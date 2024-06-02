@@ -2,6 +2,7 @@ package br.com.fiap.email.navigation
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -106,12 +108,20 @@ fun AppNavigation(valController: NavController) {
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Image(
+                    modifier = Modifier
+                        .width(50.dp)
+                        .clip(shape = CircleShape),
+                    painter = painterResource(id = R.drawable.perfil),
+                    contentDescription = "Perfil"
+                )
                 Text(
                     text = "Rachel Jacobs",
                     color = Color.Black,
-                    fontSize = 22.sp,
+                    fontSize = 18.sp,
                     fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(start = 5.dp)
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 IconButton(onClick = {}) {

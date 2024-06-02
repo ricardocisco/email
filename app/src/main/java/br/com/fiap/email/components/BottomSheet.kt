@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun BottomSheet(isOpen: () -> Unit) {
+fun BottomSheet() {
     val sheetState = rememberModalBottomSheetState()
     var isSheetOpen by rememberSaveable {
         mutableStateOf(false)
@@ -51,7 +51,7 @@ fun BottomSheet(isOpen: () -> Unit) {
     val context = LocalContext.current
 
     BottomSheetScaffold(
-        modifier = Modifier.fillMaxSize().padding(top = 650.dp),
+        modifier = Modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
         sheetContent = {
             Column {
@@ -65,18 +65,19 @@ fun BottomSheet(isOpen: () -> Unit) {
         },
         sheetPeekHeight = 0.dp
     ) {
-//        Row(
-//            modifier = Modifier.fillMaxSize(),
-//            verticalAlignment = Alignment.Bottom,
-//            horizontalArrangement = Arrangement.Center
-//        ){
-//            IconButton(onClick = {
-//                scope.launch {
-//                    scaffoldState.bottomSheetState.expand()
-//                }
-//            }) {
-//                Icon(imageVector = Icons.Filled.Add, contentDescription = "adicionar")
-//            }
-//        }
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.Center
+        ){
+            IconButton(onClick = {
+                scope.launch {
+                    scaffoldState.bottomSheetState.expand()
+                }
+            }) {
+                Icon(imageVector = Icons.Filled.Add, contentDescription = "adicionar")
+            }
+        }
     }
 }
+
