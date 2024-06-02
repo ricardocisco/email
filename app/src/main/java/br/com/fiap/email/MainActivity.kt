@@ -76,6 +76,9 @@ fun TelaSettings(){
         composable(route = "writeEmail"){
             WriteScreen(valController)
         }
+        composable(route = "emailDetail/{name}/{email}"){
+            EmailModel(valController, it.arguments?.getString("name")!!, it.arguments?.getString("email")!!)
+        }
     }
 }
 

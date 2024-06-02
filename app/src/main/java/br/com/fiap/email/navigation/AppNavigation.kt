@@ -186,13 +186,10 @@ fun AppNavigation(valController: NavController) {
                         HomeScreen()
                     }
                     composable(route = Screens.PromotionsScreen.name) {
-                        PromotionsScreen(listEmailViewModel)
+                        PromotionsScreen(listEmailViewModel, valController)
                     }
                     composable(route = Screens.FavoritesScreen.name) {
-                        FavoritesScreen(listEmailViewModel)
-                    }
-                    composable(route = "settings") {
-                        SettingsScreen()
+                        FavoritesScreen(listEmailViewModel, valController)
                     }
                 }
             }

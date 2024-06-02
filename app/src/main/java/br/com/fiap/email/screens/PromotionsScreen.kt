@@ -16,7 +16,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -35,13 +38,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
 import br.com.fiap.email.R
 import br.com.fiap.email.viewmodel.ListEmailViewModel
 import io.github.serpro69.kfaker.Faker
 
 @Composable
-fun PromotionsScreen(listEmailViewModel: ListEmailViewModel) {
+fun PromotionsScreen(listEmailViewModel: ListEmailViewModel, valController: NavController) {
 
     val emailDataList = rememberEmailDataList()
 
@@ -59,29 +63,26 @@ fun PromotionsScreen(listEmailViewModel: ListEmailViewModel) {
                     email = emailDataList[index].email,
                     index = index,
                     isFavorite = isFavorite,
-                    onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex) })
+                    onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex) },
+                    valController)
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListEmail(
     name: String,
     email: String,
     index: Int,
     isFavorite: Boolean,
-    onToggleFavorite: (Int) -> Unit
+    onToggleFavorite: (Int) -> Unit,
+    valController: NavController
 ) {
-
-//    val faker = Faker()
-//    val name = faker.name.name()
-//    val emailPerson = faker.internet.email()
-
     var isStarred by remember { mutableStateOf(false) }
-    val star_cor: Color = colorResource(id = R.color.star_cor)
 
-    Box {
+    ElevatedCard(onClick = {valController.navigate("emailDetail/${name}/${email}")}, modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp)) {
         Column {
             Row(
                 modifier = Modifier
@@ -137,11 +138,11 @@ fun ListEmail(
                     color = Color.Black
                 )
             }
-            Divider(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                color = Color.LightGray,
-                thickness = 1.dp
-            )
+//            Divider(
+//                modifier = Modifier.padding(horizontal = 16.dp),
+//                color = Color.LightGray,
+//                thickness = 1.dp
+//            )
         }
     }
 }

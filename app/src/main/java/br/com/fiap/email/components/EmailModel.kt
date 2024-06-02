@@ -30,11 +30,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.com.fiap.email.R
 
 
 @Composable
-fun EmailModel() {
+fun EmailModel(valController: NavController, name: String, email: String) {
 
     val azul_escuro: Color = colorResource(id = R.color.azul_escuro)
     val gray_100: Color = colorResource(id = R.color.gray_100)
@@ -49,20 +50,20 @@ fun EmailModel() {
             verticalAlignment = Alignment.CenterVertically
         )
         {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {valController.navigate("homeApp")}) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "botao de voltar")
             }
             Row {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         painter = painterResource(id = R.drawable.folder),
-                        contentDescription = "botao de voltar"
+                        contentDescription = "botao de pastas"
                     )
                 }
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         painter = painterResource(id = R.drawable.more),
-                        contentDescription = "botao de voltar"
+                        contentDescription = "botao de mais"
                     )
                 }
             }
@@ -89,8 +90,8 @@ fun EmailModel() {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
                     Column {
-                        Text(text = "Kristopher Cremin", fontSize = 18.sp)
-                        Text(text = "kris13@gmail.com ")
+                        Text(text = "$name", fontSize = 18.sp)
+                        Text(text = "$email", fontSize = 12.sp)
                     }
                     Text(text = "1h ago")
                 }
@@ -150,11 +151,4 @@ fun EmailModel() {
             }
         }
     }
-}
-
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewEmailModel() {
-    EmailModel()
 }

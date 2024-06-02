@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -61,7 +62,7 @@ fun ConfigScreen(valController: NavController) {
     val customBlue: Color = colorResource(id = R.color.customBlue)
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
@@ -112,315 +113,320 @@ fun ConfigScreen(valController: NavController) {
                         )
                     )
             )
-            Box(
-                contentAlignment = Alignment.TopEnd,
+            Column(
                 modifier = Modifier
-                    .padding(start = 30.dp, bottom = 40.dp)
+                    .padding(start = 30.dp, bottom = 15.dp)
                     //.border(width = 1.dp, Color.Black)
             ) {
-                Column{
-                    Text(
-                        text = "Aparência",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+                Text(
+                    text = "Tema",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 5.dp)
+                )
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(x = -7.dp)
+                ) {
+                    IconButton(
+                        onClick = { /*TODO*/ },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 15.dp)
-                    )
-                    Row (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .offset(x = -7.dp)
-                    ) {
-                        IconButton(
-                            onClick = { /*TODO*/ },
-                            modifier = Modifier
-                                .height(60.dp)
-                                .width(60.dp)
+                            .height(60.dp)
+                            .width(60.dp)
 //                                .offset(x = (-170).dp)
-                        ) {
-                            Icon(
-                                painterResource(id = R.drawable.circulo),
-                                contentDescription = "Tema White",
-                                tint = Color.White,
-                                modifier = Modifier
-                                    .height(50.dp)
-                                    .width(50.dp)
-                                    .border(
-                                        width = 5.dp,
-                                        color = customPink,
-                                        shape = CircleShape
-                                    )
-                            )
-                        }
-                        IconButton(
-                            onClick = { /*TODO*/ },
+                    ) {
+                        Icon(
+                            painterResource(id = R.drawable.circulo),
+                            contentDescription = "Tema White",
+                            tint = Color.White,
                             modifier = Modifier
-                                .height(60.dp)
-                                .width(60.dp)
+                                .height(50.dp)
+                                .width(50.dp)
+                                .border(
+                                    width = 5.dp,
+                                    color = customPink,
+                                    shape = CircleShape
+                                )
+                        )
+                    }
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier
+                            .height(60.dp)
+                            .width(60.dp)
 //                                .offset(x = (-170).dp)
-                        ) {
-                            Icon(
-                                painterResource(id = R.drawable.circulo),
-                                contentDescription = "Tema Dark",
-                                tint = Color.Black,
-                                modifier = Modifier
-                                    .height(50.dp)
-                                    .width(50.dp)
-                                    .border(
-                                        width = 5.dp,
-                                        Color.Black,
-                                        shape = CircleShape
-                                    )
-                            )
-                        }
-                    }
-                }
-            }
-            Box(
-                contentAlignment = Alignment.TopEnd,
-                modifier = Modifier
-                    .padding(start = 30.dp, end = 30.dp, bottom = 40.dp)
-                    //.border(width = 1.dp, Color.Black)
-            ) {
-                Column{
-                    Text(
-                        text = "Notificações",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 10.dp)
-                    )
-                    Row (
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
                     ) {
-                        Text(
-                            text = "Receber notificações",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.Gray,
+                        Icon(
+                            painterResource(id = R.drawable.circulo),
+                            contentDescription = "Tema Dark",
+                            tint = Color.Black,
                             modifier = Modifier
-                                .padding(bottom = 15.dp, top = 15.dp)
-                        )
-                        Switch(
-                            checked = validacaoNotificacao,
-                            onCheckedChange = {
-                                validacaoNotificacao = it
-                            },
-                            thumbContent = if (validacaoNotificacao) {
-                                {
-                                    Icon(
-                                        imageVector = Icons.Filled.Check,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(SwitchDefaults.IconSize),
-                                    )
-                                }
-                            } else {
-                                null
-                            },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                checkedTrackColor = customBlue
-                            )
-                        )
-                    }
-                    Row (
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Som",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.Gray,
-                            modifier = Modifier
-                                .padding(bottom = 15.dp, top = 15.dp)
-                        )
-                        Switch(
-                            checked = validacaoSom,
-                            onCheckedChange = {
-                                validacaoSom = it
-                            },
-                            thumbContent = if (validacaoSom) {
-                                {
-                                    Icon(
-                                        imageVector = Icons.Filled.Check,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(SwitchDefaults.IconSize),
-                                    )
-                                }
-                            } else {
-                                null
-                            },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                checkedTrackColor = customBlue
-                            )
-                        )
-                    }
-                    Row (
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Receber notificações",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.Gray,
-                            modifier = Modifier
-                                .padding(bottom = 15.dp, top = 15.dp)
-                        )
-                        Switch(
-                            checked = validacaoAgrupamento,
-                            onCheckedChange = {
-                                validacaoAgrupamento = it
-                            },
-                            thumbContent = if (validacaoAgrupamento) {
-                                {
-                                    Icon(
-                                        imageVector = Icons.Filled.Check,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(SwitchDefaults.IconSize),
-                                    )
-                                }
-                            } else {
-                                null
-                            },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                checkedTrackColor = customBlue
-                            )
+                                .height(50.dp)
+                                .width(50.dp)
+                                .border(
+                                    width = 5.dp,
+                                    Color.Black,
+                                    shape = CircleShape
+                                )
                         )
                     }
                 }
             }
-            Box(
-                contentAlignment = Alignment.TopEnd,
-                modifier = Modifier
-                    .padding(start = 30.dp, end = 30.dp)
-                //.border(width = 1.dp, Color.Black)
-            ) {
-                Column{
-                    Text(
-                        text = "Desempenho",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+            LazyColumn(
+                modifier = Modifier.fillMaxHeight(0.72f)
+            ){
+                item {
+                    Box(
+                        contentAlignment = Alignment.TopEnd,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 10.dp)
-                    )
-                    Row (
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
+                            .padding(start = 30.dp, end = 30.dp, bottom = 40.dp)
+                        //.border(width = 1.dp, Color.Black)
                     ) {
-                        Text(
-                            text = "Receber notificações",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.Gray,
-                            modifier = Modifier
-                                .padding(bottom = 15.dp, top = 15.dp)
-                        )
-                        Switch(
-                            checked = validacaoNotificacao,
-                            onCheckedChange = {
-                                validacaoNotificacao = it
-                            },
-                            thumbContent = if (validacaoNotificacao) {
-                                {
-                                    Icon(
-                                        imageVector = Icons.Filled.Check,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(SwitchDefaults.IconSize),
-                                    )
-                                }
-                            } else {
-                                null
-                            },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                checkedTrackColor = customBlue
+                        Column{
+                            Text(
+                                text = "Notificações",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 10.dp)
                             )
-                        )
+                            Row (
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = "Receber notificações",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.Gray,
+                                    modifier = Modifier
+                                        .padding(bottom = 15.dp, top = 15.dp)
+                                )
+                                Switch(
+                                    checked = validacaoNotificacao,
+                                    onCheckedChange = {
+                                        validacaoNotificacao = it
+                                    },
+                                    thumbContent = if (validacaoNotificacao) {
+                                        {
+                                            Icon(
+                                                imageVector = Icons.Filled.Check,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                                            )
+                                        }
+                                    } else {
+                                        null
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
+                                        checkedTrackColor = customBlue
+                                    )
+                                )
+                            }
+                            Row (
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = "Som",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.Gray,
+                                    modifier = Modifier
+                                        .padding(bottom = 15.dp, top = 15.dp)
+                                )
+                                Switch(
+                                    checked = validacaoSom,
+                                    onCheckedChange = {
+                                        validacaoSom = it
+                                    },
+                                    thumbContent = if (validacaoSom) {
+                                        {
+                                            Icon(
+                                                imageVector = Icons.Filled.Check,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                                            )
+                                        }
+                                    } else {
+                                        null
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
+                                        checkedTrackColor = customBlue
+                                    )
+                                )
+                            }
+                            Row (
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = "Receber notificações",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.Gray,
+                                    modifier = Modifier
+                                        .padding(bottom = 15.dp, top = 15.dp)
+                                )
+                                Switch(
+                                    checked = validacaoAgrupamento,
+                                    onCheckedChange = {
+                                        validacaoAgrupamento = it
+                                    },
+                                    thumbContent = if (validacaoAgrupamento) {
+                                        {
+                                            Icon(
+                                                imageVector = Icons.Filled.Check,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                                            )
+                                        }
+                                    } else {
+                                        null
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
+                                        checkedTrackColor = customBlue
+                                    )
+                                )
+                            }
+                        }
                     }
-                    Row (
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                }
+                item {
+                    Box(
+                        contentAlignment = Alignment.TopEnd,
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .padding(start = 30.dp, end = 30.dp)
+                        //.border(width = 1.dp, Color.Black)
                     ) {
-                        Text(
-                            text = "Som",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.Gray,
-                            modifier = Modifier
-                                .padding(bottom = 15.dp, top = 15.dp)
-                        )
-                        Switch(
-                            checked = validacaoSom,
-                            onCheckedChange = {
-                                validacaoSom = it
-                            },
-                            thumbContent = if (validacaoSom) {
-                                {
-                                    Icon(
-                                        imageVector = Icons.Filled.Check,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(SwitchDefaults.IconSize),
-                                    )
-                                }
-                            } else {
-                                null
-                            },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                checkedTrackColor = customBlue
+                        Column{
+                            Text(
+                                text = "Desempenho",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 10.dp)
                             )
-                        )
-                    }
-                    Row (
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Receber notificações",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.Gray,
-                            modifier = Modifier
-                                .padding(bottom = 15.dp, top = 15.dp)
-                        )
-                        Switch(
-                            checked = validacaoAgrupamento,
-                            onCheckedChange = {
-                                validacaoAgrupamento = it
-                            },
-                            thumbContent = if (validacaoAgrupamento) {
-                                {
-                                    Icon(
-                                        imageVector = Icons.Filled.Check,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(SwitchDefaults.IconSize),
+                            Row (
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = "Receber notificações",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.Gray,
+                                    modifier = Modifier
+                                        .padding(bottom = 15.dp, top = 15.dp)
+                                )
+                                Switch(
+                                    checked = validacaoNotificacao,
+                                    onCheckedChange = {
+                                        validacaoNotificacao = it
+                                    },
+                                    thumbContent = if (validacaoNotificacao) {
+                                        {
+                                            Icon(
+                                                imageVector = Icons.Filled.Check,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                                            )
+                                        }
+                                    } else {
+                                        null
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
+                                        checkedTrackColor = customBlue
                                     )
-                                }
-                            } else {
-                                null
-                            },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                checkedTrackColor = customBlue
-                            )
-                        )
+                                )
+                            }
+                            Row (
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = "Som",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.Gray,
+                                    modifier = Modifier
+                                        .padding(bottom = 15.dp, top = 15.dp)
+                                )
+                                Switch(
+                                    checked = validacaoSom,
+                                    onCheckedChange = {
+                                        validacaoSom = it
+                                    },
+                                    thumbContent = if (validacaoSom) {
+                                        {
+                                            Icon(
+                                                imageVector = Icons.Filled.Check,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                                            )
+                                        }
+                                    } else {
+                                        null
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
+                                        checkedTrackColor = customBlue
+                                    )
+                                )
+                            }
+                            Row (
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = "Receber notificações",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.Gray,
+                                    modifier = Modifier
+                                        .padding(bottom = 15.dp, top = 15.dp)
+                                )
+                                Switch(
+                                    checked = validacaoAgrupamento,
+                                    onCheckedChange = {
+                                        validacaoAgrupamento = it
+                                    },
+                                    thumbContent = if (validacaoAgrupamento) {
+                                        {
+                                            Icon(
+                                                imageVector = Icons.Filled.Check,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(SwitchDefaults.IconSize),
+                                            )
+                                        }
+                                    } else {
+                                        null
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
+                                        checkedTrackColor = customBlue
+                                    )
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -429,22 +435,21 @@ fun ConfigScreen(valController: NavController) {
                 modifier = Modifier
                     .padding(start = 30.dp, top = 15.dp)
                     //.border(width = 1.dp, Color.Black)
-                    .fillMaxHeight()
+                    .height(150.dp)
             ) {
-                Column {
+                Column{
                     Text(
                         text = "Histórico",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
                         modifier = Modifier
-                            .padding(bottom = 30.dp, top = 15.dp)
+                            .padding(bottom = 20.dp, top = 15.dp)
                     )
                     Button(
                         onClick = { },
                         modifier = Modifier
-                            .height(45.dp)
-                            .width(250.dp)
+
                             .shadow(
                                 elevation = 5.dp,
                                 shape = RoundedCornerShape(15.dp),

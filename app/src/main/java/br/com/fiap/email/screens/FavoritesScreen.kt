@@ -14,12 +14,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
 import br.com.fiap.email.viewmodel.ListEmailViewModel
 import io.github.serpro69.kfaker.Faker
 
 @Composable
-fun FavoritesScreen(listEmailViewModel: ListEmailViewModel) {
+fun FavoritesScreen(listEmailViewModel: ListEmailViewModel, valController: NavController) {
 
     val emailDataList = rememberEmailDataList()
 
@@ -38,7 +39,8 @@ fun FavoritesScreen(listEmailViewModel: ListEmailViewModel) {
                     isFavorite = true,
                     onToggleFavorite = { emailIndex ->
                         listEmailViewModel.toggleFavorite(emailIndex)
-                    }
+                    },
+                    valController
                 )
             }
         }
