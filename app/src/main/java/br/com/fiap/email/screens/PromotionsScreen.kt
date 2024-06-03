@@ -1,7 +1,10 @@
 package br.com.fiap.email.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -70,7 +73,7 @@ fun PromotionsScreen(listEmailViewModel: ListEmailViewModel, valController: NavC
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ListEmail(
     name: String,
@@ -80,9 +83,15 @@ fun ListEmail(
     onToggleFavorite: (Int) -> Unit,
     valController: NavController
 ) {
-    var isStarred by remember { mutableStateOf(false) }
+    var favorited by remember { mutableStateOf(false) }
 
-    ElevatedCard(onClick = {valController.navigate("emailDetail/${name}/${email}")}, modifier = Modifier.padding(horizontal = 5.dp, vertical = 1.dp)) {
+    ElevatedCard(
+        onClick = { valController.navigate("emailDetail/${name}/${email}") },
+        modifier = Modifier
+            .padding(
+            horizontal = 5.dp,
+            vertical = 1.dp)
+    ) {
         Column {
             Row(
                 modifier = Modifier
@@ -111,7 +120,7 @@ fun ListEmail(
                     Column {
                         Text(text = "12m ago", color = Color.Black)
                         IconButton(onClick = {
-                            isStarred = !isStarred
+                            favorited = !favorited
                             onToggleFavorite(index)
                         }) {
                             val iconColor = if (isFavorite) {
