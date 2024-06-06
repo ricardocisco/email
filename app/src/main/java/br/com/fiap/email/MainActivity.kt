@@ -46,7 +46,7 @@ import br.com.fiap.email.screens.ConfigScreen
 import br.com.fiap.email.screens.FavoritesScreen
 import br.com.fiap.email.screens.HomeScreen
 import br.com.fiap.email.screens.PromotionsScreen
-import br.com.fiap.email.screens.SettingsScreen
+import br.com.fiap.email.screens.ResponseScreen
 import br.com.fiap.email.screens.WriteScreen
 import br.com.fiap.email.ui.theme.EmailTheme
 
@@ -78,6 +78,9 @@ fun TelaSettings(){
         }
         composable(route = "emailDetail/{name}/{email}"){
             EmailModel(valController, it.arguments?.getString("name")!!, it.arguments?.getString("email")!!)
+        }
+        composable(route ="responseEmail/{name}/{email}"){
+            ResponseScreen(valController, it.arguments?.getString("name")!!, it.arguments?.getString("email")!!)
         }
     }
 }

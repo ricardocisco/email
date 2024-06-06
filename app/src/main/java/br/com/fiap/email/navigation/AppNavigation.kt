@@ -83,7 +83,6 @@ import br.com.fiap.email.components.ButtonWrite
 import br.com.fiap.email.screens.FavoritesScreen
 import br.com.fiap.email.screens.HomeScreen
 import br.com.fiap.email.screens.PromotionsScreen
-import br.com.fiap.email.screens.SettingsScreen
 import br.com.fiap.email.viewmodel.ListEmailViewModel
 import kotlinx.coroutines.launch
 
