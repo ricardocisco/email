@@ -41,7 +41,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.fiap.email.components.EmailModel
 import br.com.fiap.email.navigation.AppNavigation
+import br.com.fiap.email.navigation.CalendarNavigation
 import br.com.fiap.email.navigation.Screens
+import br.com.fiap.email.screens.CalendarScreen
 import br.com.fiap.email.screens.ConfigScreen
 import br.com.fiap.email.screens.FavoritesScreen
 import br.com.fiap.email.screens.HomeScreen
@@ -57,7 +59,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EmailTheme {
-                TelaSettings()
+                CalendarNavigation()
             }
         }
     }

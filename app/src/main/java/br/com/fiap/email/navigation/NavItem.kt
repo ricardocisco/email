@@ -22,7 +22,7 @@ val listNavItems = listOf(
         label = "Home",
         icon = Icons.Default.Home,
         route = Screens.HomeScreen.name,
-        hasNews = true,
+        hasNews = false
     ),
     NavItem(
         label = "Promotions",

@@ -5,3 +5,9 @@ enum class Screens {
     PromotionsScreen,
     FavoritesScreen
 }
+
+enum class ScreenCalendar {
+    CalendarScreen,
+    CalendarTaskScreen,
+    CalendarGantScreen
+}
