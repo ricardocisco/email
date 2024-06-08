@@ -21,6 +21,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,25 +49,22 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import br.com.fiap.email.R
 import java.time.LocalDate
+import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
-fun CalendarScreen() {
+fun CalendarScreen(events: Map<LocalDate, String>, onEventAdd: (LocalDate, String) -> Unit) {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    var events by remember { mutableStateOf(mapOf<LocalDate, String>()) }
     var showEventDialog by remember { mutableStateOf(false) }
-    var eventText by remember { mutableStateOf("") }
     var dialogDate by remember { mutableStateOf<LocalDate?>(null) }
-
-    val customCinzaClaro: Color = colorResource(id = R.color.customCinzaClaro)
 
     if (showEventDialog) {
         EventDialog(
-            date = dialogDate!!,
+            date = dialogDate ?: LocalDate.now(),
             onEventAdd = { date, event ->
-                events = events.toMutableMap().apply { put(date, event) }
+                onEventAdd(date, event)
                 showEventDialog = false
             },
             onDismiss = { showEventDialog = false }
@@ -77,15 +78,17 @@ fun CalendarScreen() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(customCinzaClaro)
+                .background(Color.Gray.copy(alpha = 0.1f))
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(horizontal = 22.dp, vertical = 6.dp)
             ){
                 MonthHeader(
                     selectedDate = selectedDate,
                     onPreviousMonth = { selectedDate = selectedDate.minusMonths(1) },
-                    onNextMonth = { selectedDate = selectedDate.plusMonths(1) }
+                    onNextMonth = { selectedDate = selectedDate.plusMonths(1) },
+                    onMonthSelected = { selectedDate = selectedDate.withMonth(it) },
+                    onYearSelected = { selectedDate = selectedDate.withYear(it) }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 WeekDaysHeader()
@@ -100,29 +103,87 @@ fun CalendarScreen() {
                 )
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         EventList(events = events)
     }
 }
 
 @Composable
-fun MonthHeader(selectedDate: LocalDate, onPreviousMonth: () -> Unit, onNextMonth: () -> Unit) {
+fun MonthHeader(
+    selectedDate: LocalDate,
+    onPreviousMonth: () -> Unit,
+    onNextMonth: () -> Unit,
+    onMonthSelected: (Int) -> Unit,
+    onYearSelected: (Int) -> Unit
+) {
+    var monthExpanded by remember { mutableStateOf(false) }
+    var yearExpanded by remember { mutableStateOf(false) }
     val monthName = selectedDate.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
     val year = selectedDate.year
+    val months = (1..12).map { it to it.getMonthName() }
+    val years = (2000..2100).toList()
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onPreviousMonth) {
             Icon(Icons.Default.ArrowBack, contentDescription = "Previous Month")
         }
-        Text(
-            text = "$monthName $year",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box {
+                Text(
+                    fontSize = 20.sp,
+                    text = monthName,
+                    modifier = Modifier
+                        .clickable { monthExpanded = true }
+                )
+                DropdownMenu(
+                    expanded = monthExpanded,
+                    onDismissRequest = { monthExpanded = false }
+                ) {
+                    months.forEach { (month, name) ->
+                        DropdownMenuItem(onClick = {
+                            onMonthSelected(month)
+                            monthExpanded = false
+                        }, text = {
+                            Text(text = name)
+                        }
+                        )
+                    }
+                }
+            }
+            Text(
+                text = ",",
+            )
+            Box {
+                Text(
+                    fontSize = 20.sp,
+                    text = year.toString(),
+                    modifier = Modifier
+                        .clickable { yearExpanded = true }
+                        .padding(8.dp)
+                )
+                DropdownMenu(
+                    expanded = yearExpanded,
+                    onDismissRequest = { yearExpanded = false }
+                ) {
+                    years.forEach { year ->
+                        DropdownMenuItem(onClick = {
+                            onYearSelected(year)
+                            yearExpanded = false
+                        }, text = {
+                            Text(text = year.toString())
+                        }
+                        )
+                    }
+                }
+            }
+        }
         IconButton(onClick = onNextMonth) {
             Icon(Icons.Default.ArrowForward, contentDescription = "Next Month")
         }
@@ -131,7 +192,7 @@ fun MonthHeader(selectedDate: LocalDate, onPreviousMonth: () -> Unit, onNextMont
 
 @Composable
 fun WeekDaysHeader() {
-    val daysOfWeek = listOf("DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB")
+    val daysOfWeek = listOf("DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB")
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -150,13 +211,19 @@ fun WeekDaysHeader() {
 }
 
 @Composable
-fun CalendarGrid(yearMonth: YearMonth, events: Map<LocalDate, String>, onDayClick: (LocalDate) -> Unit) {
+fun CalendarGrid(
+    yearMonth: YearMonth,
+    events: Map<LocalDate, String>,
+    onDayClick: (LocalDate) -> Unit
+) {
     val firstDayOfMonth = yearMonth.atDay(1)
     val lastDayOfMonth = yearMonth.atEndOfMonth()
     val firstDayOfWeek = firstDayOfMonth.dayOfWeek.value % 7
     val daysInMonth = lastDayOfMonth.dayOfMonth
 
-    Column{
+    val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
+
+    Column {
         var currentDay = 1
         for (week in 0..5) {
             Row(modifier = Modifier.fillMaxWidth()) {
@@ -169,26 +236,25 @@ fun CalendarGrid(yearMonth: YearMonth, events: Map<LocalDate, String>, onDayClic
                         currentDay++
                     }
 
-                    val date = if (day != null) LocalDate.of(yearMonth.year, yearMonth.month, day) else null
+                    val date = if (day != null) LocalDate.of(
+                        yearMonth.year,
+                        yearMonth.month,
+                        day
+                    ) else null
                     val isEventDay = date != null && events.containsKey(date)
                     val backgroundColor = when {
-                        isEventDay -> Color.Blue
-                        day != null -> Color.LightGray
+                        isEventDay -> customDarkBlue
                         else -> Color.Transparent
                     }
                     val textColor = if (isEventDay) Color.White else Color.Black
-
 
                     Box(
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1f)
                             .padding(2.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(
-                                if (date != null && events.containsKey(date)) Color.Blue
-                                else Color.Transparent
-                            )
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(backgroundColor)
                             .clickable(enabled = day != null) {
                                 if (day != null) {
                                     onDayClick(LocalDate.of(yearMonth.year, yearMonth.month, day))
@@ -211,7 +277,11 @@ fun CalendarGrid(yearMonth: YearMonth, events: Map<LocalDate, String>, onDayClic
 }
 
 @Composable
-fun EventDialog(date: LocalDate, onEventAdd: (LocalDate, String) -> Unit, onDismiss: () -> Unit) {
+fun EventDialog(
+    date: LocalDate,
+    onEventAdd: (LocalDate, String) -> Unit,
+    onDismiss: () -> Unit
+) {
     var eventText by remember { mutableStateOf("") }
 
     Dialog(onDismissRequest = onDismiss) {
@@ -255,11 +325,13 @@ fun EventDialog(date: LocalDate, onEventAdd: (LocalDate, String) -> Unit, onDism
     }
 }
 
+fun Int.getMonthName(): String {
+    return Month.of(this).getDisplayName(TextStyle.FULL, Locale.getDefault())
+}
+
 @Composable
 fun EventList(events: Map<LocalDate, String>) {
-    LazyColumn(
-        modifier = Modifier.padding(bottom = 80.dp)
-    ){
+    LazyColumn {
         items(events.toList()) { (date, event) ->
             EventItem(date, event)
         }
@@ -271,7 +343,7 @@ fun EventItem(date: LocalDate, event: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(4.dp)
+            .padding(8.dp)
             .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(8.dp))
             .padding(8.dp)
     ) {
@@ -279,9 +351,154 @@ fun EventItem(date: LocalDate, event: String) {
             text = "${date.dayOfMonth}/${date.monthValue}/${date.year}: ",
             fontWeight = FontWeight.Bold
         )
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(8.dp))
         Text(text = event)
     }
 }
+@Composable
+fun ShowEventDialog(
+    onEventAdd: (LocalDate, String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    var eventText by remember { mutableStateOf("") }
 
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(text = "Adicionar Evento")
+                Spacer(modifier = Modifier.height(8.dp))
+                DatePicker(
+                    selectedDate = selectedDate,
+                    onDateSelected = { selectedDate = it }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                BasicTextField(
+                    value = eventText,
+                    onValueChange = { eventText = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(8.dp))
+                        .padding(8.dp),
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text("Cancelar")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(onClick = {
+                        onEventAdd(selectedDate, eventText)
+                    }) {
+                        Text("Salvar")
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DatePicker(
+    selectedDate: LocalDate,
+    onDateSelected: (LocalDate) -> Unit
+) {
+    var year by remember { mutableStateOf(selectedDate.year) }
+    var month by remember { mutableStateOf(selectedDate.monthValue) }
+    var day by remember { mutableStateOf(selectedDate.dayOfMonth) }
+
+    Column {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Ano:")
+            Spacer(modifier = Modifier.width(8.dp))
+            Box {
+                val expandedYear = remember { mutableStateOf(false) }
+                Text(
+                    text = year.toString(),
+                    modifier = Modifier
+                        .clickable { expandedYear.value = true }
+                        .padding(8.dp)
+                        .background(Color.Gray.copy(alpha = 0.1f))
+                )
+                DropdownMenu(
+                    expanded = expandedYear.value,
+                    onDismissRequest = { expandedYear.value = false }
+                ) {
+                    (1900..2100).forEach {
+                        DropdownMenuItem(onClick = {
+                            year = it
+                            expandedYear.value = false
+                            onDateSelected(LocalDate.of(year, month, day))
+                        }, text = {Text(text = it.toString())})
+                    }
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Mês:")
+            Spacer(modifier = Modifier.width(8.dp))
+            Box {
+                val expandedMonth = remember { mutableStateOf(false) }
+                Text(
+                    text = month.toString(),
+                    modifier = Modifier
+                        .clickable { expandedMonth.value = true }
+                        .padding(8.dp)
+                        .background(Color.Gray.copy(alpha = 0.1f))
+                )
+                DropdownMenu(
+                    expanded = expandedMonth.value,
+                    onDismissRequest = { expandedMonth.value = false }
+                ) {
+                    (1..12).forEach {
+                        DropdownMenuItem(onClick = {
+                            month = it
+                            expandedMonth.value = false
+                            onDateSelected(LocalDate.of(year, month, day))
+                        }, text = {Text(text = it.toString())})
+                    }
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Dia:")
+            Spacer(modifier = Modifier.width(8.dp))
+            Box {
+                val expandedDay = remember { mutableStateOf(false) }
+                Text(
+                    text = day.toString(),
+                    modifier = Modifier
+                        .clickable { expandedDay.value = true }
+                        .padding(8.dp)
+                        .background(Color.Gray.copy(alpha = 0.1f))
+                )
+                DropdownMenu(
+                    expanded = expandedDay.value,
+                    onDismissRequest = { expandedDay.value = false }
+                ) {
+                    (1..31).forEach {
+                        DropdownMenuItem(onClick = {
+                            day = it
+                            expandedDay.value = false
+                            onDateSelected(LocalDate.of(year, month, day))
+                        }, text = {Text(text = it.toString())})
+                    }
+                }
+            }
+        }
+    }
+}
 

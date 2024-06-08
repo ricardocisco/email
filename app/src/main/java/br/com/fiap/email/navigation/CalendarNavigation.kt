@@ -29,7 +29,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,7 +56,9 @@ import br.com.fiap.email.screens.CalendarTaskScreen
 import br.com.fiap.email.screens.FavoritesScreen
 import br.com.fiap.email.screens.HomeScreen
 import br.com.fiap.email.screens.PromotionsScreen
+import br.com.fiap.email.screens.ShowEventDialog
 import br.com.fiap.email.viewmodel.ListEmailViewModel
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -62,6 +66,18 @@ import br.com.fiap.email.viewmodel.ListEmailViewModel
 fun CalendarNavigation() {
     val calendarController = rememberNavController()
     val listEmailViewModel = remember { ListEmailViewModel() }
+    var showEventDialog by remember { mutableStateOf(false) }
+    var events by remember { mutableStateOf(mapOf<LocalDate, String>()) }
+
+    if (showEventDialog) {
+        ShowEventDialog(
+            onEventAdd = { date, event ->
+                events = events.toMutableMap().apply { put(date, event) }
+                showEventDialog = false
+            },
+            onDismiss = { showEventDialog = false }
+        )
+    }
 
     Column {
         Box(
@@ -87,7 +103,9 @@ fun CalendarNavigation() {
                             .width(30.dp)
                     )
                 }
-                IconButton(onClick = {}) {
+                IconButton(onClick = {
+                    showEventDialog = true
+                }) {
                     Image(
                         modifier = Modifier.size(32.dp),
                         painter = painterResource(id = R.drawable.addevent),
@@ -135,7 +153,9 @@ fun CalendarNavigation() {
                     startDestination = ScreenCalendar.CalendarScreen.name,
                 ) {
                     composable(route = ScreenCalendar.CalendarScreen.name) {
-                        CalendarScreen()
+                        CalendarScreen(events = events, onEventAdd = { date, event ->
+                            events = events.toMutableMap().apply { put(date, event) }
+                        })
                     }
                     composable(route = ScreenCalendar.CalendarTaskScreen.name) {
                         CalendarTaskScreen()

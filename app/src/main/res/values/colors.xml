@@ -16,5 +16,5 @@
     <color name="customCinza">#FAFAFA</color>
     <color name="customDarkCinza">#F0F0F0</color>
     <color name="customLightBlue">#3572EF</color>
-    <color name="customCinzaClaro">#DCDCDC</color>
+    <color name="customCinzaClaro">#BBBBBBBB</color>
 </resources>
