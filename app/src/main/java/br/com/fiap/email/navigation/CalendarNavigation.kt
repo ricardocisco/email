@@ -67,12 +67,17 @@ fun CalendarNavigation() {
     val calendarController = rememberNavController()
     val listEmailViewModel = remember { ListEmailViewModel() }
     var showEventDialog by remember { mutableStateOf(false) }
-    var events by remember { mutableStateOf(mapOf<LocalDate, String>()) }
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    var events by remember { mutableStateOf(mapOf<LocalDate, MutableList<String>>()) }
 
     if (showEventDialog) {
         ShowEventDialog(
             onEventAdd = { date, event ->
-                events = events.toMutableMap().apply { put(date, event) }
+                events = events.toMutableMap().apply {
+                    val eventList = getOrDefault(date, mutableListOf())
+                    eventList.add(event)
+                    put(date, eventList)
+                }
                 showEventDialog = false
             },
             onDismiss = { showEventDialog = false }
@@ -154,11 +159,21 @@ fun CalendarNavigation() {
                 ) {
                     composable(route = ScreenCalendar.CalendarScreen.name) {
                         CalendarScreen(events = events, onEventAdd = { date, event ->
-                            events = events.toMutableMap().apply { put(date, event) }
+                            val updatedEvents = events.toMutableMap()
+                            val eventList = updatedEvents[date] ?: mutableListOf()
+                            eventList.add(event)
+                            updatedEvents[date] = eventList
+                            events = updatedEvents
                         })
                     }
                     composable(route = ScreenCalendar.CalendarTaskScreen.name) {
-                        CalendarTaskScreen()
+                        CalendarTaskScreen(events = events, onEventAdd = { date, event ->
+                            val updatedEvents = events.toMutableMap()
+                            val eventList = updatedEvents[date] ?: mutableListOf()
+                            eventList.add(event)
+                            updatedEvents[date] = eventList
+                            events = updatedEvents
+                        })
                     }
                     composable(route = ScreenCalendar.CalendarGantScreen.name) {
                         CalendarGantScreen()

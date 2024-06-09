@@ -37,7 +37,7 @@ fun ButtonWrite(valController: NavController) {
                 .background(azul_escuro, shape = CircleShape)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.edit),
+                painter = painterResource(id = R.drawable.editevent),
                 contentDescription = "escrever novo email",
                 modifier = Modifier.size(28.dp),
                 tint = Color.White
