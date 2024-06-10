@@ -17,4 +17,7 @@
     <color name="customDarkCinza">#F0F0F0</color>
     <color name="customLightBlue">#3572EF</color>
     <color name="customCinzaClaro">#BBBBBBBB</color>
+    <color name="customAzulClaro">#BDD0FC</color>
+    <color name="vermelhoBg">#FCC8BD</color>
+    <color name="vermelhoText">#EA1515</color>
 </resources>

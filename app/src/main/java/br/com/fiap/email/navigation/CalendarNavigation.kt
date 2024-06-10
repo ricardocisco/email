@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -90,6 +92,7 @@ fun CalendarNavigation() {
                 .fillMaxWidth()
                 .height(70.dp)
                 .background(Color.White)
+                .shadow(1.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -120,7 +123,8 @@ fun CalendarNavigation() {
             }
         }
         Box(
-        ) {
+        )
+        {
             Scaffold(
                 bottomBar = {
                     NavigationBar(
@@ -128,7 +132,6 @@ fun CalendarNavigation() {
                     ) {
                         val navBackStackEntry by calendarController.currentBackStackEntryAsState()
                         val currentDestination = navBackStackEntry?.destination
-
                         listCalendarNavItems.forEach { calendarNav ->
                             NavigationBarItem(
                                 selected = currentDestination?.hierarchy?.any { it.route == calendarNav.route } == true,
@@ -151,6 +154,12 @@ fun CalendarNavigation() {
                             )
                         }
                     }
+                    Divider (
+                        color = Color.LightGray,
+                        modifier = Modifier
+                            .height(1.dp)
+                            .fillMaxWidth()
+                    )
                 }
             ) {
                 NavHost(

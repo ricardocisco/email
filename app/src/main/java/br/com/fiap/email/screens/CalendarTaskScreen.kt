@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -64,7 +66,7 @@ fun CalendarTaskScreen(events: Map<LocalDate, MutableList<String>>, onEventAdd: 
 
         ){
             Row(modifier = Modifier.padding(16.dp)){
-                Text(text = "Task for today", fontSize = 26.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Tarefas do dia", fontSize = 26.sp, fontWeight = FontWeight.Bold)
             }
         }
         Box(modifier = Modifier.padding(horizontal = 16.dp)){
@@ -78,7 +80,6 @@ fun CalendarTaskScreen(events: Map<LocalDate, MutableList<String>>, onEventAdd: 
 @Composable
 fun TaskList(events: Map<LocalDate, MutableList<String>>) {
     var state by remember { mutableStateOf(true) }
-
     LazyColumn {
         events.forEach { (date, eventList) ->
             item {
@@ -100,6 +101,12 @@ fun TaskList(events: Map<LocalDate, MutableList<String>>) {
                         }
                     }
                 }
+                Divider (
+                    color = Color.LightGray,
+                    modifier = Modifier
+                        .height(1.dp)
+                        .fillMaxWidth()
+                )
             }
         }
     }
