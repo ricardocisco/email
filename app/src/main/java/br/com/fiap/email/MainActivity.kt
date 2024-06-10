@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EmailTheme {
-                CalendarNavigation()
+                TelaSettings()
             }
         }
     }

@@ -28,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -51,6 +52,8 @@ import io.github.serpro69.kfaker.Faker
 fun PromotionsScreen(listEmailViewModel: ListEmailViewModel, valController: NavController) {
 
     val emailDataList = rememberEmailDataList()
+    val selectedItems = remember { mutableStateListOf<Int>() }
+
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -61,12 +64,21 @@ fun PromotionsScreen(listEmailViewModel: ListEmailViewModel, valController: NavC
         ) {
             items(10) { index ->
                 val isFavorite = listEmailViewModel.isFavorite(index)
+                val isSelected = selectedItems.contains(index)
                 ListEmail(
                     name = emailDataList[index].name,
                     email = emailDataList[index].email,
                     index = index,
                     isFavorite = isFavorite,
                     onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex) },
+                    isSelected = isSelected,
+                    onItemSelected = { emailIndex ->
+                        if (selectedItems.contains(emailIndex)) {
+                            selectedItems.remove(emailIndex)
+                        } else {
+                            selectedItems.add(emailIndex)
+                        }
+                    },
                     valController)
             }
         }
@@ -81,6 +93,8 @@ fun ListEmail(
     index: Int,
     isFavorite: Boolean,
     onToggleFavorite: (Int) -> Unit,
+    isSelected: Boolean,
+    onItemSelected: (Int) -> Unit,
     valController: NavController
 ) {
     var favorited by remember { mutableStateOf(false) }
@@ -92,7 +106,13 @@ fun ListEmail(
             horizontal = 5.dp,
             vertical = 1.dp)
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .combinedClickable(
+                    onLongClick = { onItemSelected(index) }
+                ){}
+                .background(if (isSelected) Color.Blue else Color.White)
+        ){
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
