@@ -24,7 +24,6 @@ import io.github.serpro69.kfaker.Faker
 fun FavoritesScreen(listEmailViewModel: ListEmailViewModel, valController: NavController) {
 
     val emailDataList = rememberEmailDataList()
-    val selectedItems = remember { mutableStateListOf<Int>() }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -34,23 +33,15 @@ fun FavoritesScreen(listEmailViewModel: ListEmailViewModel, valController: NavCo
         ) {
             val favoriteEmails = listEmailViewModel.favoriteEmails.toList()
             items(favoriteEmails) { index ->
-                val isSelected = selectedItems.contains(index)
+                val isSelected = listEmailViewModel.selectedItems.contains(index)
                 ListEmail(
                     name = emailDataList[index].name,
                     email = emailDataList[index].email,
                     index = index,
                     isFavorite = true,
-                    onToggleFavorite = { emailIndex ->
-                        listEmailViewModel.toggleFavorite(emailIndex)
-                    },
+                    onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex)},
                     isSelected = isSelected,
-                    onItemSelected = { emailIndex ->
-                        if (selectedItems.contains(emailIndex)) {
-                            selectedItems.remove(emailIndex)
-                        } else {
-                            selectedItems.add(emailIndex)
-                        }
-                    },
+                    onItemSelected = { emailIndex -> listEmailViewModel.toggleItemSelected(emailIndex) },
                     valController
                 )
             }

@@ -84,6 +84,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.fiap.email.R
 import br.com.fiap.email.components.BottomSheet
+import br.com.fiap.email.components.BottomSheetButton
 import br.com.fiap.email.components.ButtonWrite
 import br.com.fiap.email.screens.FavoritesScreen
 import br.com.fiap.email.screens.HomeScreen
@@ -99,6 +100,7 @@ fun AppNavigation(valController: NavController) {
     val navController = rememberNavController()
     val listEmailViewModel = remember { ListEmailViewModel() }
     val isInEditMode by listEmailViewModel.isInEditMode
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     Column {
         Box(
@@ -130,7 +132,7 @@ fun AppNavigation(valController: NavController) {
                                 contentDescription = "botao de pastas"
                             )
                         }
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = {showBottomSheet = true}) {
                             Icon(
                                 painter = painterResource(id = R.drawable.more),
                                 contentDescription = "botao de mais"
@@ -224,6 +226,9 @@ fun AppNavigation(valController: NavController) {
                         }
                     }
                     ButtonWrite(valController)
+                    BottomSheetButtonEdit(showBottomSheet) {
+                        showBottomSheet = it
+                    }
                 }
             ) {
                 NavHost(
@@ -239,6 +244,112 @@ fun AppNavigation(valController: NavController) {
                     composable(route = Screens.FavoritesScreen.name) {
                         FavoritesScreen(listEmailViewModel, valController)
                     }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit) {
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    val azul_escuro: Color = colorResource(id = R.color.azul_escuro)
+
+    Column {
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    onButtonClick(false)
+                },
+                sheetState = sheetState
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(25.dp)
+                ){
+                    Row(
+                        modifier = Modifier
+                            .padding(10.dp, 12.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.forward),
+                            contentDescription = "forward"
+                        )
+                        Text(
+                            text = "Encaminhar",
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    }
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        color = Color.LightGray,
+                        thickness = 1.dp
+                    )
+                    Row(
+                        modifier = Modifier
+                            .padding(10.dp, 12.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.folderimg),
+                            contentDescription = "pastas"
+                        )
+                        Text(
+                            text = "Adicionar a Pasta",
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    }
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        color = Color.LightGray,
+                        thickness = 1.dp
+                    )
+                    Row(
+                        modifier = Modifier
+                            .padding(10.dp, 12.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.spam),
+                            contentDescription = "spam"
+                        )
+                        Text(
+                            text = "Denunciar Spam",
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    }
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        color = Color.LightGray,
+                        thickness = 1.dp
+                    )
+                    Row(
+                        modifier = Modifier
+                            .padding(10.dp, 12.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.delete),
+                            contentDescription = "delete"
+                        )
+                        Text(
+                            text = "Deletar",
+                            modifier = Modifier.padding(start = 10.dp),
+                            color = azul_escuro
+                        )
+                    }
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        color = Color.LightGray,
+                        thickness = 1.dp
+                    )
                 }
             }
         }
