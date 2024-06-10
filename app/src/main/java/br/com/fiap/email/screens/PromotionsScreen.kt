@@ -64,7 +64,7 @@ fun PromotionsScreen(listEmailViewModel: ListEmailViewModel, valController: NavC
         ) {
             items(10) { index ->
                 val isFavorite = listEmailViewModel.isFavorite(index)
-                val isSelected = selectedItems.contains(index)
+                val isSelected = listEmailViewModel.selectedItems.contains(index)
                 ListEmail(
                     name = emailDataList[index].name,
                     email = emailDataList[index].email,
@@ -72,13 +72,7 @@ fun PromotionsScreen(listEmailViewModel: ListEmailViewModel, valController: NavC
                     isFavorite = isFavorite,
                     onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex) },
                     isSelected = isSelected,
-                    onItemSelected = { emailIndex ->
-                        if (selectedItems.contains(emailIndex)) {
-                            selectedItems.remove(emailIndex)
-                        } else {
-                            selectedItems.add(emailIndex)
-                        }
-                    },
+                    onItemSelected = { emailIndex -> listEmailViewModel.toggleItemSelected(emailIndex) },
                     valController)
             }
         }
@@ -109,8 +103,9 @@ fun ListEmail(
         Column(
             modifier = Modifier
                 .combinedClickable(
+                    onClick = { valController.navigate("emailDetail/${name}/${email}") },
                     onLongClick = { onItemSelected(index) }
-                ){}
+                )
                 .background(if (isSelected) Color.Blue else Color.White)
         ){
             Row(

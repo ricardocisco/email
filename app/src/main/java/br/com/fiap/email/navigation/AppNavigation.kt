@@ -23,6 +23,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
@@ -70,6 +73,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -94,6 +98,7 @@ import kotlinx.coroutines.launch
 fun AppNavigation(valController: NavController) {
     val navController = rememberNavController()
     val listEmailViewModel = remember { ListEmailViewModel() }
+    val isInEditMode by listEmailViewModel.isInEditMode
 
     Column {
         Box(
@@ -102,44 +107,77 @@ fun AppNavigation(valController: NavController) {
                 .height(70.dp)
                 .background(Color.White)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
+            if (isInEditMode) {
+                Row(
                     modifier = Modifier
-                        .width(50.dp)
-                        .clip(shape = CircleShape),
-                    painter = painterResource(id = R.drawable.perfil),
-                    contentDescription = "Perfil"
-                )
-                Text(
-                    text = "Rachel Jacobs",
-                    color = Color.Black,
-                    fontSize = 18.sp,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(start = 5.dp)
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                IconButton(onClick = {}) {
-                    Icon(
-                        modifier = Modifier.size(32.dp),
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Pesquisa",
-                        tint = Color.Black
-                    )
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButton(onClick = {listEmailViewModel.clearSelectedItems()}) {
+                        Icon(
+                            modifier = Modifier.size(32.dp),
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "Pesquisa",
+                            tint = Color.Black
+                        )
+                    }
+                    Row {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.folder),
+                                contentDescription = "botao de pastas"
+                            )
+                        }
+                        IconButton(onClick = {}) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.more),
+                                contentDescription = "botao de mais"
+                            )
+                        }
+                    }
                 }
-                Spacer(modifier = Modifier.padding(2.dp))
-                IconButton(onClick = { valController.navigate("settings") }) {
-                    Icon(
-                        modifier = Modifier.size(32.dp),
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "Configurações",
-                        tint = Color.Black
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .width(50.dp)
+                            .clip(shape = CircleShape),
+                        painter = painterResource(id = R.drawable.perfil),
+                        contentDescription = "Perfil"
                     )
+                    Text(
+                        text = "Rachel Jacobs",
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily.SansSerif,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(start = 5.dp)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    IconButton(onClick = {}) {
+                        Icon(
+                            modifier = Modifier.size(32.dp),
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Pesquisa",
+                            tint = Color.Black
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(2.dp))
+                    IconButton(onClick = { valController.navigate("settings") }) {
+                        Icon(
+                            modifier = Modifier.size(32.dp),
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Configurações",
+                            tint = Color.Black
+                        )
+                    }
                 }
             }
         }
