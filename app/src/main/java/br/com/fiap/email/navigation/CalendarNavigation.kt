@@ -92,7 +92,6 @@ fun CalendarNavigation() {
                 .fillMaxWidth()
                 .height(70.dp)
                 .background(Color.White)
-                .shadow(1.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -122,6 +121,12 @@ fun CalendarNavigation() {
                 }
             }
         }
+        Divider (
+            color = Color.LightGray,
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+        )
         Box(
         )
         {

@@ -52,8 +52,6 @@ import io.github.serpro69.kfaker.Faker
 fun PromotionsScreen(listEmailViewModel: ListEmailViewModel, valController: NavController) {
 
     val emailDataList = rememberEmailDataList()
-    val selectedItems = remember { mutableStateListOf<Int>() }
-
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -92,6 +90,7 @@ fun ListEmail(
     valController: NavController
 ) {
     var favorited by remember { mutableStateOf(false) }
+    val customAzulClaro = colorResource(id = R.color.customAzulClaro)
 
     ElevatedCard(
         onClick = { valController.navigate("emailDetail/${name}/${email}") },
@@ -106,7 +105,7 @@ fun ListEmail(
                     onClick = { valController.navigate("emailDetail/${name}/${email}") },
                     onLongClick = { onItemSelected(index) }
                 )
-                .background(if (isSelected) Color.Blue else Color.White)
+                .background(if (isSelected) customAzulClaro else Color.White)
         ){
             Row(
                 modifier = Modifier
