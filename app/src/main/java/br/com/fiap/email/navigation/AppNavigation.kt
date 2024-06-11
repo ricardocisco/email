@@ -23,7 +23,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -54,6 +56,7 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -74,6 +77,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -89,6 +93,7 @@ import br.com.fiap.email.screens.FavoritesScreen
 import br.com.fiap.email.screens.HomeScreen
 import br.com.fiap.email.screens.PromotionsScreen
 import br.com.fiap.email.viewmodel.ListEmailViewModel
+import br.com.fiap.email.viewmodel.NetworkViewModel
 import kotlinx.coroutines.launch
 
 
@@ -178,6 +183,7 @@ fun AppNavigation(valController: NavController) {
                             tint = Color.Black
                         )
                     }
+                    NetworkStatus()
                 }
             }
         }
@@ -245,6 +251,25 @@ fun AppNavigation(valController: NavController) {
     }
 }
 
+
+@Composable
+fun NetworkStatus(viewModel: NetworkViewModel = viewModel()) {
+    val isConnected = viewModel.connectivityLiveData.observeAsState(initial = false)
+
+    if (isConnected.value == true) {
+        Image(
+            modifier = Modifier.size(32.dp),
+            painter = painterResource(id = R.drawable.cloudon),
+            contentDescription = "Online"
+        )
+    } else {
+        Image(
+            modifier = Modifier.size(32.dp),
+            painter = painterResource(id = R.drawable.cloudoff),
+            contentDescription = "Offline"
+        )
+    }
+}
 
 
 

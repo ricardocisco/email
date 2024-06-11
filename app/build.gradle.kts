@@ -73,4 +73,7 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("io.github.serpro69:kotlin-faker:2.0.0-rc.4")
+
+    implementation ("androidx.compose.runtime:runtime-livedata:1.2.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
 }
