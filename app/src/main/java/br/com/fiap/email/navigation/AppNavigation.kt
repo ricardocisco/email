@@ -89,7 +89,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.fiap.email.R
-import br.com.fiap.email.components.BottomSheet
 import br.com.fiap.email.components.BottomSheetButton
 import br.com.fiap.email.components.ButtonWrite
 import br.com.fiap.email.screens.FavoritesScreen
@@ -296,7 +295,8 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                 onDismissRequest = {
                     onButtonClick(false)
                 },
-                sheetState = sheetState
+                sheetState = sheetState,
+                containerColor = Color.White
             ) {
                 Column(
                     modifier = Modifier
@@ -314,7 +314,8 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                         )
                         Text(
                             text = "Encaminhar",
-                            modifier = Modifier.padding(start = 10.dp)
+                            modifier = Modifier.padding(start = 10.dp),
+                            color = Color.Black
                         )
                     }
                     Divider(
@@ -334,7 +335,8 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                         )
                         Text(
                             text = "Adicionar a Pasta",
-                            modifier = Modifier.padding(start = 10.dp)
+                            modifier = Modifier.padding(start = 10.dp),
+                            color = Color.Black
                         )
                     }
                     Divider(
@@ -354,7 +356,8 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                         )
                         Text(
                             text = "Denunciar Spam",
-                            modifier = Modifier.padding(start = 10.dp)
+                            modifier = Modifier.padding(start = 10.dp),
+                            color = Color.Black
                         )
                     }
                     Divider(

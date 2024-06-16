@@ -37,7 +37,7 @@ import br.com.fiap.email.navigation.Screens
 fun HomeScreen(valController: NavController, navController: NavController) {
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(Color.White),
         contentAlignment = Alignment.TopStart,
     ) {
         Divider(

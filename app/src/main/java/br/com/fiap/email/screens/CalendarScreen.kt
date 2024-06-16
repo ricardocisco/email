@@ -76,10 +76,11 @@ fun CalendarScreen(events: Map<LocalDate, MutableList<String>>, onEventAdd: (Loc
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth().background(Color.White)
                 .background(Color.Gray.copy(alpha = 0.1f))
         ) {
             Column(
@@ -316,15 +317,17 @@ fun EventDialog(
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text("Cancelar")
+                        Text("Cancelar", color = Color.Black)
                     }
                     Spacer(modifier = Modifier.width(8.dp))
-                    Button(onClick = {
-                        onEventAdd(date, eventText)
-                    }) {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.azul_escuro)),
+                        onClick = {
+                            onEventAdd(date, eventText)
+                        }) {
                         Text("Salvar")
                     }
                 }

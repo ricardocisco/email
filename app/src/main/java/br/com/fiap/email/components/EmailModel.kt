@@ -218,7 +218,8 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                 onDismissRequest = {
                     onButtonClick(false)
                 },
-                sheetState = sheetState
+                sheetState = sheetState,
+                containerColor = Color.White
             ) {
                 Column(
                     modifier = Modifier
@@ -236,7 +237,8 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                         )
                         Text(
                             text = "Responder",
-                            modifier = Modifier.padding(start = 10.dp)
+                            modifier = Modifier.padding(start = 10.dp),
+                            color = Color.Black
                         )
                     }
                     Divider(
@@ -256,7 +258,8 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                         )
                         Text(
                             text = "Encaminhar",
-                            modifier = Modifier.padding(start = 10.dp)
+                            modifier = Modifier.padding(start = 10.dp),
+                            color = Color.Black
                         )
                     }
                     Divider(
@@ -276,7 +279,8 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                         )
                         Text(
                             text = "Adicionar a Pasta",
-                            modifier = Modifier.padding(start = 10.dp)
+                            modifier = Modifier.padding(start = 10.dp),
+                            color = Color.Black
                         )
                     }
                     Divider(
@@ -296,7 +300,8 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                         )
                         Text(
                             text = "Denunciar Spam",
-                            modifier = Modifier.padding(start = 10.dp)
+                            modifier = Modifier.padding(start = 10.dp),
+                            color = Color.Black
                         )
                     }
                     Divider(

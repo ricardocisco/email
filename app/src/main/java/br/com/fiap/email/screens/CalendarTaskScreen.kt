@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -59,14 +60,16 @@ fun CalendarTaskScreen(events: Map<LocalDate, MutableList<String>>, onEventAdd: 
         )
     }
 
-    Column {
+    Column(
+        modifier = Modifier.background(Color.White).fillMaxSize()
+    ){
         Box(modifier = Modifier
             .fillMaxWidth(),
             contentAlignment = Alignment.CenterStart
 
         ){
             Row(modifier = Modifier.padding(16.dp)){
-                Text(text = "Tarefas do dia", fontSize = 26.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Tarefas do dia", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = Color.Black)
             }
         }
         Box(modifier = Modifier.padding(horizontal = 16.dp)){
@@ -86,7 +89,8 @@ fun TaskList(events: Map<LocalDate, MutableList<String>>) {
                 Column(modifier = Modifier){
                     Text(
                         text = "${formatDate(date)}",
-                        fontSize = 22.sp
+                        fontSize = 22.sp,
+                        color = Color.Black
                     )
                     eventList.forEach { event ->
                         Row(
@@ -96,7 +100,8 @@ fun TaskList(events: Map<LocalDate, MutableList<String>>) {
                             Checkbox(checked = state, onCheckedChange = { state = !state })
                             Text(
                                 text = event,
-                                fontSize = 20.sp
+                                fontSize = 20.sp,
+                                color = Color.Black
                             )
                         }
                     }
