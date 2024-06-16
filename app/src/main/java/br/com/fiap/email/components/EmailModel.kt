@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.com.fiap.email.R
+import br.com.fiap.email.navigation.Screens
 import kotlinx.coroutines.launch
 
 
@@ -51,7 +52,6 @@ import kotlinx.coroutines.launch
 fun EmailModel(valController: NavController, name: String, email: String) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
-
     val gray_100: Color = colorResource(id = R.color.gray_100)
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
 
@@ -65,21 +65,24 @@ fun EmailModel(valController: NavController, name: String, email: String) {
             verticalAlignment = Alignment.CenterVertically
         )
         {
-            IconButton(onClick = { valController.navigate("homeApp") }) {
+            IconButton(onClick = {valController.navigate("homeApp")}) {
                 Icon(
                     painterResource(id = R.drawable.seta_voltar),
                     contentDescription = "Botão de Voltar",
                     tint = Color.Black,
                     modifier = Modifier
-                        .height(35.dp)
-                        .width(35.dp)
+                        .height(30.dp)
+                        .width(30.dp)
                 )
             }
             Row {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         painter = painterResource(id = R.drawable.folder),
-                        contentDescription = "botao de pastas"
+                        contentDescription = "botao de pastas",
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp)
                     )
                 }
                 IconButton(onClick = {
@@ -87,7 +90,10 @@ fun EmailModel(valController: NavController, name: String, email: String) {
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.more),
-                        contentDescription = "botao de mais"
+                        contentDescription = "botao de mais",
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp)
                     )
                 }
             }
@@ -149,7 +155,7 @@ fun EmailModel(valController: NavController, name: String, email: String) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = {},
+                    onClick = {valController.navigate("writeEmail")},
                     modifier = Modifier
                         .shadow(
                             elevation = 5.dp,

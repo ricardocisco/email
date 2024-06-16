@@ -86,8 +86,8 @@ fun ConfigScreen(valController: NavController) {
                         contentDescription = "Botão de Voltar",
                         tint = Color.Black,
                         modifier = Modifier
-                            .height(35.dp)
-                            .width(35.dp)
+                            .height(30.dp)
+                            .width(30.dp)
                     )
                 }
                 Text(

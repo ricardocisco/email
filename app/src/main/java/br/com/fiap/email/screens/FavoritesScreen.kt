@@ -3,9 +3,12 @@ package br.com.fiap.email.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -21,33 +24,56 @@ import br.com.fiap.email.viewmodel.ListEmailViewModel
 import io.github.serpro69.kfaker.Faker
 
 @Composable
-fun FavoritesScreen(listEmailViewModel: ListEmailViewModel, valController: NavController) {
-
+fun FavoritesScreen(
+    listEmailViewModel: ListEmailViewModel,
+    valController: NavController,
+    searchText: String,
+) {
     val emailDataList = rememberEmailDataList()
+    val filteredFavoriteEmails = listEmailViewModel.favoriteEmails
+        .filter {
+            emailDataList[it].name.contains(
+                searchText,
+                ignoreCase = true
+            ) || emailDataList[it].email.contains(searchText, ignoreCase = true)
+        }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopStart
     ) {
+        Divider(
+            color = Color.LightGray,
+            modifier = Modifier
+                .padding(top = 80.dp)
+                .height(1.dp)
+                .fillMaxWidth()
+        )
         LazyColumn(
-            modifier = Modifier.padding(top = 80.dp)
+            modifier = Modifier.padding(top = 90.dp)
         ) {
-            val favoriteEmails = listEmailViewModel.favoriteEmails.toList()
-            items(favoriteEmails) { index ->
+            items(filteredFavoriteEmails) { index ->
                 val isSelected = listEmailViewModel.selectedItems.contains(index)
+                val emailData = emailDataList[index]
                 ListEmail(
-                    name = emailDataList[index].name,
-                    email = emailDataList[index].email,
+                    name = emailData.name,
+                    email = emailData.email,
                     index = index,
                     isFavorite = true,
-                    onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex)},
+                    onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex) },
                     isSelected = isSelected,
-                    onItemSelected = { emailIndex -> listEmailViewModel.toggleItemSelected(emailIndex) },
+                    onItemSelected = { emailIndex ->
+                        listEmailViewModel.toggleItemSelected(
+                            emailIndex
+                        )
+                    },
                     valController
                 )
             }
         }
     }
 }
+
 @Composable
 private fun rememberEmailDataList(): List<EmailData> {
     val emailDataList = remember {

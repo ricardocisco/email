@@ -47,6 +47,7 @@ import androidx.compose.material3.NavigationBarDefaults.containerColor
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -82,6 +83,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -102,10 +104,12 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AppNavigation(valController: NavController) {
-    val navController = rememberNavController()
     val listEmailViewModel = remember { ListEmailViewModel() }
     val isInEditMode by listEmailViewModel.isInEditMode
     var showBottomSheet by remember { mutableStateOf(false) }
+    var isSearching by remember { mutableStateOf(false) }
+    var searchText by remember { mutableStateOf("") }
+    val navController = rememberNavController()
 
     Column {
         Box(
@@ -122,7 +126,7 @@ fun AppNavigation(valController: NavController) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    IconButton(onClick = {listEmailViewModel.clearSelectedItems()}) {
+                    IconButton(onClick = { listEmailViewModel.clearSelectedItems() }) {
                         Icon(
                             modifier = Modifier.size(32.dp),
                             imageVector = Icons.Default.Clear,
@@ -137,7 +141,7 @@ fun AppNavigation(valController: NavController) {
                                 contentDescription = "botao de pastas"
                             )
                         }
-                        IconButton(onClick = {showBottomSheet = true}) {
+                        IconButton(onClick = { showBottomSheet = true }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.more),
                                 contentDescription = "botao de mais"
@@ -152,40 +156,62 @@ fun AppNavigation(valController: NavController) {
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        modifier = Modifier
-                            .width(50.dp)
-                            .clip(shape = CircleShape),
-                        painter = painterResource(id = R.drawable.perfil),
-                        contentDescription = "Perfil"
-                    )
-                    Text(
-                        text = "Rachel Jacobs",
-                        color = Color.Black,
-                        fontSize = 18.sp,
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.padding(start = 5.dp)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    IconButton(onClick = {}) {
-                        Icon(
-                            modifier = Modifier.size(32.dp),
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Pesquisa",
-                            tint = Color.Black
+                    if (isSearching) {
+                        OutlinedTextField(
+                            value = searchText,
+                            onValueChange = { searchText = it },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            placeholder = { Text("Digite para pesquisar...") },
+                            singleLine = true,
+                            shape = RoundedCornerShape(50),
+                            trailingIcon = {
+                                IconButton(onClick = { isSearching = false }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Cancelar",
+                                        tint = Color.Black
+                                    )
+                                }
+                            }
                         )
-                    }
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    IconButton(onClick = { valController.navigate("settings") }) {
-                        Icon(
-                            modifier = Modifier.size(32.dp),
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Configurações",
-                            tint = Color.Black
+                    } else {
+                        Image(
+                            modifier = Modifier
+                                .width(50.dp)
+                                .clip(shape = CircleShape),
+                            painter = painterResource(id = R.drawable.perfil),
+                            contentDescription = "Perfil"
                         )
+                        Text(
+                            text = "Rachel Jacobs",
+                            color = Color.Black,
+                            fontSize = 18.sp,
+                            fontFamily = FontFamily.SansSerif,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.padding(start = 5.dp)
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        IconButton(onClick = { isSearching = true }) {
+                            Icon(
+                                modifier = Modifier.size(32.dp),
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Pesquisa",
+                                tint = Color.Black
+                            )
+                        }
+                        Spacer(modifier = Modifier.padding(2.dp))
+                        IconButton(onClick = { valController.navigate("settings") }) {
+                            Icon(
+                                modifier = Modifier.size(32.dp),
+                                imageVector = Icons.Default.Settings,
+                                contentDescription = "Configurações",
+                                tint = Color.Black
+                            )
+                        }
+                        NetworkStatus()
                     }
-                    NetworkStatus()
                 }
             }
         }
@@ -242,13 +268,14 @@ fun AppNavigation(valController: NavController) {
                     startDestination = Screens.HomeScreen.name,
                 ) {
                     composable(route = Screens.HomeScreen.name) {
-                        HomeScreen()
+                        HomeScreen(valController)
                     }
                     composable(route = Screens.PromotionsScreen.name) {
-                        PromotionsScreen(listEmailViewModel, valController)
+                        PromotionsScreen(
+                            listEmailViewModel, valController, searchText)
                     }
                     composable(route = Screens.FavoritesScreen.name) {
-                        FavoritesScreen(listEmailViewModel, valController)
+                        FavoritesScreen(listEmailViewModel, valController, searchText)
                     }
                 }
             }
@@ -274,7 +301,7 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                 Column(
                     modifier = Modifier
                         .padding(25.dp)
-                ){
+                ) {
                     Row(
                         modifier = Modifier
                             .padding(10.dp, 12.dp),

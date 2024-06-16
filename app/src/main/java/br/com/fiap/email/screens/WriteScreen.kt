@@ -51,7 +51,6 @@ import androidx.navigation.NavController
 @Composable
 fun WriteScreen(valController: NavController) {
 
-    val customPink: Color = colorResource(id = R.color.customPink)
     val customBlue: Color = colorResource(id = R.color.customBlue)
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
     val customCinza: Color = colorResource(id = R.color.customCinza)
@@ -85,8 +84,8 @@ fun WriteScreen(valController: NavController) {
                         contentDescription = "Botão de Voltar",
                         tint = Color.Black,
                         modifier = Modifier
-                            .height(35.dp)
-                            .width(35.dp)
+                            .height(30.dp)
+                            .width(30.dp)
                     )
                 }
                 Text(

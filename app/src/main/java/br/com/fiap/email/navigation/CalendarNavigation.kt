@@ -65,7 +65,7 @@ import java.time.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CalendarNavigation() {
+fun CalendarNavigation(valController: NavController) {
     val calendarController = rememberNavController()
     val listEmailViewModel = remember { ListEmailViewModel() }
     var showEventDialog by remember { mutableStateOf(false) }
@@ -100,7 +100,7 @@ fun CalendarNavigation() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = {}) {
+                IconButton(onClick = { valController.navigate("homeApp") }) {
                     Icon(
                         painterResource(id = R.drawable.seta_voltar),
                         contentDescription = "Botão de Voltar",
@@ -121,7 +121,7 @@ fun CalendarNavigation() {
                 }
             }
         }
-        Divider (
+        Divider(
             color = Color.LightGray,
             modifier = Modifier
                 .height(1.dp)
@@ -159,7 +159,7 @@ fun CalendarNavigation() {
                             )
                         }
                     }
-                    Divider (
+                    Divider(
                         color = Color.LightGray,
                         modifier = Modifier
                             .height(1.dp)

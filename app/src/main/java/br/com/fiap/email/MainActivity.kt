@@ -65,23 +65,34 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TelaSettings(){
+fun TelaSettings() {
     val valController = rememberNavController()
-    NavHost(navController = valController, startDestination = "homeApp"){
-        composable(route = "homeApp"){
+    NavHost(navController = valController, startDestination = "homeApp") {
+        composable(route = "homeApp") {
             AppNavigation(valController)
         }
-        composable(route = "settings"){
+        composable(route = "settings") {
             ConfigScreen(valController)
         }
-        composable(route = "writeEmail"){
+        composable(route = "writeEmail") {
             WriteScreen(valController)
         }
-        composable(route = "emailDetail/{name}/{email}"){
-            EmailModel(valController, it.arguments?.getString("name")!!, it.arguments?.getString("email")!!)
+        composable(route = "emailDetail/{name}/{email}") {
+            EmailModel(
+                valController,
+                it.arguments?.getString("name")!!,
+                it.arguments?.getString("email")!!
+            )
         }
-        composable(route ="responseEmail/{name}/{email}"){
-            ResponseScreen(valController, it.arguments?.getString("name")!!, it.arguments?.getString("email")!!)
+        composable(route = "responseEmail/{name}/{email}") {
+            ResponseScreen(
+                valController,
+                it.arguments?.getString("name")!!,
+                it.arguments?.getString("email")!!
+            )
+        }
+        composable(route = "calendar") {
+            CalendarNavigation(valController)
         }
     }
 }

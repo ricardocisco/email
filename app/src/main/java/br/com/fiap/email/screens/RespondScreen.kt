@@ -42,7 +42,6 @@ import br.com.fiap.email.R
 
 @Composable
 fun ResponseScreen(valController: NavController, name: String, email: String){
-    val customPink: Color = colorResource(id = R.color.customPink)
     val customBlue: Color = colorResource(id = R.color.customBlue)
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
     val customCinza: Color = colorResource(id = R.color.customCinza)
@@ -81,7 +80,7 @@ fun ResponseScreen(valController: NavController, name: String, email: String){
                     )
                 }
                 Text(
-                    text = "Escrever",
+                    text = "Responder",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
