@@ -231,7 +231,7 @@ fun AppNavigation(valController: NavController) {
                                 onClick = {
                                     navController.navigate(navItem.route) {
                                         popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
+                                            saveState = false
                                         }
                                         launchSingleTop = true
                                         restoreState = true
@@ -268,7 +268,7 @@ fun AppNavigation(valController: NavController) {
                     startDestination = Screens.HomeScreen.name,
                 ) {
                     composable(route = Screens.HomeScreen.name) {
-                        HomeScreen(valController)
+                        HomeScreen(valController, navController)
                     }
                     composable(route = Screens.PromotionsScreen.name) {
                         PromotionsScreen(
@@ -397,13 +397,13 @@ fun NetworkStatus(viewModel: NetworkViewModel = viewModel()) {
     if (isConnected.value == true) {
         Image(
             modifier = Modifier.size(32.dp),
-            painter = painterResource(id = R.drawable.cloudon),
+            painter = painterResource(id = R.drawable.interneton),
             contentDescription = "Online"
         )
     } else {
         Image(
             modifier = Modifier.size(32.dp),
-            painter = painterResource(id = R.drawable.cloudoff),
+            painter = painterResource(id = R.drawable.internetoff),
             contentDescription = "Offline"
         )
     }

@@ -50,7 +50,7 @@ fun FavoritesScreen(
                 .fillMaxWidth()
         )
         LazyColumn(
-            modifier = Modifier.padding(top = 90.dp)
+            modifier = Modifier.padding(top = 85.dp)
         ) {
             items(filteredFavoriteEmails) { index ->
                 val isSelected = listEmailViewModel.selectedItems.contains(index)

@@ -46,6 +46,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +63,8 @@ fun WriteScreen(valController: NavController) {
 
     Column(
         modifier = Modifier
-            .fillMaxHeight(),
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(
             modifier = Modifier
@@ -113,7 +115,7 @@ fun WriteScreen(valController: NavController) {
         }
         Column(
             modifier = Modifier
-                .fillMaxHeight()
+                .fillMaxHeight(0.85f)
                 .background(customCinza),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -182,7 +184,7 @@ fun WriteScreen(valController: NavController) {
                     .padding(horizontal = 30.dp)
                 //.border(width = 1.dp, Color.Black)
             )
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(50.dp))
             TextField(
                 value = campoAssunto,
                 onValueChange = { campoAssunto = it },
@@ -231,83 +233,83 @@ fun WriteScreen(valController: NavController) {
                     .fillMaxWidth()
                     .padding(horizontal = 25.dp)
             )
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(40.dp)
-//                    .background(
-//                        brush = Brush.verticalGradient(
-//                            colors = listOf(customBlue, customCinza),
-//                            startY = 120f,
-//                            endY = 0f,
-//                        )
-//                    )
-//            )
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Box(
                 modifier = Modifier
-                    .height(100.dp)
                     .fillMaxWidth()
-                    .background(Color.White)
+                    .height(40.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(customBlue, customCinza),
+                            startY = 120f,
+                            endY = 0f,
+                        )
+                    )
+            )
+        }
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .height(100.dp)
+                .fillMaxWidth()
+                .background(Color.White)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.Center,
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
+                Button(
+                    onClick = { },
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(170.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = customDarkCinza)
                 ) {
-                    Button(
-                        onClick = { },
+                    Icon(
+                        painterResource(id = R.drawable.anexo),
+                        contentDescription = "Anexo",
+                        tint = Color.Black,
                         modifier = Modifier
-                            .height(45.dp)
-                            .width(170.dp),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = customDarkCinza)
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.anexo),
-                            contentDescription = "Anexo",
-                            tint = Color.Black,
-                            modifier = Modifier
-                                .height(30.dp)
-                                .width(30.dp)
-                        )
-                        Text(
-                            text = "Anexar",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black,
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(20.dp))
-                    Button(
-                        onClick = { },
+                            .height(30.dp)
+                            .width(30.dp)
+                    )
+                    Text(
+                        text = "Anexar",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                    )
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                Button(
+                    onClick = { },
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(170.dp)
+                        .shadow(
+                            elevation = 5.dp,
+                            shape = RoundedCornerShape(15.dp),
+                            spotColor = customDarkBlue,
+                            clip = false
+                        ),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = customDarkBlue)
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.envio),
+                        contentDescription = "Envio",
+                        tint = Color.White,
                         modifier = Modifier
-                            .height(45.dp)
-                            .width(170.dp)
-                            .shadow(
-                                elevation = 5.dp,
-                                shape = RoundedCornerShape(15.dp),
-                                spotColor = customDarkBlue,
-                                clip = false
-                            ),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = customDarkBlue)
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.envio),
-                            contentDescription = "Envio",
-                            tint = Color.White,
-                            modifier = Modifier
-                                .height(30.dp)
-                                .width(30.dp)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            text = "Enviar",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                        )
-                    }
+                            .height(30.dp)
+                            .width(30.dp)
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = "Enviar",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                    )
                 }
             }
         }

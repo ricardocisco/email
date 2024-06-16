@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -41,7 +42,7 @@ import androidx.navigation.NavController
 import br.com.fiap.email.R
 
 @Composable
-fun ResponseScreen(valController: NavController, name: String, email: String){
+fun ResponseScreen(valController: NavController, name: String, email: String) {
     val customBlue: Color = colorResource(id = R.color.customBlue)
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
     val customCinza: Color = colorResource(id = R.color.customCinza)
@@ -53,7 +54,8 @@ fun ResponseScreen(valController: NavController, name: String, email: String){
 
     Column(
         modifier = Modifier
-            .fillMaxHeight(),
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(
             modifier = Modifier
@@ -66,7 +68,7 @@ fun ResponseScreen(valController: NavController, name: String, email: String){
                     .height(80.dp)
             ) {
                 IconButton(
-                    onClick = { valController.navigate("emailDetail/${name}/${email}") },
+                    onClick = { valController.navigate("homeApp") },
                     modifier = Modifier
                         .offset(x = (-170).dp)
                 ) {
@@ -75,8 +77,8 @@ fun ResponseScreen(valController: NavController, name: String, email: String){
                         contentDescription = "Botão de Voltar",
                         tint = Color.Black,
                         modifier = Modifier
-                            .height(35.dp)
-                            .width(35.dp)
+                            .height(30.dp)
+                            .width(30.dp)
                     )
                 }
                 Text(
@@ -104,7 +106,7 @@ fun ResponseScreen(valController: NavController, name: String, email: String){
         }
         Column(
             modifier = Modifier
-                .fillMaxHeight()
+                .fillMaxHeight(0.85f)
                 .background(customCinza),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -141,7 +143,7 @@ fun ResponseScreen(valController: NavController, name: String, email: String){
                 label = { Text("Para:") },
                 placeholder = { Text("exemplo@email.com") },
                 textStyle = TextStyle(
-                    fontSize = 18.sp
+                    fontSize = 14.sp
                 ),
                 maxLines = 10,
                 colors = TextFieldDefaults.colors(
@@ -173,7 +175,7 @@ fun ResponseScreen(valController: NavController, name: String, email: String){
                     .padding(horizontal = 30.dp)
                 //.border(width = 1.dp, Color.Black)
             )
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(50.dp))
             TextField(
                 value = campoAssunto,
                 onValueChange = { campoAssunto = it },
@@ -222,83 +224,83 @@ fun ResponseScreen(valController: NavController, name: String, email: String){
                     .fillMaxWidth()
                     .padding(horizontal = 25.dp)
             )
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(40.dp)
-//                    .background(
-//                        brush = Brush.verticalGradient(
-//                            colors = listOf(customBlue, customCinza),
-//                            startY = 120f,
-//                            endY = 0f,
-//                        )
-//                    )
-//            )
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Box(
                 modifier = Modifier
-                    .height(100.dp)
                     .fillMaxWidth()
-                    .background(Color.White)
+                    .height(40.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(customBlue, customCinza),
+                            startY = 120f,
+                            endY = 0f,
+                        )
+                    )
+            )
+        }
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .height(100.dp)
+                .fillMaxWidth()
+                .background(Color.White)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.Center,
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
+                Button(
+                    onClick = { },
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(170.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = customDarkCinza)
                 ) {
-                    Button(
-                        onClick = { },
+                    Icon(
+                        painterResource(id = R.drawable.anexo),
+                        contentDescription = "Anexo",
+                        tint = Color.Black,
                         modifier = Modifier
-                            .height(45.dp)
-                            .width(170.dp),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = customDarkCinza)
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.anexo),
-                            contentDescription = "Anexo",
-                            tint = Color.Black,
-                            modifier = Modifier
-                                .height(30.dp)
-                                .width(30.dp)
-                        )
-                        Text(
-                            text = "Anexar",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black,
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(20.dp))
-                    Button(
-                        onClick = { },
+                            .height(30.dp)
+                            .width(30.dp)
+                    )
+                    Text(
+                        text = "Anexar",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                    )
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                Button(
+                    onClick = { },
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(170.dp)
+                        .shadow(
+                            elevation = 5.dp,
+                            shape = RoundedCornerShape(15.dp),
+                            spotColor = customDarkBlue,
+                            clip = false
+                        ),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = customDarkBlue)
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.envio),
+                        contentDescription = "Envio",
+                        tint = Color.White,
                         modifier = Modifier
-                            .height(45.dp)
-                            .width(170.dp)
-                            .shadow(
-                                elevation = 5.dp,
-                                shape = RoundedCornerShape(15.dp),
-                                spotColor = customDarkBlue,
-                                clip = false
-                            ),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = customDarkBlue)
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.envio),
-                            contentDescription = "Envio",
-                            tint = Color.White,
-                            modifier = Modifier
-                                .height(30.dp)
-                                .width(30.dp)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            text = "Enviar",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                        )
-                    }
+                            .height(30.dp)
+                            .width(30.dp)
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = "Enviar",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                    )
                 }
             }
         }

@@ -15,10 +15,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -31,7 +34,8 @@ import br.com.fiap.email.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(valController: NavController) {
+fun HomeScreen(valController: NavController, navController: NavController) {
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopStart,
@@ -67,17 +71,18 @@ fun HomeScreen(valController: NavController) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.calendar),
+                    Icon(
+                        painter = painterResource(id = R.drawable.calendaricon),
                         contentDescription = "Calendario",
                         modifier = Modifier
                             .height(24.dp)
-                            .width(24.dp)
+                            .width(24.dp),
+                        tint = colorResource(id = R.color.azul_escuro)
                     )
                     Text(
                         text = "Calendario",
                         modifier = Modifier.padding(start = 10.dp),
-                        color = Color.Black,
+                        color = colorResource(id = R.color.azul_escuro),
                         fontSize = 16.sp
                     )
                 }
@@ -88,7 +93,7 @@ fun HomeScreen(valController: NavController) {
                 )
             }
             Card(
-                onClick = { valController.navigate(Screens.FavoritesScreen.name) },
+                onClick = { navController.navigate(Screens.FavoritesScreen.name) },
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent)
             ) {
                 Row(
@@ -97,18 +102,20 @@ fun HomeScreen(valController: NavController) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.starblack),
+                    Icon(
+                        painter = painterResource(id = R.drawable.star_outline),
                         contentDescription = "Favoritos",
                         modifier = Modifier
                             .height(24.dp)
-                            .width(24.dp)
+                            .width(24.dp),
+                        tint = colorResource(id = R.color.azul_escuro)
+
                     )
                     Text(
                         text = "Favoritos",
                         modifier = Modifier.padding(start = 10.dp),
-                        color = Color.Black,
-                        fontSize = 16.sp
+                        color = colorResource(id = R.color.azul_escuro),
+                        fontSize = 16.sp,
                     )
                 }
                 Divider(
@@ -117,6 +124,15 @@ fun HomeScreen(valController: NavController) {
                     thickness = 1.dp
                 )
             }
+            Text(
+                text = "Criados",
+                color = Color.Black,
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .padding(top = 15.dp, bottom = 15.dp),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.SemiBold
+            )
             Card(
                 onClick = { /*TODO*/ },
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent)

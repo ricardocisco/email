@@ -81,7 +81,7 @@ fun PromotionsScreen(
                 .fillMaxWidth()
         )
         LazyColumn(
-            modifier = Modifier.padding(top = 90.dp)
+            modifier = Modifier.padding(top = 85.dp)
         ) {
             items(filteredEmailDataList.size) { index ->
                 val isFavorite = listEmailViewModel.isFavorite(index)
