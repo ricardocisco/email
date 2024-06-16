@@ -176,6 +176,7 @@ fun AppNavigation(valController: NavController) {
                             }
                         )
                     } else {
+                        Spacer(modifier = Modifier.padding(7.dp))
                         Image(
                             modifier = Modifier
                                 .width(50.dp)
@@ -183,6 +184,7 @@ fun AppNavigation(valController: NavController) {
                             painter = painterResource(id = R.drawable.perfil),
                             contentDescription = "Perfil"
                         )
+                        Spacer(modifier = Modifier.padding(3.dp))
                         Text(
                             text = "Rachel Jacobs",
                             color = Color.Black,
@@ -200,7 +202,6 @@ fun AppNavigation(valController: NavController) {
                                 tint = Color.Black
                             )
                         }
-                        Spacer(modifier = Modifier.padding(2.dp))
                         IconButton(onClick = { valController.navigate("settings") }) {
                             Icon(
                                 modifier = Modifier.size(32.dp),
@@ -209,7 +210,9 @@ fun AppNavigation(valController: NavController) {
                                 tint = Color.Black
                             )
                         }
+                        Spacer(modifier = Modifier.padding(4.dp))
                         NetworkStatus()
+                        Spacer(modifier = Modifier.padding(7.dp))
                     }
                 }
             }

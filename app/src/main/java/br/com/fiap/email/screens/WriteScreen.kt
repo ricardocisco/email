@@ -63,196 +63,202 @@ fun WriteScreen(valController: NavController) {
 
     Column(
         modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween,
+            .fillMaxSize()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .height(80.dp)
-            ) {
-                IconButton(
-                    onClick = { valController.navigate("homeApp") },
+            Column {
+                Box(
+                    contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .offset(x = (-170).dp)
+                        .height(80.dp)
                 ) {
-                    Icon(
-                        painterResource(id = R.drawable.seta_voltar),
-                        contentDescription = "Botão de Voltar",
-                        tint = Color.Black,
-                        modifier = Modifier
-                            .height(30.dp)
-                            .width(30.dp)
-                    )
-                }
-                Text(
-                    text = "Escrever",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(customBlue, customCinza),
-                            startY = 0f,
-                            endY = 120f,
-                        )
-                    )
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxHeight(0.85f)
-                .background(customCinza),
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            TextField(
-                value = campoDe,
-                onValueChange = { campoDe = it },
-                label = { Text("De:") },
-                placeholder = { Text("exemplo@email.com") },
-                textStyle = TextStyle(
-                    fontSize = 18.sp
-                ),
-                maxLines = 1,
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black,
-                    unfocusedLabelColor = Color.Black,
-                    unfocusedPlaceholderColor = Color.LightGray,
-                    cursorColor = customBlue,
-                    focusedIndicatorColor = Color.LightGray,
-                    unfocusedIndicatorColor = Color.LightGray
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(horizontal = 30.dp)
-                //.border(width = 1.dp, Color.Black)
-            )
-            TextField(
-                value = campoPara,
-                onValueChange = { campoPara = it },
-                label = { Text("Para:") },
-                placeholder = { Text("exemplo@email.com") },
-                textStyle = TextStyle(
-                    fontSize = 18.sp
-                ),
-                maxLines = 10,
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black,
-                    unfocusedLabelColor = Color.Black,
-                    unfocusedPlaceholderColor = Color.LightGray,
-                    cursorColor = customBlue,
-                    focusedIndicatorColor = Color.LightGray,
-                    unfocusedIndicatorColor = Color.LightGray
-                ),
-                trailingIcon = {
                     IconButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { valController.navigate("homeApp") },
+                        modifier = Modifier
+                            .offset(x = (-170).dp)
                     ) {
                         Icon(
-                            painterResource(id = R.drawable.seta_baixo),
-                            contentDescription = "Botão p/ Baixo",
+                            painterResource(id = R.drawable.seta_voltar),
+                            contentDescription = "Botão de Voltar",
                             tint = Color.Black,
+                            modifier = Modifier
+                                .height(30.dp)
+                                .width(30.dp)
                         )
                     }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(horizontal = 30.dp)
-                //.border(width = 1.dp, Color.Black)
-            )
-            Spacer(modifier = Modifier.height(50.dp))
-            TextField(
-                value = campoAssunto,
-                onValueChange = { campoAssunto = it },
-                label = { Text("Assunto:") },
-                textStyle = TextStyle(
-                    fontSize = 18.sp
-                ),
-                maxLines = 1,
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black,
-                    unfocusedLabelColor = Color.Black,
-                    unfocusedPlaceholderColor = Color.LightGray,
-                    cursorColor = customBlue,
-                    focusedIndicatorColor = Color.LightGray,
-                    unfocusedIndicatorColor = Color.LightGray
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(horizontal = 30.dp)
-            )
-            TextField(
-                value = campoEmail,
-                onValueChange = { campoEmail = it },
-                label = { Text("E-mail:") },
-                textStyle = TextStyle(
-                    fontSize = 18.sp
-                ),
-                maxLines = 80,
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Gray,
-                    unfocusedLabelColor = Color.Gray,
-                    cursorColor = customBlue,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 25.dp)
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(customBlue, customCinza),
-                            startY = 120f,
-                            endY = 0f,
-                        )
+                    Text(
+                        text = "Escrever",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center
                     )
-            )
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(customBlue, customCinza),
+                                startY = 0f,
+                                endY = 120f,
+                            )
+                        )
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight(0.85f)
+                    .background(customCinza),
+                verticalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Column(
+                    modifier = Modifier
+                    //.border(width = 1.dp, Color.Black)
+                ) {
+                    TextField(
+                        value = campoDe,
+                        onValueChange = { campoDe = it },
+                        label = { Text("De:") },
+                        placeholder = { Text("exemplo@email.com") },
+                        textStyle = TextStyle(
+                            fontSize = 18.sp
+                        ),
+                        maxLines = 1,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            focusedLabelColor = Color.Black,
+                            unfocusedLabelColor = Color.Black,
+                            unfocusedPlaceholderColor = Color.LightGray,
+                            cursorColor = customBlue,
+                            focusedIndicatorColor = Color.LightGray,
+                            unfocusedIndicatorColor = Color.LightGray
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                            .padding(horizontal = 30.dp)
+                    )
+                    TextField(
+                        value = campoPara,
+                        onValueChange = { campoPara = it },
+                        label = { Text("Para:") },
+                        placeholder = { Text("exemplo@email.com") },
+                        textStyle = TextStyle(
+                            fontSize = 18.sp
+                        ),
+                        maxLines = 10,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            focusedLabelColor = Color.Black,
+                            unfocusedLabelColor = Color.Black,
+                            unfocusedPlaceholderColor = Color.LightGray,
+                            cursorColor = customBlue,
+                            focusedIndicatorColor = Color.LightGray,
+                            unfocusedIndicatorColor = Color.LightGray
+                        ),
+                        trailingIcon = {
+                            IconButton(
+                                onClick = { /*TODO*/ },
+                            ) {
+                                Icon(
+                                    painterResource(id = R.drawable.seta_baixo),
+                                    contentDescription = "Botão p/ Baixo",
+                                    tint = Color.Black,
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                            .padding(horizontal = 30.dp)
+                    )
+                    TextField(
+                        value = campoAssunto,
+                        onValueChange = { campoAssunto = it },
+                        label = { Text("Assunto:") },
+                        textStyle = TextStyle(
+                            fontSize = 18.sp
+                        ),
+                        maxLines = 1,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            focusedLabelColor = Color.Black,
+                            unfocusedLabelColor = Color.Black,
+                            unfocusedPlaceholderColor = Color.LightGray,
+                            cursorColor = customBlue,
+                            focusedIndicatorColor = Color.LightGray,
+                            unfocusedIndicatorColor = Color.LightGray
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp)
+                            .padding(horizontal = 30.dp)
+                        //.border(width = 1.dp, Color.Black)
+                    )
+                    TextField(
+                        value = campoEmail,
+                        onValueChange = { campoEmail = it },
+                        label = { Text("E-mail:") },
+                        textStyle = TextStyle(
+                            fontSize = 18.sp
+                        ),
+                        maxLines = 5,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            focusedLabelColor = Color.Gray,
+                            unfocusedLabelColor = Color.Gray,
+                            cursorColor = customBlue,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 30.dp)
+                        //.border(width = 1.dp, Color.Black)
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(customBlue, customCinza),
+                                startY = 120f,
+                                endY = 0f,
+                            )
+                        )
+                )
+            }
         }
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .height(100.dp)
                 .fillMaxWidth()
                 .background(Color.White)
+                //.border(width = 1.dp, Color.Black)
+                .padding(vertical = 20.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center,

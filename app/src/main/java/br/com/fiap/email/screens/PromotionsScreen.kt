@@ -60,7 +60,7 @@ fun PromotionsScreen(
     valController: NavController,
     searchText: String,
 ) {
-    val customBlue: Color = colorResource(id = R.color.customBlue)
+
     val emailDataList = rememberEmailDataList()
     val filteredEmailDataList = emailDataList.filter {
         it.name.contains(searchText, ignoreCase = true) || it.email.contains(
@@ -216,7 +216,7 @@ fun ListEmail(
 @Composable
 private fun rememberEmailDataList(): List<EmailData> {
     val emailDataList = remember {
-        (0 until 15).map { index ->
+        (0 until 10).map { index ->
             EmailData(generateNameWithFaker(), generateEmailWithFaker())
         }
     }
