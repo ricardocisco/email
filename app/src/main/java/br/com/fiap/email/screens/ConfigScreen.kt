@@ -327,7 +327,7 @@ fun ConfigScreen(valController: NavController) {
                                     .fillMaxWidth()
                             ) {
                                 Text(
-                                    text = "Receber notificações",
+                                    text = "Animações",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
                                     color = Color.Gray,
@@ -362,7 +362,7 @@ fun ConfigScreen(valController: NavController) {
                                     .fillMaxWidth()
                             ) {
                                 Text(
-                                    text = "Som",
+                                    text = "Atualizações Automáticas",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
                                     color = Color.Gray,
@@ -397,7 +397,7 @@ fun ConfigScreen(valController: NavController) {
                                     .fillMaxWidth()
                             ) {
                                 Text(
-                                    text = "Receber notificações",
+                                    text = "Limitar Dados em Segundo Plano",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
                                     color = Color.Gray,
