@@ -34,10 +34,12 @@ import br.com.fiap.email.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(valController: NavController, navController: NavController) {
+fun HomeScreen(valController: NavController, navController: NavController)
+{
+    val colors = MaterialTheme.colorScheme
 
     Box(
-        modifier = Modifier.fillMaxSize().background(Color.White),
+        modifier = Modifier.fillMaxSize().background(colors.surface),
         contentAlignment = Alignment.TopStart,
     ) {
         Divider(
@@ -54,7 +56,7 @@ fun HomeScreen(valController: NavController, navController: NavController) {
         ) {
             Text(
                 text = "Default",
-                color = Color.Black,
+                color = colors.onPrimary,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .padding(top = 15.dp, bottom = 15.dp),
@@ -126,7 +128,7 @@ fun HomeScreen(valController: NavController, navController: NavController) {
             }
             Text(
                 text = "Criados",
-                color = Color.Black,
+                color = colors.onPrimary,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .padding(top = 15.dp, bottom = 15.dp),
@@ -148,12 +150,12 @@ fun HomeScreen(valController: NavController, navController: NavController) {
                         contentDescription = "Ler Depois",
                         modifier = Modifier
                             .height(24.dp)
-                            .width(24.dp)
+                            .width(24.dp),
                     )
                     Text(
                         text = "Ler Depois",
                         modifier = Modifier.padding(start = 10.dp),
-                        color = Color.Black,
+                        color = colors.onPrimary,
                         fontSize = 16.sp
                     )
                 }
@@ -183,7 +185,7 @@ fun HomeScreen(valController: NavController, navController: NavController) {
                     Text(
                         text = "Enviados",
                         modifier = Modifier.padding(start = 10.dp),
-                        color = Color.Black,
+                        color = colors.onPrimary,
                         fontSize = 16.sp
                     )
                 }
@@ -213,7 +215,7 @@ fun HomeScreen(valController: NavController, navController: NavController) {
                     Text(
                         text = "Spam",
                         modifier = Modifier.padding(start = 10.dp),
-                        color = Color.Black,
+                        color = colors.onPrimary,
                         fontSize = 16.sp
                     )
                 }
@@ -243,7 +245,7 @@ fun HomeScreen(valController: NavController, navController: NavController) {
                     Text(
                         text = "Lixeira",
                         modifier = Modifier.padding(start = 10.dp),
-                        color = Color.Black,
+                        color = colors.onPrimary,
                         fontSize = 16.sp
                     )
                 }

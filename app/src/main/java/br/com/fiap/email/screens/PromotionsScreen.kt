@@ -30,6 +30,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -69,8 +70,10 @@ fun PromotionsScreen(
         )
     }
 
+    val colors = MaterialTheme.colorScheme
+
     Box(
-        modifier = Modifier.fillMaxSize().background(Color.White),
+        modifier = Modifier.fillMaxSize().background(colors.background),
         contentAlignment = Alignment.TopCenter
     ) {
         Divider(
@@ -123,6 +126,8 @@ fun ListEmail(
     var favorited by remember { mutableStateOf(false) }
     val customAzulClaro = colorResource(id = R.color.customAzulClaro)
 
+    val colors = MaterialTheme.colorScheme
+
     ElevatedCard(
         onClick = {
             valController.navigate("emailDetail/${name}/${email}")
@@ -142,7 +147,7 @@ fun ListEmail(
                         onItemSelected(index)
                     }
                 )
-                .background(if (isSelected) customAzulClaro else Color.White)
+                .background(if (isSelected) customAzulClaro else colors.surface)
         ) {
             Row(
                 modifier = Modifier
@@ -164,12 +169,12 @@ fun ListEmail(
                     Column(
                         modifier = Modifier.padding(start = 15.dp)
                     ) {
-                        Text(text = name, color = Color.Black, fontSize = 16.sp)
-                        Text(text = "International Officer", color = Color.Black)
-                        Text(text = email, color = Color.Black)
+                        Text(text = name, color = if (isSelected) colors.surface else colors.onPrimary, fontSize = 16.sp)
+                        Text(text = "International Officer", color = if (isSelected) colors.surface else colors.onPrimary)
+                        Text(text = email, color = if (isSelected) colors.surface else colors.onPrimary)
                     }
                     Column {
-                        Text(text = "12m ago", color = Color.Black)
+                        Text(text = "12m ago", color = if (isSelected) colors.surface else colors.onPrimary)
                         IconButton(onClick = {
                             favorited = !favorited
                             onToggleFavorite(index)
@@ -195,13 +200,13 @@ fun ListEmail(
                 Text(
                     modifier = Modifier.padding(bottom = 15.dp),
                     text = "Lorem ipsum dolor sit amet",
-                    color = Color.Black,
+                    color = if (isSelected) colors.surface else colors.onPrimary,
                     fontSize = 16.sp
                 )
                 Text(
                     text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
                             "Sit amet consectetur adipiscing elit duis tristique. Enim lobortis scelerisque fermentum dui faucibus in ornare. ",
-                    color = Color.Black
+                    color = if (isSelected) colors.surface else colors.onPrimary
                 )
             }
 //            Divider(

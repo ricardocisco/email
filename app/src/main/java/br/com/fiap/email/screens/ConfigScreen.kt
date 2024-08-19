@@ -62,10 +62,12 @@ fun ConfigScreen(valController: NavController) {
     val customBlue: Color = colorResource(id = R.color.customBlue)
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
 
+    val colors = MaterialTheme.colorScheme
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(colors.surface)
     ) {
         Column (
             modifier = Modifier
@@ -84,7 +86,7 @@ fun ConfigScreen(valController: NavController) {
                     Icon(
                         painterResource(id = R.drawable.seta_voltar),
                         contentDescription = "Botão de Voltar",
-                        tint = Color.Black,
+                        tint = colors.onBackground,
                         modifier = Modifier
                             .height(30.dp)
                             .width(30.dp)
@@ -94,25 +96,12 @@ fun ConfigScreen(valController: NavController) {
                     text = "Configurações",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black,
+                    color = colors.onBackground,
                     modifier = Modifier
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center
                 )
             }
-            Box(
-                modifier = Modifier
-                    .padding(bottom = 10.dp)
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(customBlue, Color.Transparent),
-                            startY = 0f,
-                            endY = 120f,
-                        )
-                    )
-            )
             Column(
                 modifier = Modifier
                     .padding(start = 30.dp, bottom = 15.dp)
@@ -122,7 +111,7 @@ fun ConfigScreen(valController: NavController) {
                     text = "Tema",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black,
+                    color = colors.onBackground,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 5.dp)
@@ -191,7 +180,7 @@ fun ConfigScreen(valController: NavController) {
                                 text = "Notificações",
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.Black,
+                                color = colors.onBackground,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(bottom = 10.dp)
@@ -205,7 +194,7 @@ fun ConfigScreen(valController: NavController) {
                                     text = "Receber notificações",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = Color.Gray,
+                                    color = colors.onBackground,
                                     modifier = Modifier
                                         .padding(bottom = 15.dp, top = 15.dp)
                                 )
@@ -240,7 +229,7 @@ fun ConfigScreen(valController: NavController) {
                                     text = "Som",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = Color.Gray,
+                                    color = colors.onBackground,
                                     modifier = Modifier
                                         .padding(bottom = 15.dp, top = 15.dp)
                                 )
@@ -275,7 +264,7 @@ fun ConfigScreen(valController: NavController) {
                                     text = "Receber notificações",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = Color.Gray,
+                                    color = colors.onBackground,
                                     modifier = Modifier
                                         .padding(bottom = 15.dp, top = 15.dp)
                                 )
@@ -316,7 +305,7 @@ fun ConfigScreen(valController: NavController) {
                                 text = "Desempenho",
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.Black,
+                                color = colors.onBackground,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(bottom = 10.dp)
@@ -330,7 +319,7 @@ fun ConfigScreen(valController: NavController) {
                                     text = "Animações",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = Color.Gray,
+                                    color = colors.onBackground,
                                     modifier = Modifier
                                         .padding(bottom = 15.dp, top = 15.dp)
                                 )
@@ -365,7 +354,7 @@ fun ConfigScreen(valController: NavController) {
                                     text = "Atualizações Automáticas",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = Color.Gray,
+                                    color = colors.onBackground,
                                     modifier = Modifier
                                         .padding(bottom = 15.dp, top = 15.dp)
                                 )
@@ -400,7 +389,7 @@ fun ConfigScreen(valController: NavController) {
                                     text = "Limitar Dados em Segundo Plano",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = Color.Gray,
+                                    color = colors.onBackground,
                                     modifier = Modifier
                                         .padding(bottom = 15.dp, top = 15.dp)
                                 )
@@ -442,7 +431,7 @@ fun ConfigScreen(valController: NavController) {
                         text = "Histórico",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+                        color = colors.onBackground,
                         modifier = Modifier
                             .padding(bottom = 20.dp, top = 15.dp)
                     )

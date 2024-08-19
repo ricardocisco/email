@@ -18,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -52,14 +53,17 @@ fun ResponseScreen(valController: NavController, name: String, email: String) {
     var campoAssunto by rememberSaveable { mutableStateOf("") }
     var campoEmail by rememberSaveable { mutableStateOf("") }
 
+    val colors = MaterialTheme.colorScheme
+
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        Arrangement.SpaceBetween
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(colors.surface)
         ) {
             Column {
                 Box(
@@ -75,7 +79,7 @@ fun ResponseScreen(valController: NavController, name: String, email: String) {
                         Icon(
                             painterResource(id = R.drawable.seta_voltar),
                             contentDescription = "Botão de Voltar",
-                            tint = Color.Black,
+                            tint = colors.onPrimary,
                             modifier = Modifier
                                 .height(30.dp)
                                 .width(30.dp)
@@ -85,34 +89,21 @@ fun ResponseScreen(valController: NavController, name: String, email: String) {
                         text = "Responder",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+                        color = colors.onPrimary,
                         modifier = Modifier
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
                 }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(customBlue, customCinza),
-                                startY = 0f,
-                                endY = 120f,
-                            )
-                        )
-                )
             }
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.85f)
-                    .background(customCinza),
+                    .background(colors.surface),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 Column(
                     modifier = Modifier
-                    //.border(width = 1.dp, Color.Black)
                 ) {
                     TextField(
                         value = campoDe,
@@ -126,10 +117,10 @@ fun ResponseScreen(valController: NavController, name: String, email: String) {
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            focusedLabelColor = Color.Black,
-                            unfocusedLabelColor = Color.Black,
+                            focusedTextColor = colors.onPrimary,
+                            unfocusedTextColor = colors.onPrimary,
+                            focusedLabelColor = colors.onPrimary,
+                            unfocusedLabelColor = colors.onPrimary,
                             unfocusedPlaceholderColor = Color.LightGray,
                             cursorColor = customBlue,
                             focusedIndicatorColor = Color.LightGray,
@@ -152,10 +143,10 @@ fun ResponseScreen(valController: NavController, name: String, email: String) {
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            focusedLabelColor = Color.Black,
-                            unfocusedLabelColor = Color.Black,
+                            focusedTextColor = colors.onPrimary,
+                            unfocusedTextColor = colors.onPrimary,
+                            focusedLabelColor = colors.onPrimary,
+                            unfocusedLabelColor = colors.onPrimary,
                             unfocusedPlaceholderColor = Color.LightGray,
                             cursorColor = customBlue,
                             focusedIndicatorColor = Color.LightGray,
@@ -168,7 +159,7 @@ fun ResponseScreen(valController: NavController, name: String, email: String) {
                                 Icon(
                                     painterResource(id = R.drawable.seta_baixo),
                                     contentDescription = "Botão p/ Baixo",
-                                    tint = Color.Black,
+                                    tint = colors.onPrimary,
                                 )
                             }
                         },
@@ -188,10 +179,10 @@ fun ResponseScreen(valController: NavController, name: String, email: String) {
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            focusedLabelColor = Color.Black,
-                            unfocusedLabelColor = Color.Black,
+                            focusedTextColor = colors.onPrimary,
+                            unfocusedTextColor = colors.onPrimary,
+                            focusedLabelColor = colors.onPrimary,
+                            unfocusedLabelColor = colors.onPrimary,
                             unfocusedPlaceholderColor = Color.LightGray,
                             cursorColor = customBlue,
                             focusedIndicatorColor = Color.LightGray,
@@ -214,10 +205,10 @@ fun ResponseScreen(valController: NavController, name: String, email: String) {
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            focusedLabelColor = Color.Gray,
-                            unfocusedLabelColor = Color.Gray,
+                            focusedTextColor = colors.onPrimary,
+                            unfocusedTextColor = colors.onPrimary,
+                            focusedLabelColor = colors.onPrimary,
+                            unfocusedLabelColor = colors.onPrimary,
                             cursorColor = customBlue,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
@@ -225,21 +216,8 @@ fun ResponseScreen(valController: NavController, name: String, email: String) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 30.dp)
-                        //.border(width = 1.dp, Color.Black)
                     )
                 }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(customBlue, customCinza),
-                                startY = 120f,
-                                endY = 0f,
-                            )
-                        )
-                )
             }
         }
         Column(
@@ -247,9 +225,8 @@ fun ResponseScreen(valController: NavController, name: String, email: String) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
-                //.border(width = 1.dp, Color.Black)
-                .padding(vertical = 20.dp)
+                .background(colors.surface)
+                .padding(vertical = 40.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center,

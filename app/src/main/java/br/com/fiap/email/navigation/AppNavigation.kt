@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -94,6 +95,8 @@ import br.com.fiap.email.components.ButtonWrite
 import br.com.fiap.email.screens.FavoritesScreen
 import br.com.fiap.email.screens.HomeScreen
 import br.com.fiap.email.screens.PromotionsScreen
+import br.com.fiap.email.ui.theme.DarkColorScheme
+import br.com.fiap.email.ui.theme.LightColorScheme
 import br.com.fiap.email.viewmodel.ListEmailViewModel
 import br.com.fiap.email.viewmodel.NetworkViewModel
 import kotlinx.coroutines.launch
@@ -110,12 +113,14 @@ fun AppNavigation(valController: NavController) {
     var searchText by remember { mutableStateOf("") }
     val navController = rememberNavController()
 
+    val colors = MaterialTheme.colorScheme
+
     Column {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(70.dp)
-                .background(Color.White)
+                .background(colors.surface)
         ) {
             if (isInEditMode) {
                 Row(
@@ -130,20 +135,22 @@ fun AppNavigation(valController: NavController) {
                             modifier = Modifier.size(32.dp),
                             imageVector = Icons.Default.Clear,
                             contentDescription = "Pesquisa",
-                            tint = Color.Black
+                            tint = colors.onBackground
                         )
                     }
                     Row {
                         IconButton(onClick = { /*TODO*/ }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.folder),
-                                contentDescription = "botao de pastas"
+                                contentDescription = "botao de pastas",
+                                tint = colors.onBackground
                             )
                         }
                         IconButton(onClick = { showBottomSheet = true }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.more),
-                                contentDescription = "botao de mais"
+                                contentDescription = "botao de mais",
+                                tint = colors.onBackground
                             )
                         }
                     }
@@ -170,7 +177,7 @@ fun AppNavigation(valController: NavController) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
                                         contentDescription = "Cancelar",
-                                        tint = Color.Black
+                                        tint = colors.onBackground
                                     )
                                 }
                             }
@@ -187,7 +194,7 @@ fun AppNavigation(valController: NavController) {
                         Spacer(modifier = Modifier.padding(3.dp))
                         Text(
                             text = "Rachel Jacobs",
-                            color = Color.Black,
+                            color = colors.onBackground,
                             fontSize = 18.sp,
                             fontFamily = FontFamily.SansSerif,
                             fontWeight = FontWeight.Medium,
@@ -199,7 +206,7 @@ fun AppNavigation(valController: NavController) {
                                 modifier = Modifier.size(32.dp),
                                 imageVector = Icons.Default.Search,
                                 contentDescription = "Pesquisa",
-                                tint = Color.Black
+                                tint = colors.onBackground
                             )
                         }
                         IconButton(onClick = { valController.navigate("settings") }) {
@@ -207,7 +214,7 @@ fun AppNavigation(valController: NavController) {
                                 modifier = Modifier.size(32.dp),
                                 imageVector = Icons.Default.Settings,
                                 contentDescription = "Configurações",
-                                tint = Color.Black
+                                tint = colors.onBackground
                             )
                         }
                         Spacer(modifier = Modifier.padding(4.dp))
@@ -217,12 +224,11 @@ fun AppNavigation(valController: NavController) {
                 }
             }
         }
-        Box(
-        ) {
+        Box() {
             Scaffold(
                 topBar = {
                     NavigationBar(
-                        containerColor = Color.White,
+                        containerColor = colors.surface,
                     ) {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentDestination = navBackStackEntry?.destination
@@ -292,6 +298,8 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
     val scope = rememberCoroutineScope()
     val azul_escuro: Color = colorResource(id = R.color.azul_escuro)
 
+    val colors = MaterialTheme.colorScheme
+
     Column {
         if (showBottomSheet) {
             ModalBottomSheet(
@@ -299,7 +307,7 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                     onButtonClick(false)
                 },
                 sheetState = sheetState,
-                containerColor = Color.White
+                containerColor = colors.primary
             ) {
                 Column(
                     modifier = Modifier
@@ -318,7 +326,7 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                         Text(
                             text = "Encaminhar",
                             modifier = Modifier.padding(start = 10.dp),
-                            color = Color.Black
+                            color = colors.onPrimary
                         )
                     }
                     Divider(
@@ -339,7 +347,7 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                         Text(
                             text = "Adicionar a Pasta",
                             modifier = Modifier.padding(start = 10.dp),
-                            color = Color.Black
+                            color = colors.onPrimary
                         )
                     }
                     Divider(
@@ -360,7 +368,7 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                         Text(
                             text = "Denunciar Spam",
                             modifier = Modifier.padding(start = 10.dp),
-                            color = Color.Black
+                            color = colors.onPrimary
                         )
                     }
                     Divider(

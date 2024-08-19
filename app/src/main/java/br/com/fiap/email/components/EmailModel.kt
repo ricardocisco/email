@@ -23,6 +23,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -55,12 +56,15 @@ fun EmailModel(valController: NavController, name: String, email: String) {
     val gray_100: Color = colorResource(id = R.color.gray_100)
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
 
+    val colors = MaterialTheme.colorScheme
+
     Column {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(70.dp)
-                .shadow(1.dp),
+                .shadow(1.dp)
+                .background(colors.primary),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         )
@@ -69,7 +73,7 @@ fun EmailModel(valController: NavController, name: String, email: String) {
                 Icon(
                     painterResource(id = R.drawable.seta_voltar),
                     contentDescription = "Botão de Voltar",
-                    tint = Color.Black,
+                    tint = colors.onPrimary,
                     modifier = Modifier
                         .height(30.dp)
                         .width(30.dp)
@@ -82,7 +86,8 @@ fun EmailModel(valController: NavController, name: String, email: String) {
                         contentDescription = "botao de pastas",
                         modifier = Modifier
                             .height(30.dp)
-                            .width(30.dp)
+                            .width(30.dp),
+                        tint = colors.onPrimary
                     )
                 }
                 IconButton(onClick = {
@@ -93,13 +98,14 @@ fun EmailModel(valController: NavController, name: String, email: String) {
                         contentDescription = "botao de mais",
                         modifier = Modifier
                             .height(30.dp)
-                            .width(30.dp)
+                            .width(30.dp),
+                        tint = colors.onPrimary
                     )
                 }
             }
         }
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().background(color =  colors.primary),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
@@ -122,17 +128,17 @@ fun EmailModel(valController: NavController, name: String, email: String) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column {
-                        Text(text = "$name", fontSize = 18.sp)
-                        Text(text = "$email", fontSize = 13.sp)
+                        Text(text = "$name", fontSize = 18.sp, color = colors.onPrimary)
+                        Text(text = "$email", fontSize = 13.sp, color = colors.onPrimary)
                     }
-                    Text(text = "1h ago")
+                    Text(text = "1h ago", color = colors.onPrimary)
                 }
             }
             Column {
                 Row(
                     modifier = Modifier.padding(20.dp)
                 ) {
-                    Text(text = "What is your opinion about this boss?", fontSize = 18.sp)
+                    Text(text = "What is your opinion about this boss?", fontSize = 18.sp, color = colors.onPrimary)
                 }
                 Row(
                     modifier = Modifier.padding(20.dp)
@@ -143,7 +149,7 @@ fun EmailModel(valController: NavController, name: String, email: String) {
                                 "Risus feugiat in ante metus dictum. Iaculis at erat pellentesque adipiscing commodo elit at imperdiet. Adipiscing tristique risus nec feugiat in. Nibh praesent tristique magna sit amet purus gravida. " +
                                 "Egestas diam in arcu cursus euismod quis viverra nibh cras. Tincidunt nunc pulvinar sapien et ligula ullamcorper. Rhoncus mattis rhoncus urna neque viverra justo nec. Quisque non tellus orci ac. " +
                                 "Cursus vitae congue mauris rhoncus aenean vel elit scelerisque mauris. " +
-                                "Sed tempus urna et pharetra.", fontSize = 14.sp
+                                "Sed tempus urna et pharetra.", fontSize = 14.sp, color = colors.onPrimary
                     )
                 }
             }
@@ -212,6 +218,8 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
     val scope = rememberCoroutineScope()
     val azul_escuro: Color = colorResource(id = R.color.azul_escuro)
 
+    val colors = MaterialTheme.colorScheme
+
     Column {
         if (showBottomSheet) {
             ModalBottomSheet(
@@ -219,7 +227,7 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                     onButtonClick(false)
                 },
                 sheetState = sheetState,
-                containerColor = Color.White
+                containerColor = colors.primary
             ) {
                 Column(
                     modifier = Modifier
@@ -238,7 +246,7 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                         Text(
                             text = "Responder",
                             modifier = Modifier.padding(start = 10.dp),
-                            color = Color.Black
+                            color = colors.onPrimary
                         )
                     }
                     Divider(
@@ -259,7 +267,7 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                         Text(
                             text = "Encaminhar",
                             modifier = Modifier.padding(start = 10.dp),
-                            color = Color.Black
+                            color = colors.onPrimary
                         )
                     }
                     Divider(
@@ -280,7 +288,7 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                         Text(
                             text = "Adicionar a Pasta",
                             modifier = Modifier.padding(start = 10.dp),
-                            color = Color.Black
+                            color = colors.onPrimary
                         )
                     }
                     Divider(
@@ -301,7 +309,7 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                         Text(
                             text = "Denunciar Spam",
                             modifier = Modifier.padding(start = 10.dp),
-                            color = Color.Black
+                            color = colors.onPrimary
                         )
                     }
                     Divider(

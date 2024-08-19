@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -38,8 +39,10 @@ fun FavoritesScreen(
             ) || emailDataList[it].email.contains(searchText, ignoreCase = true)
         }
 
+    val colors = MaterialTheme.colorScheme
+
     Box(
-        modifier = Modifier.fillMaxSize().background(Color.White),
+        modifier = Modifier.fillMaxSize().background(colors.surface),
         contentAlignment = Alignment.TopStart
     ) {
         Divider(

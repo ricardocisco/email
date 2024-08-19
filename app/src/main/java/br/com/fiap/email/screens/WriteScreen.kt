@@ -20,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
@@ -61,14 +62,17 @@ fun WriteScreen(valController: NavController) {
     var campoAssunto by rememberSaveable { mutableStateOf("") }
     var campoEmail by rememberSaveable { mutableStateOf("") }
 
+    val colors = MaterialTheme.colorScheme
+
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        Arrangement.SpaceBetween
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(colors.surface)
         ) {
             Column {
                 Box(
@@ -84,7 +88,7 @@ fun WriteScreen(valController: NavController) {
                         Icon(
                             painterResource(id = R.drawable.seta_voltar),
                             contentDescription = "Botão de Voltar",
-                            tint = Color.Black,
+                            tint = colors.onPrimary,
                             modifier = Modifier
                                 .height(30.dp)
                                 .width(30.dp)
@@ -94,29 +98,17 @@ fun WriteScreen(valController: NavController) {
                         text = "Escrever",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+                        color = colors.onPrimary,
                         modifier = Modifier
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
                 }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(customBlue, customCinza),
-                                startY = 0f,
-                                endY = 120f,
-                            )
-                        )
-                )
             }
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.85f)
-                    .background(customCinza),
+                    .background(colors.surface),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 Column(
@@ -135,10 +127,10 @@ fun WriteScreen(valController: NavController) {
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            focusedLabelColor = Color.Black,
-                            unfocusedLabelColor = Color.Black,
+                            focusedTextColor = colors.onPrimary,
+                            unfocusedTextColor = colors.onPrimary,
+                            focusedLabelColor = colors.onPrimary,
+                            unfocusedLabelColor = colors.onPrimary,
                             unfocusedPlaceholderColor = Color.LightGray,
                             cursorColor = customBlue,
                             focusedIndicatorColor = Color.LightGray,
@@ -161,10 +153,10 @@ fun WriteScreen(valController: NavController) {
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            focusedLabelColor = Color.Black,
-                            unfocusedLabelColor = Color.Black,
+                            focusedTextColor = colors.onPrimary,
+                            unfocusedTextColor = colors.onPrimary,
+                            focusedLabelColor = colors.onPrimary,
+                            unfocusedLabelColor = colors.onPrimary,
                             unfocusedPlaceholderColor = Color.LightGray,
                             cursorColor = customBlue,
                             focusedIndicatorColor = Color.LightGray,
@@ -177,7 +169,7 @@ fun WriteScreen(valController: NavController) {
                                 Icon(
                                     painterResource(id = R.drawable.seta_baixo),
                                     contentDescription = "Botão p/ Baixo",
-                                    tint = Color.Black,
+                                    tint = colors.onPrimary,
                                 )
                             }
                         },
@@ -197,10 +189,10 @@ fun WriteScreen(valController: NavController) {
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            focusedLabelColor = Color.Black,
-                            unfocusedLabelColor = Color.Black,
+                            focusedTextColor = colors.onPrimary,
+                            unfocusedTextColor = colors.onPrimary,
+                            focusedLabelColor = colors.onPrimary,
+                            unfocusedLabelColor = colors.onPrimary,
                             unfocusedPlaceholderColor = Color.LightGray,
                             cursorColor = customBlue,
                             focusedIndicatorColor = Color.LightGray,
@@ -223,10 +215,10 @@ fun WriteScreen(valController: NavController) {
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            focusedLabelColor = Color.Gray,
-                            unfocusedLabelColor = Color.Gray,
+                            focusedTextColor = colors.onPrimary,
+                            unfocusedTextColor = colors.onPrimary,
+                            focusedLabelColor = colors.onPrimary,
+                            unfocusedLabelColor = colors.onPrimary,
                             cursorColor = customBlue,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
@@ -237,18 +229,6 @@ fun WriteScreen(valController: NavController) {
                         //.border(width = 1.dp, Color.Black)
                     )
                 }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(customBlue, customCinza),
-                                startY = 120f,
-                                endY = 0f,
-                            )
-                        )
-                )
             }
         }
         Column(
@@ -256,9 +236,8 @@ fun WriteScreen(valController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
-                //.border(width = 1.dp, Color.Black)
-                .padding(vertical = 20.dp)
+                .background(colors.surface)
+                .padding(vertical = 40.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -266,7 +245,7 @@ fun WriteScreen(valController: NavController) {
                 Button(
                     onClick = { },
                     modifier = Modifier
-                        .height(45.dp)
+                        .height(40.dp)
                         .width(170.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = customDarkCinza)
@@ -290,7 +269,7 @@ fun WriteScreen(valController: NavController) {
                 Button(
                     onClick = { },
                     modifier = Modifier
-                        .height(45.dp)
+                        .height(40.dp)
                         .width(170.dp)
                         .shadow(
                             elevation = 5.dp,
