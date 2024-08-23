@@ -43,6 +43,8 @@ import br.com.fiap.email.components.EmailModel
 import br.com.fiap.email.navigation.AppNavigation
 import br.com.fiap.email.navigation.CalendarNavigation
 import br.com.fiap.email.navigation.Screens
+import br.com.fiap.email.network.ApiClient
+import br.com.fiap.email.network.AuthService
 import br.com.fiap.email.screens.CalendarScreen
 import br.com.fiap.email.screens.ConfigScreen
 import br.com.fiap.email.screens.FavoritesScreen
@@ -60,28 +62,29 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EmailTheme {
-                TelaSettings()
+                val authService = ApiClient.authService
+                TelaSettings(authService)
             }
         }
     }
 }
 
 @Composable
-fun TelaSettings() {
+fun TelaSettings(authService: AuthService) {
     val valController = rememberNavController()
     NavHost(navController = valController, startDestination = "inicialScreen") {
         composable(route = "inicialScreen") {
             InicialScreen(valController)
         }
         composable(route = "login") {
-            LoginScreen(valController){
+            LoginScreen(valController, authService){
                 valController.navigate("homeApp") {
                     popUpTo("login") { inclusive = true }
                 }
             }
         }
         composable(route = "register") {
-            RegisterScreen(valController) {
+            RegisterScreen(valController, authService) {
                 valController.navigate("login") {
                     popUpTo("register") { inclusive = true }
                 }
