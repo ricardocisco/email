@@ -47,7 +47,10 @@ import br.com.fiap.email.screens.CalendarScreen
 import br.com.fiap.email.screens.ConfigScreen
 import br.com.fiap.email.screens.FavoritesScreen
 import br.com.fiap.email.screens.HomeScreen
+import br.com.fiap.email.screens.InicialScreen
+import br.com.fiap.email.screens.LoginScreen
 import br.com.fiap.email.screens.PromotionsScreen
+import br.com.fiap.email.screens.RegisterScreen
 import br.com.fiap.email.screens.ResponseScreen
 import br.com.fiap.email.screens.WriteScreen
 import br.com.fiap.email.ui.theme.EmailTheme
@@ -66,7 +69,24 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TelaSettings() {
     val valController = rememberNavController()
-    NavHost(navController = valController, startDestination = "homeApp") {
+    NavHost(navController = valController, startDestination = "inicialScreen") {
+        composable(route = "inicialScreen") {
+            InicialScreen(valController)
+        }
+        composable(route = "login") {
+            LoginScreen(valController){
+                valController.navigate("homeApp") {
+                    popUpTo("login") { inclusive = true }
+                }
+            }
+        }
+        composable(route = "register") {
+            RegisterScreen(valController) {
+                valController.navigate("login") {
+                    popUpTo("register") { inclusive = true }
+                }
+            }
+        }
         composable(route = "homeApp") {
             AppNavigation(valController)
         }
