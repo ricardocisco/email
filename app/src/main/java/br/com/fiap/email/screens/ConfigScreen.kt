@@ -464,6 +464,11 @@ fun ConfigScreen(valController: NavController) {
                             color = Color.White,
                         )
                     }
+                    Button(
+                        onClick = {valController.navigate("inicialScreen")}
+                    ){
+                        Text(text = "Sair")
+                    }
                 }
             }
         }

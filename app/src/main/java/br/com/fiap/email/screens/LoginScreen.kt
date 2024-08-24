@@ -19,17 +19,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.wear.compose.material.ButtonDefaults
 import br.com.fiap.email.models.AuthResponse
 import br.com.fiap.email.models.LoginRequest
+import br.com.fiap.email.network.ApiClient
 import br.com.fiap.email.network.AuthService
+import br.com.fiap.email.viewmodel.UserViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 @Composable
-fun LoginScreen(valController: NavController, authService: AuthService, onLoginSuccess: () -> Unit){
+fun LoginScreen(userViewModel: UserViewModel, valController: NavController, authService: AuthService, onLoginSuccess: () -> Unit){
 
     val colors = MaterialTheme.colorScheme
     var email by remember { mutableStateOf("") }
@@ -53,14 +56,18 @@ fun LoginScreen(valController: NavController, authService: AuthService, onLoginS
         )
         androidx.wear.compose.material.Button(
             onClick = { val loginRequest = LoginRequest(email, password)
-                      authService.login(loginRequest).enqueue(object :  Callback<AuthResponse> {
+                      ApiClient.authService.login(loginRequest).enqueue(object :  Callback<AuthResponse> {
                           override fun onResponse(
                               call: Call<AuthResponse>,
                               response: Response<AuthResponse>
                           ) {
                               if (response.isSuccessful) {
-                                  Log.e("Ok", "Ok: ${response.code()}")
-                                  onLoginSuccess()
+                                  val authResponse = response.body()
+                                  if( authResponse?.user != null){
+                                      userViewModel.setUserName(authResponse.user.nome)
+                                      onLoginSuccess()
+                                  }
+                                  Log.d("Login", "AuthResponse: $authResponse")
                               } else {
                                   Log.e("Login", "Erro na resposta: ${response.code()}")
                               }

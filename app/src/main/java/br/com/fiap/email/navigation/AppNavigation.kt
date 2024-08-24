@@ -99,13 +99,14 @@ import br.com.fiap.email.ui.theme.DarkColorScheme
 import br.com.fiap.email.ui.theme.LightColorScheme
 import br.com.fiap.email.viewmodel.ListEmailViewModel
 import br.com.fiap.email.viewmodel.NetworkViewModel
+import br.com.fiap.email.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AppNavigation(valController: NavController) {
+fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
     val listEmailViewModel = remember { ListEmailViewModel() }
     val isInEditMode by listEmailViewModel.isInEditMode
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -114,6 +115,8 @@ fun AppNavigation(valController: NavController) {
     val navController = rememberNavController()
 
     val colors = MaterialTheme.colorScheme
+
+    val nome by userViewModel.userName.observeAsState("")
 
     Column {
         Box(
@@ -193,7 +196,7 @@ fun AppNavigation(valController: NavController) {
                         )
                         Spacer(modifier = Modifier.padding(3.dp))
                         Text(
-                            text = "Rachel Jacobs",
+                            text = nome,
                             color = colors.onBackground,
                             fontSize = 18.sp,
                             fontFamily = FontFamily.SansSerif,

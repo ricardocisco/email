@@ -209,11 +209,6 @@ fun ListEmail(
                     color = if (isSelected) colors.surface else colors.onPrimary
                 )
             }
-//            Divider(
-//                modifier = Modifier.padding(horizontal = 16.dp),
-//                color = Color.LightGray,
-//                thickness = 1.dp
-//            )
         }
     }
 }

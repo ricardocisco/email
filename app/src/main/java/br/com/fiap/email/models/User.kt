@@ -14,7 +14,7 @@ data class Preferences(
 
 data class Emails(
     val sent: List<Email> = emptyList(),
-    val received: List<Email> = emptyList()
+    val received: List<ReceivedEmail> = emptyList()
 )
 
 data class Email(
@@ -25,4 +25,13 @@ data class Email(
     val sentAt: String,
     val receivedAt: String? = null,
     val isSpam: Boolean = false
+)
+
+data class ReceivedEmail(
+    val emailId: String,
+    val sender: String,
+    val subject: String,
+    val body: String,
+    val receivedAt: String,
+    val isSpam: Boolean
 )

@@ -36,6 +36,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -56,28 +58,30 @@ import br.com.fiap.email.screens.RegisterScreen
 import br.com.fiap.email.screens.ResponseScreen
 import br.com.fiap.email.screens.WriteScreen
 import br.com.fiap.email.ui.theme.EmailTheme
+import br.com.fiap.email.viewmodel.UserViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             EmailTheme {
+                val userViewModel: UserViewModel = viewModel();
                 val authService = ApiClient.authService
-                TelaSettings(authService)
+                TelaSettings( authService, userViewModel)
             }
         }
     }
 }
 
 @Composable
-fun TelaSettings(authService: AuthService) {
+fun TelaSettings(authService: AuthService, userViewModel: UserViewModel) {
     val valController = rememberNavController()
     NavHost(navController = valController, startDestination = "inicialScreen") {
         composable(route = "inicialScreen") {
             InicialScreen(valController)
         }
         composable(route = "login") {
-            LoginScreen(valController, authService){
+            LoginScreen( userViewModel,valController, authService){
                 valController.navigate("homeApp") {
                     popUpTo("login") { inclusive = true }
                 }
@@ -91,7 +95,7 @@ fun TelaSettings(authService: AuthService) {
             }
         }
         composable(route = "homeApp") {
-            AppNavigation(valController)
+            AppNavigation(valController, userViewModel)
         }
         composable(route = "settings") {
             ConfigScreen(valController)
