@@ -6,8 +6,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import br.com.fiap.email.models.ReceivedEmail
 
 class ListEmailViewModel : ViewModel() {
+
     private val _favoriteEmails = mutableStateOf<Set<Int>>(setOf())
 
     val favoriteEmails: Set<Int>

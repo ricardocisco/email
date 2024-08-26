@@ -19,7 +19,8 @@ data class Emails(
 
 data class Email(
     val emailId: String,
-    val recipient: String,
+    val sentEmail: String,
+    val sentNome: String,
     val subject: String,
     val body: String,
     val sentAt: String,
@@ -29,7 +30,8 @@ data class Email(
 
 data class ReceivedEmail(
     val emailId: String,
-    val sender: String,
+    val receiveEmail: String,
+    val receiveNome: String,
     val subject: String,
     val body: String,
     val receivedAt: String,

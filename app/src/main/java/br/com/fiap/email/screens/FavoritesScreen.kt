@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -22,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
 import br.com.fiap.email.viewmodel.ListEmailViewModel
+import br.com.fiap.email.viewmodel.UserViewModel
 import io.github.serpro69.kfaker.Faker
 
 @Composable
@@ -29,14 +32,17 @@ fun FavoritesScreen(
     listEmailViewModel: ListEmailViewModel,
     valController: NavController,
     searchText: String,
+    userViewModel: UserViewModel
 ) {
-    val emailDataList = rememberEmailDataList()
+
+    val receivedEmail by userViewModel.receivedEmails.observeAsState(emptyList())
+
     val filteredFavoriteEmails = listEmailViewModel.favoriteEmails
         .filter {
-            emailDataList[it].name.contains(
+            receivedEmail[it].receiveNome.contains(
                 searchText,
                 ignoreCase = true
-            ) || emailDataList[it].email.contains(searchText, ignoreCase = true)
+            ) || receivedEmail[it].subject.contains(searchText, ignoreCase = true)
         }
 
     val colors = MaterialTheme.colorScheme
@@ -57,10 +63,12 @@ fun FavoritesScreen(
         ) {
             items(filteredFavoriteEmails) { index ->
                 val isSelected = listEmailViewModel.selectedItems.contains(index)
-                val emailData = emailDataList[index]
+                val emailData = receivedEmail[index]
                 ListEmail(
-                    name = emailData.name,
-                    email = emailData.email,
+                    name = emailData.receiveNome,
+                    email = emailData.receiveEmail,
+                    subject = emailData.subject,
+                    body = emailData.body,
                     index = index,
                     isFavorite = true,
                     onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex) },
@@ -70,19 +78,9 @@ fun FavoritesScreen(
                             emailIndex
                         )
                     },
-                    valController
+                    valController = valController
                 )
             }
         }
     }
-}
-
-@Composable
-private fun rememberEmailDataList(): List<EmailData> {
-    val emailDataList = remember {
-        (0 until 10).map { index ->
-            EmailData(generateNameWithFaker(), generateEmailWithFaker())
-        }
-    }
-    return emailDataList
 }

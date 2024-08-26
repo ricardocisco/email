@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun EmailModel(valController: NavController, name: String, email: String) {
+fun EmailModel(valController: NavController, name: String, email: String, subject: String, body: String) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
     val gray_100: Color = colorResource(id = R.color.gray_100)
@@ -128,8 +128,8 @@ fun EmailModel(valController: NavController, name: String, email: String) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column {
-                        Text(text = "$name", fontSize = 18.sp, color = colors.onPrimary)
-                        Text(text = "$email", fontSize = 13.sp, color = colors.onPrimary)
+                        Text(text = name, fontSize = 18.sp, color = colors.onPrimary)
+                        Text(text = email, fontSize = 13.sp, color = colors.onPrimary)
                     }
                     Text(text = "1h ago", color = colors.onPrimary)
                 }
@@ -138,18 +138,13 @@ fun EmailModel(valController: NavController, name: String, email: String) {
                 Row(
                     modifier = Modifier.padding(20.dp)
                 ) {
-                    Text(text = "What is your opinion about this boss?", fontSize = 18.sp, color = colors.onPrimary)
+                    Text(text = body, fontSize = 18.sp, color = colors.onPrimary)
                 }
                 Row(
                     modifier = Modifier.padding(20.dp)
                 ) {
                     Text(
-                        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
-                                "Sit amet consectetur adipiscing elit duis tristique. Enim lobortis scelerisque fermentum dui faucibus in ornare. Faucibus vitae aliquet nec ullamcorper sit amet risus nullam. " +
-                                "Risus feugiat in ante metus dictum. Iaculis at erat pellentesque adipiscing commodo elit at imperdiet. Adipiscing tristique risus nec feugiat in. Nibh praesent tristique magna sit amet purus gravida. " +
-                                "Egestas diam in arcu cursus euismod quis viverra nibh cras. Tincidunt nunc pulvinar sapien et ligula ullamcorper. Rhoncus mattis rhoncus urna neque viverra justo nec. Quisque non tellus orci ac. " +
-                                "Cursus vitae congue mauris rhoncus aenean vel elit scelerisque mauris. " +
-                                "Sed tempus urna et pharetra.", fontSize = 14.sp, color = colors.onPrimary
+                        text = subject, fontSize = 14.sp, color = colors.onPrimary
                     )
                 }
             }
@@ -179,7 +174,7 @@ fun EmailModel(valController: NavController, name: String, email: String) {
                     Text(text = "Encaminhar", modifier = Modifier.padding(start = 10.dp), color = Color.Black, fontSize = 16.sp)
                 }
                 Button(
-                    onClick = {valController.navigate("responseEmail/${name}/${email}")},
+                    onClick = {valController.navigate("responseEmail/${name}/${email}/${subject}")},
                     modifier = Modifier
                         .shadow(
                             elevation = 5.dp,

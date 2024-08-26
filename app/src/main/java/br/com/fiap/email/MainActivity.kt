@@ -103,18 +103,22 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel) {
         composable(route = "writeEmail") {
             WriteScreen(valController)
         }
-        composable(route = "emailDetail/{name}/{email}") {
+        composable(route = "emailDetail/{name}/{email}/{subject}/{body}") {
             EmailModel(
                 valController,
                 it.arguments?.getString("name")!!,
-                it.arguments?.getString("email")!!
+                it.arguments?.getString("email")!!,
+                it.arguments?.getString("subject")!!,
+                it.arguments?.getString("body")!!
             )
         }
-        composable(route = "responseEmail/{name}/{email}") {
+        composable(route = "responseEmail/{name}/{email}/{subject}") {
             ResponseScreen(
                 valController,
                 it.arguments?.getString("name")!!,
-                it.arguments?.getString("email")!!
+                it.arguments?.getString("email")!!,
+                it.arguments?.getString("subject")!!,
+                userViewModel
             )
         }
         composable(route = "calendar") {

@@ -33,6 +33,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +54,7 @@ import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
 import br.com.fiap.email.R
 import br.com.fiap.email.viewmodel.ListEmailViewModel
+import br.com.fiap.email.viewmodel.UserViewModel
 import io.github.serpro69.kfaker.Faker
 
 @Composable
@@ -60,11 +62,13 @@ fun PromotionsScreen(
     listEmailViewModel: ListEmailViewModel,
     valController: NavController,
     searchText: String,
+    userViewModel: UserViewModel
 ) {
 
-    val emailDataList = rememberEmailDataList()
-    val filteredEmailDataList = emailDataList.filter {
-        it.name.contains(searchText, ignoreCase = true) || it.email.contains(
+    val receivedEmail by userViewModel.receivedEmails.observeAsState(emptyList())
+
+    val filteredEmailDataList = receivedEmail.filter {
+        it.receiveNome.contains(searchText, ignoreCase = true) || it.subject.contains(
             searchText,
             ignoreCase = true
         )
@@ -73,7 +77,9 @@ fun PromotionsScreen(
     val colors = MaterialTheme.colorScheme
 
     Box(
-        modifier = Modifier.fillMaxSize().background(colors.background),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.background),
         contentAlignment = Alignment.TopCenter
     ) {
         Divider(
@@ -90,8 +96,10 @@ fun PromotionsScreen(
                 val isFavorite = listEmailViewModel.isFavorite(index)
                 val isSelected = listEmailViewModel.selectedItems.contains(index)
                 ListEmail(
-                    name = emailDataList[index].name,
-                    email = emailDataList[index].email,
+                    name = filteredEmailDataList[index].receiveNome,
+                    email = filteredEmailDataList[index].receiveEmail,
+                    subject = filteredEmailDataList[index].subject,
+                    body = filteredEmailDataList[index].body,
                     index = index,
                     isFavorite = isFavorite,
                     onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex) },
@@ -101,7 +109,7 @@ fun PromotionsScreen(
                             emailIndex
                         )
                     },
-                    valController
+                    valController = valController
                 )
             }
         }
@@ -113,6 +121,8 @@ fun PromotionsScreen(
 fun ListEmail(
     name: String,
     email: String,
+    body: String,
+    subject: String,
     index: Int,
     isFavorite: Boolean,
     onToggleFavorite: (Int) -> Unit,
@@ -130,7 +140,7 @@ fun ListEmail(
 
     ElevatedCard(
         onClick = {
-            valController.navigate("emailDetail/${name}/${email}")
+            valController.navigate("emailDetail/${name}/${email}/${body}/${subject}")
         },
         modifier = Modifier
             .padding(
@@ -141,7 +151,7 @@ fun ListEmail(
         Column(
             modifier = Modifier
                 .combinedClickable(
-                    onClick = { valController.navigate("emailDetail/${name}/${email}") },
+                    onClick = { valController.navigate("emailDetail/${name}/${email}/${body}/${subject}") },
                     onLongClick = {
                         vibrate(context)
                         onItemSelected(index)
@@ -170,7 +180,6 @@ fun ListEmail(
                         modifier = Modifier.padding(start = 15.dp)
                     ) {
                         Text(text = name, color = if (isSelected) colors.surface else colors.onPrimary, fontSize = 16.sp)
-                        Text(text = "International Officer", color = if (isSelected) colors.surface else colors.onPrimary)
                         Text(text = email, color = if (isSelected) colors.surface else colors.onPrimary)
                     }
                     Column {
@@ -199,43 +208,17 @@ fun ListEmail(
             ) {
                 Text(
                     modifier = Modifier.padding(bottom = 15.dp),
-                    text = "Lorem ipsum dolor sit amet",
+                    text = subject,
                     color = if (isSelected) colors.surface else colors.onPrimary,
                     fontSize = 16.sp
                 )
                 Text(
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
-                            "Sit amet consectetur adipiscing elit duis tristique. Enim lobortis scelerisque fermentum dui faucibus in ornare. ",
+                    text = body,
                     color = if (isSelected) colors.surface else colors.onPrimary
                 )
             }
         }
     }
-}
-
-@Composable
-private fun rememberEmailDataList(): List<EmailData> {
-    val emailDataList = remember {
-        (0 until 10).map { index ->
-            EmailData(generateNameWithFaker(), generateEmailWithFaker())
-        }
-    }
-    return emailDataList
-}
-
-data class EmailData(
-    val name: String,
-    val email: String
-)
-
-fun generateNameWithFaker(): String {
-    val faker = Faker()
-    return faker.name.name()
-}
-
-fun generateEmailWithFaker(): String {
-    val faker = Faker()
-    return faker.internet.email()
 }
 
 fun vibrate(context: Context) {

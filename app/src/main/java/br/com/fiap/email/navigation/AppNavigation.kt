@@ -283,10 +283,10 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
                     }
                     composable(route = Screens.PromotionsScreen.name) {
                         PromotionsScreen(
-                            listEmailViewModel, valController, searchText)
+                            listEmailViewModel, valController, searchText, userViewModel)
                     }
                     composable(route = Screens.FavoritesScreen.name) {
-                        FavoritesScreen(listEmailViewModel, valController, searchText)
+                        FavoritesScreen(listEmailViewModel, valController, searchText, userViewModel)
                     }
                 }
             }

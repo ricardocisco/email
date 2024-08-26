@@ -65,6 +65,8 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
                                   val authResponse = response.body()
                                   if( authResponse?.user != null){
                                       userViewModel.setUserName(authResponse.user.nome)
+                                      userViewModel.setReceivedEmails(authResponse.user.emails.received)
+                                      userViewModel.setUserEmail(authResponse.user.email)
                                       onLoginSuccess()
                                   }
                                   Log.d("Login", "AuthResponse: $authResponse")

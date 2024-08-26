@@ -16,7 +16,4 @@ interface AuthService {
 
     @POST("api/Auth/login")
     fun login(@Body request: LoginRequest): Call<AuthResponse>
-
-    @GET("api/emails/{userId}/received-emails")
-    fun getReceivedEmails(@Path("userId") userId: String): List<ReceivedEmail>
 }

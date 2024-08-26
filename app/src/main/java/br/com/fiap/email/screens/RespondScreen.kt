@@ -24,6 +24,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -41,18 +42,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.com.fiap.email.R
+import br.com.fiap.email.viewmodel.UserViewModel
 
 @Composable
-fun ResponseScreen(valController: NavController, name: String, email: String) {
+fun ResponseScreen(valController: NavController, name: String, email: String, subject: String, userViewModel: UserViewModel) {
+    val deMail by userViewModel.userEmail.observeAsState("")
     val customBlue: Color = colorResource(id = R.color.customBlue)
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
     val customCinza: Color = colorResource(id = R.color.customCinza)
     val customDarkCinza: Color = colorResource(id = R.color.customDarkCinza)
-    var campoDe by rememberSaveable { mutableStateOf("") }
+    var campoDe by rememberSaveable { mutableStateOf("${deMail}") }
     var campoPara by rememberSaveable { mutableStateOf("${email}") }
     var campoAssunto by rememberSaveable { mutableStateOf("") }
     var campoEmail by rememberSaveable { mutableStateOf("") }
-
     val colors = MaterialTheme.colorScheme
 
     Column(
