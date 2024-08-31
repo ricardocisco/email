@@ -166,7 +166,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                 )
             }
             Card(
-                onClick = { /*TODO*/ },
+                onClick = {valController.navigate("sentScreen")},
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent)
             ) {
                 Row(

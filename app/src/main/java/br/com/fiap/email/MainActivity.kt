@@ -56,6 +56,7 @@ import br.com.fiap.email.screens.LoginScreen
 import br.com.fiap.email.screens.PromotionsScreen
 import br.com.fiap.email.screens.RegisterScreen
 import br.com.fiap.email.screens.ResponseScreen
+import br.com.fiap.email.screens.SentScreen
 import br.com.fiap.email.screens.WriteScreen
 import br.com.fiap.email.ui.theme.EmailTheme
 import br.com.fiap.email.viewmodel.UserViewModel
@@ -100,8 +101,11 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel) {
         composable(route = "settings") {
             ConfigScreen(valController)
         }
-        composable(route = "writeEmail") {
-            WriteScreen(valController)
+        composable(route = "writeEmail?subject={subject}&body={body}") {
+            WriteScreen(valController, userViewModel,
+                it.arguments?.getString("subject")?: "",
+                it.arguments?.getString("body")?: "")
+
         }
         composable(route = "emailDetail/{name}/{email}/{subject}/{body}") {
             EmailModel(
@@ -123,6 +127,9 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel) {
         }
         composable(route = "calendar") {
             CalendarNavigation(valController)
+        }
+        composable(route = "sentScreen"){
+            SentScreen(valController, userViewModel)
         }
     }
 }

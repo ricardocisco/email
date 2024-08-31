@@ -1,5 +1,7 @@
 package br.com.fiap.email.network
 import br.com.fiap.email.models.AuthResponse
+import br.com.fiap.email.models.Email
+import br.com.fiap.email.models.Emails
 import br.com.fiap.email.models.LoginRequest
 import br.com.fiap.email.models.ReceivedEmail
 import br.com.fiap.email.models.RegisterRequest
@@ -16,4 +18,10 @@ interface AuthService {
 
     @POST("api/Auth/login")
     fun login(@Body request: LoginRequest): Call<AuthResponse>
+
+    @POST("api/Auth/users/{userId}/sendEmail")
+    fun sentEmail(@Path("userId") userId: String, @Body email: Email): Call<Email>
+
+    @GET("api/Auth/users/{userId}/emails")
+    fun getUserEmails(@Path("userId") userId: String): Call<Emails>
 }

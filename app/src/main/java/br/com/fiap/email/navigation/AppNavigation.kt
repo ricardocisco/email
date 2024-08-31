@@ -220,9 +220,8 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
                                 tint = colors.onBackground
                             )
                         }
-                        Spacer(modifier = Modifier.padding(4.dp))
-                        NetworkStatus()
-                        Spacer(modifier = Modifier.padding(7.dp))
+//                        Spacer(modifier = Modifier.padding(4.dp))
+//                        Spacer(modifier = Modifier.padding(7.dp))
                     }
                 }
             }
@@ -298,7 +297,6 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
 @Composable
 fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit) {
     val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
     val azul_escuro: Color = colorResource(id = R.color.azul_escuro)
 
     val colors = MaterialTheme.colorScheme

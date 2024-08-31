@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -102,10 +103,15 @@ fun ConfigScreen(valController: NavController) {
                     textAlign = TextAlign.Center
                 )
             }
+            Divider(
+                color = Color.LightGray,
+                modifier = Modifier
+                    .height(1.dp)
+                    .fillMaxWidth()
+            )
             Column(
                 modifier = Modifier
                     .padding(start = 30.dp, bottom = 15.dp)
-                    //.border(width = 1.dp, Color.Black)
             ) {
                 Text(
                     text = "Tema",

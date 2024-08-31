@@ -65,13 +65,14 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
                                   val authResponse = response.body()
                                   if( authResponse?.user != null){
                                       userViewModel.setUserName(authResponse.user.nome)
-                                      userViewModel.setReceivedEmails(authResponse.user.emails.received)
+                                      userViewModel.setUserId(authResponse.user.id)
                                       userViewModel.setUserEmail(authResponse.user.email)
+                                      Log.d("Login", "${response.body()}")
                                       onLoginSuccess()
                                   }
-                                  Log.d("Login", "AuthResponse: $authResponse")
-                              } else {
-                                  Log.e("Login", "Erro na resposta: ${response.code()}")
+                                  else{
+                                      Log.d("Login", "Erro: ${response.code()}")
+                                  }
                               }
                           }
                           override fun onFailure(call: Call<AuthResponse>, t: Throwable) {

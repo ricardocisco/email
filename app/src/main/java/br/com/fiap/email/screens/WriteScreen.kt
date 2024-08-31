@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,7 +28,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -44,24 +48,35 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import br.com.fiap.email.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WriteScreen(valController: NavController) {
+fun WriteScreen(
+    valController: NavController,
+    userViewModel: UserViewModel,
+    subject: String? = null,
+    body: String? = null
+)  {
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogMessage by remember { mutableStateOf("") }
 
+    val email by userViewModel.userEmail.observeAsState("")
+    val user by userViewModel.userId.observeAsState("")
     val customBlue: Color = colorResource(id = R.color.customBlue)
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
-    val customCinza: Color = colorResource(id = R.color.customCinza)
     val customDarkCinza: Color = colorResource(id = R.color.customDarkCinza)
-    var campoDe by rememberSaveable { mutableStateOf("") }
+    var campoDe by rememberSaveable { mutableStateOf(email) }
     var campoPara by rememberSaveable { mutableStateOf("") }
-    var campoAssunto by rememberSaveable { mutableStateOf("") }
-    var campoEmail by rememberSaveable { mutableStateOf("") }
-
+    var campoAssunto by rememberSaveable { mutableStateOf(subject ?: "") }
+    var campoEmail by rememberSaveable { mutableStateOf(body ?: "") }
     val colors = MaterialTheme.colorScheme
 
     Column(
@@ -105,6 +120,12 @@ fun WriteScreen(valController: NavController) {
                     )
                 }
             }
+            Divider(
+                color = Color.LightGray,
+                modifier = Modifier
+                    .height(1.dp)
+                    .fillMaxWidth()
+            )
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.85f)
@@ -113,7 +134,6 @@ fun WriteScreen(valController: NavController) {
             ) {
                 Column(
                     modifier = Modifier
-                    //.border(width = 1.dp, Color.Black)
                 ) {
                     TextField(
                         value = campoDe,
@@ -226,18 +246,22 @@ fun WriteScreen(valController: NavController) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 30.dp)
-                        //.border(width = 1.dp, Color.Black)
                     )
                 }
             }
         }
+        Divider(
+            color = Color.LightGray,
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+        )
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .background(colors.surface)
-                .padding(vertical = 40.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -245,7 +269,7 @@ fun WriteScreen(valController: NavController) {
                 Button(
                     onClick = { },
                     modifier = Modifier
-                        .height(40.dp)
+                        .height(45.dp)
                         .width(170.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = customDarkCinza)
@@ -267,9 +291,17 @@ fun WriteScreen(valController: NavController) {
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 Button(
-                    onClick = { },
+                    onClick = {
+                        if (user.isNotBlank() && campoPara.isNotBlank() && campoAssunto.isNotBlank() && campoEmail.isNotBlank()) {
+                            userViewModel.sendEmail(user, campoPara, campoAssunto, campoEmail)
+                            dialogMessage = "E-mail enviado com sucesso!"
+                        } else {
+                            dialogMessage = "Preencha todos os campos"
+                        }
+                        showDialog = true
+                    },
                     modifier = Modifier
-                        .height(40.dp)
+                        .height(45.dp)
                         .width(170.dp)
                         .shadow(
                             elevation = 5.dp,
@@ -295,6 +327,30 @@ fun WriteScreen(valController: NavController) {
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                     )
+                }
+                if (showDialog) {
+                    LaunchedEffect(Unit) {
+                        kotlinx.coroutines.delay(4000)
+                        showDialog = false
+                    }
+
+                    Dialog(onDismissRequest = { showDialog = false }) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .height(100.dp)
+                                .width(250.dp)
+                                .background(Color.White, shape = RoundedCornerShape(8.dp))
+                                .padding(16.dp)
+                        ) {
+                            Text(
+                                text = dialogMessage,
+                                fontSize = 16.sp,
+                                color = Color.Black,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
                 }
             }
         }

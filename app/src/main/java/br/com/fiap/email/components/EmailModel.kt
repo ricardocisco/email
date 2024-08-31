@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,7 +51,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun EmailModel(valController: NavController, name: String, email: String, subject: String, body: String) {
+fun EmailModel(valController: NavController, name: String, email: String, body: String, subject: String) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
     val gray_100: Color = colorResource(id = R.color.gray_100)
@@ -104,9 +105,14 @@ fun EmailModel(valController: NavController, name: String, email: String, subjec
                 }
             }
         }
+        Divider(
+            color = Color.LightGray,
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+        )
         Column(
             modifier = Modifier.fillMaxSize().background(color =  colors.primary),
-            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
                 modifier = Modifier
@@ -134,20 +140,28 @@ fun EmailModel(valController: NavController, name: String, email: String, subjec
                     Text(text = "1h ago", color = colors.onPrimary)
                 }
             }
-            Column {
+            Column(
+                modifier = Modifier.fillMaxHeight(0.85f)
+            ) {
                 Row(
                     modifier = Modifier.padding(20.dp)
                 ) {
-                    Text(text = body, fontSize = 18.sp, color = colors.onPrimary)
+                    Text(text = subject, fontSize = 18.sp, color = colors.onPrimary)
                 }
                 Row(
                     modifier = Modifier.padding(20.dp)
                 ) {
                     Text(
-                        text = subject, fontSize = 14.sp, color = colors.onPrimary
+                        text = body, fontSize = 14.sp, color = colors.onPrimary
                     )
                 }
             }
+            Divider(
+                color = Color.LightGray,
+                modifier = Modifier
+                    .height(1.dp)
+                    .fillMaxWidth()
+            )
             Row(
                 modifier = Modifier
                     .height(100.dp)
@@ -156,7 +170,7 @@ fun EmailModel(valController: NavController, name: String, email: String, subjec
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = {valController.navigate("writeEmail")},
+                    onClick = {valController.navigate("writeEmail?subject=${subject}&body=${body}")},
                     modifier = Modifier
                         .shadow(
                             elevation = 5.dp,

@@ -18,13 +18,11 @@ data class Emails(
 )
 
 data class Email(
-    val emailId: String,
     val sentEmail: String,
     val sentNome: String,
     val subject: String,
     val body: String,
     val sentAt: String,
-    val receivedAt: String? = null,
     val isSpam: Boolean = false
 )
 
@@ -34,6 +32,5 @@ data class ReceivedEmail(
     val receiveNome: String,
     val subject: String,
     val body: String,
-    val receivedAt: String,
     val isSpam: Boolean
 )

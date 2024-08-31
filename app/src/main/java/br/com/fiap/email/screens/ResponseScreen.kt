@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -23,9 +24,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import br.com.fiap.email.R
 import br.com.fiap.email.viewmodel.UserViewModel
@@ -47,13 +51,15 @@ import br.com.fiap.email.viewmodel.UserViewModel
 @Composable
 fun ResponseScreen(valController: NavController, name: String, email: String, subject: String, userViewModel: UserViewModel) {
     val deMail by userViewModel.userEmail.observeAsState("")
+    val user by userViewModel.userId.observeAsState("")
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogMessage by remember { mutableStateOf("") }
     val customBlue: Color = colorResource(id = R.color.customBlue)
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
-    val customCinza: Color = colorResource(id = R.color.customCinza)
     val customDarkCinza: Color = colorResource(id = R.color.customDarkCinza)
     var campoDe by rememberSaveable { mutableStateOf("${deMail}") }
     var campoPara by rememberSaveable { mutableStateOf("${email}") }
-    var campoAssunto by rememberSaveable { mutableStateOf("") }
+    var campoAssunto by rememberSaveable { mutableStateOf("${subject}") }
     var campoEmail by rememberSaveable { mutableStateOf("") }
     val colors = MaterialTheme.colorScheme
 
@@ -98,6 +104,12 @@ fun ResponseScreen(valController: NavController, name: String, email: String, su
                     )
                 }
             }
+            Divider(
+                color = Color.LightGray,
+                modifier = Modifier
+                    .height(1.dp)
+                    .fillMaxWidth()
+            )
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.85f)
@@ -194,7 +206,6 @@ fun ResponseScreen(valController: NavController, name: String, email: String, su
                             .fillMaxWidth()
                             .height(60.dp)
                             .padding(horizontal = 30.dp)
-                        //.border(width = 1.dp, Color.Black)
                     )
                     TextField(
                         value = campoEmail,
@@ -222,13 +233,18 @@ fun ResponseScreen(valController: NavController, name: String, email: String, su
                 }
             }
         }
+        Divider(
+            color = Color.LightGray,
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+        )
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .background(colors.surface)
-                .padding(vertical = 40.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -258,7 +274,15 @@ fun ResponseScreen(valController: NavController, name: String, email: String, su
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 Button(
-                    onClick = { },
+                    onClick = {
+                        if (user.isNotBlank() && campoPara.isNotBlank() && campoAssunto.isNotBlank() && campoEmail.isNotBlank()) {
+                            userViewModel.sendEmail(user, campoPara, campoAssunto, campoEmail)
+                            dialogMessage = "E-mail enviado com sucesso!"
+                        } else {
+                            dialogMessage = "Preencha todos os campos"
+                        }
+                        showDialog = true
+                    },
                     modifier = Modifier
                         .height(45.dp)
                         .width(170.dp)
@@ -286,6 +310,30 @@ fun ResponseScreen(valController: NavController, name: String, email: String, su
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                     )
+                }
+                if (showDialog) {
+                    LaunchedEffect(Unit) {
+                        kotlinx.coroutines.delay(4000)
+                        showDialog = false
+                    }
+
+                    Dialog(onDismissRequest = { showDialog = false }) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .height(100.dp)
+                                .width(250.dp)
+                                .background(Color.White, shape = RoundedCornerShape(8.dp))
+                                .padding(16.dp)
+                        ) {
+                            Text(
+                                text = dialogMessage,
+                                fontSize = 16.sp,
+                                color = Color.Black,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
                 }
             }
         }

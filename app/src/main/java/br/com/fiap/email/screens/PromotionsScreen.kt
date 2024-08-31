@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +33,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
@@ -64,8 +66,11 @@ fun PromotionsScreen(
     searchText: String,
     userViewModel: UserViewModel
 ) {
-
     val receivedEmail by userViewModel.receivedEmails.observeAsState(emptyList())
+    val userId = userViewModel.userId.observeAsState("")
+    LaunchedEffect(Unit) {
+        userViewModel.fetchReceivedEmails(userId.value)
+    }
 
     val filteredEmailDataList = receivedEmail.filter {
         it.receiveNome.contains(searchText, ignoreCase = true) || it.subject.contains(
