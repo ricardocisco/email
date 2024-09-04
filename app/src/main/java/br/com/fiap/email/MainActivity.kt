@@ -47,6 +47,7 @@ import br.com.fiap.email.navigation.CalendarNavigation
 import br.com.fiap.email.navigation.Screens
 import br.com.fiap.email.network.ApiClient
 import br.com.fiap.email.network.AuthService
+import br.com.fiap.email.screens.ArchivedScreen
 import br.com.fiap.email.screens.CalendarScreen
 import br.com.fiap.email.screens.ConfigScreen
 import br.com.fiap.email.screens.FavoritesScreen
@@ -55,6 +56,7 @@ import br.com.fiap.email.screens.InicialScreen
 import br.com.fiap.email.screens.LoginScreen
 import br.com.fiap.email.screens.PromotionsScreen
 import br.com.fiap.email.screens.RegisterScreen
+import br.com.fiap.email.screens.ResetScreen
 import br.com.fiap.email.screens.ResponseScreen
 import br.com.fiap.email.screens.SentScreen
 import br.com.fiap.email.screens.WriteScreen
@@ -130,6 +132,12 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel) {
         }
         composable(route = "sentScreen"){
             SentScreen(valController, userViewModel)
+        }
+        composable(route = "archivedScreen"){
+            ArchivedScreen(valController, userViewModel)
+        }
+        composable(route = "resetScreen"){
+            ResetScreen(valController)
         }
     }
 }

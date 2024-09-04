@@ -3,6 +3,7 @@ import br.com.fiap.email.models.AuthResponse
 import br.com.fiap.email.models.Email
 import br.com.fiap.email.models.Emails
 import br.com.fiap.email.models.LoginRequest
+import br.com.fiap.email.models.MoveEmailsRequest
 import br.com.fiap.email.models.ReceivedEmail
 import br.com.fiap.email.models.RegisterRequest
 import retrofit2.Call
@@ -24,4 +25,7 @@ interface AuthService {
 
     @GET("api/Auth/users/{userId}/emails")
     fun getUserEmails(@Path("userId") userId: String): Call<Emails>
+
+    @POST("api/User/{userId}/moveToArchived")
+    fun getMoveToArchived(@Path("userId") userId: String, @Body request: MoveEmailsRequest): Call<Void>
 }

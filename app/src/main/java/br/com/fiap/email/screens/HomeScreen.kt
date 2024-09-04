@@ -136,7 +136,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                 fontWeight = FontWeight.SemiBold
             )
             Card(
-                onClick = { /*TODO*/ },
+                onClick = {valController.navigate("archivedScreen")},
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent)
             ) {
                 Row(
@@ -147,7 +147,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.clock),
-                        contentDescription = "Ler Depois",
+                        contentDescription = "Arquivados",
                         modifier = Modifier
                             .height(24.dp)
                             .width(24.dp),

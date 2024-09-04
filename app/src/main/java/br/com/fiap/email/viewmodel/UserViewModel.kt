@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.fiap.email.models.ArchivedEmail
 import br.com.fiap.email.models.Email
 import br.com.fiap.email.models.Emails
 import br.com.fiap.email.models.ReceivedEmail
@@ -23,8 +24,6 @@ class UserViewModel() : ViewModel() {
     val userName = MutableLiveData<String>()
     val userId = MutableLiveData<String>()
     val userEmail = MutableLiveData<String>()
-//    val sentEmails = MutableLiveData<List<Email>>()
-//    val receivedEmails = MutableLiveData<List<ReceivedEmail>>()
 
     fun setUserName(name: String) {
         userName.value = name
@@ -38,18 +37,12 @@ class UserViewModel() : ViewModel() {
         userEmail.value = email
     }
 
-//    fun setReceivedEmails(emails: List<ReceivedEmail>){
-//        receivedEmails.value = emails
-//    }
-//    fun setSendEmails(emails: List<Email>){
-//        sentEmails.value = emails
-//    }
-
     private val _message = mutableStateOf<MessageState?>(null)
     val message: State<MessageState?> get() = _message
 
     fun sendEmail(userId: String, sentEmail: String, subject: String, body: String){
         val email = Email(
+            emailId = "",
             sentEmail = sentEmail,
             sentNome = "",
             subject = subject,
@@ -80,6 +73,9 @@ class UserViewModel() : ViewModel() {
     private val _sentEmails = MutableLiveData<List<Email>>()
     val sentEmails: LiveData<List<Email>> get() = _sentEmails
 
+    private val _archivedEmails = MutableLiveData<List<ArchivedEmail>>()
+    val archivesEmails: LiveData<List<ArchivedEmail>> get() = _archivedEmails
+
     fun fetchReceivedEmails(userId: String) {
         ApiClient.authService.getUserEmails(userId).enqueue(object : Callback<Emails> {
             override fun onResponse(call: Call<Emails>, response: Response<Emails>) {
@@ -102,6 +98,23 @@ class UserViewModel() : ViewModel() {
             override fun onResponse(call: Call<Emails>, response: Response<Emails>) {
                 if (response.isSuccessful) {
                     _sentEmails.value = response.body()?.sent
+                    _message.value = MessageState.Success
+                } else {
+                    _message.value = MessageState.Error("Falha ao carregar os emails")
+                }
+            }
+
+            override fun onFailure(call: Call<Emails>, t: Throwable) {
+                _message.value = MessageState.Error("Falha ao carregar os emails: ${t.message}")
+            }
+        })
+    }
+
+    fun fetchArchivedEmails(userId: String) {
+        ApiClient.authService.getUserEmails(userId).enqueue(object : Callback<Emails> {
+            override fun onResponse(call: Call<Emails>, response: Response<Emails>) {
+                if(response.isSuccessful){
+                    _archivedEmails.value = response.body()?.archived
                     _message.value = MessageState.Success
                 } else {
                     _message.value = MessageState.Error("Falha ao carregar os emails")
