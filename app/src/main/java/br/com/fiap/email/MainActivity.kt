@@ -59,6 +59,7 @@ import br.com.fiap.email.screens.RegisterScreen
 import br.com.fiap.email.screens.ResetScreen
 import br.com.fiap.email.screens.ResponseScreen
 import br.com.fiap.email.screens.SentScreen
+import br.com.fiap.email.screens.TrashScreen
 import br.com.fiap.email.screens.WriteScreen
 import br.com.fiap.email.ui.theme.EmailTheme
 import br.com.fiap.email.viewmodel.UserViewModel
@@ -135,6 +136,9 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel) {
         }
         composable(route = "archivedScreen"){
             ArchivedScreen(valController, userViewModel)
+        }
+        composable(route = "trashScreen"){
+            TrashScreen(valController, userViewModel)
         }
         composable(route = "resetScreen"){
             ResetScreen(valController)

@@ -11,6 +11,7 @@ import br.com.fiap.email.models.ArchivedEmail
 import br.com.fiap.email.models.Email
 import br.com.fiap.email.models.Emails
 import br.com.fiap.email.models.ReceivedEmail
+import br.com.fiap.email.models.TrashEmail
 import br.com.fiap.email.network.ApiClient
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -76,6 +77,9 @@ class UserViewModel() : ViewModel() {
     private val _archivedEmails = MutableLiveData<List<ArchivedEmail>>()
     val archivesEmails: LiveData<List<ArchivedEmail>> get() = _archivedEmails
 
+    private val _trashEmails = MutableLiveData<List<TrashEmail>>()
+    val trashEmails: LiveData<List<TrashEmail>> get() = _trashEmails
+
     fun fetchReceivedEmails(userId: String) {
         ApiClient.authService.getUserEmails(userId).enqueue(object : Callback<Emails> {
             override fun onResponse(call: Call<Emails>, response: Response<Emails>) {
@@ -117,6 +121,23 @@ class UserViewModel() : ViewModel() {
                     _archivedEmails.value = response.body()?.archived
                     _message.value = MessageState.Success
                 } else {
+                    _message.value = MessageState.Error("Falha ao carregar os emails")
+                }
+            }
+
+            override fun onFailure(call: Call<Emails>, t: Throwable) {
+                _message.value = MessageState.Error("Falha ao carregar os emails: ${t.message}")
+            }
+        })
+    }
+
+    fun fetchTrashEmails(userId: String){
+        ApiClient.authService.getUserEmails(userId).enqueue(object : Callback<Emails>{
+            override fun onResponse(call: Call<Emails>, response: Response<Emails>) {
+                if (response.isSuccessful){
+                    _trashEmails.value = response.body()?.trash
+                    _message.value = MessageState.Success
+                }else {
                     _message.value = MessageState.Error("Falha ao carregar os emails")
                 }
             }

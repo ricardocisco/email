@@ -153,7 +153,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                             .width(24.dp),
                     )
                     Text(
-                        text = "Ler Depois",
+                        text = "Arquivados",
                         modifier = Modifier.padding(start = 10.dp),
                         color = colors.onPrimary,
                         fontSize = 16.sp
@@ -226,7 +226,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                 )
             }
             Card(
-                onClick = { /*TODO*/ },
+                onClick = {valController.navigate("trashScreen")},
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent)
             ) {
                 Row(

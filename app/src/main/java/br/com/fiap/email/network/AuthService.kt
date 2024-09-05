@@ -3,6 +3,7 @@ import br.com.fiap.email.models.AuthResponse
 import br.com.fiap.email.models.Email
 import br.com.fiap.email.models.Emails
 import br.com.fiap.email.models.LoginRequest
+import br.com.fiap.email.models.MoveArchivedRequest
 import br.com.fiap.email.models.MoveEmailsRequest
 import br.com.fiap.email.models.ReceivedEmail
 import br.com.fiap.email.models.RegisterRequest
@@ -28,4 +29,13 @@ interface AuthService {
 
     @POST("api/User/{userId}/moveToArchived")
     fun getMoveToArchived(@Path("userId") userId: String, @Body request: MoveEmailsRequest): Call<Void>
+
+    @POST("api/User/{userId}/moveToTrash")
+    fun getMoveToTrash(@Path("userId") userId: String, @Body request: MoveEmailsRequest): Call<Void>
+
+    @POST("api/User/{userId}/moveFromArchived")
+    fun moveFromArchived(@Path("userId") userId: String, @Body request: MoveArchivedRequest): Call<Void>
+
+    @POST("api/User/{userId}/moveFromTrash")
+    fun moveFromTrash(@Path("userId") userId: String, @Body request: MoveArchivedRequest): Call<Void>
 }

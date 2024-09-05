@@ -1,6 +1,7 @@
 package br.com.fiap.email.navigation
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,6 +36,8 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -57,6 +60,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -92,6 +96,8 @@ import androidx.navigation.compose.rememberNavController
 import br.com.fiap.email.R
 import br.com.fiap.email.components.BottomSheetButton
 import br.com.fiap.email.components.ButtonWrite
+import br.com.fiap.email.components.DialogLoading
+import br.com.fiap.email.models.User
 import br.com.fiap.email.screens.FavoritesScreen
 import br.com.fiap.email.screens.HomeScreen
 import br.com.fiap.email.screens.PromotionsScreen
@@ -117,6 +123,15 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
     val colors = MaterialTheme.colorScheme
 
     val nome by userViewModel.userName.observeAsState("")
+    val receivedEmail by userViewModel.receivedEmails.observeAsState(emptyList())
+    val userId = userViewModel.userId.observeAsState("")
+
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogMessage by remember { mutableStateOf("Processando...") }
+
+    LaunchedEffect(Unit) {
+        userViewModel.fetchReceivedEmails(userId.value)
+    }
 
     Column {
         Box(
@@ -142,7 +157,29 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
                         )
                     }
                     Row {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = {
+                            val selectedEmails = listEmailViewModel.selectedItems.map { index ->
+                                receivedEmail[index].emailId
+                            }
+                            showDialog = true
+                            dialogMessage = "Arquivando emails"
+
+                            listEmailViewModel.moveToArchived(
+                                userId = userId.value,
+                                emailIds = selectedEmails,
+                                emailType = "received",
+                                onSuccess = {
+                                    dialogMessage = "E-mails arquivados com sucesso!"
+                                    listEmailViewModel.clearSelectedItems()
+                                    userViewModel.fetchReceivedEmails(userId.value)
+                                    showDialog = false
+                                },
+                                onError = {
+                                    dialogMessage = "Erro ao arquivar e-mails."
+                                    showDialog = false
+                                }
+                            )
+                        }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.folder),
                                 contentDescription = "botao de pastas",
@@ -156,6 +193,13 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
                                 tint = colors.onBackground
                             )
                         }
+                        DialogLoading(
+                            showDialog = showDialog,
+                            onDismiss = {showDialog = true},
+                            message = dialogMessage,
+                            isLoading = listEmailViewModel.isLoading,
+                            delayTime = 9000
+                        )
                     }
                 }
             } else {
@@ -268,9 +312,11 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
                         }
                     }
                     ButtonWrite(valController)
-                    BottomSheetButtonEdit(showBottomSheet) {
-                        showBottomSheet = it
-                    }
+                    BottomSheetButtonEdit(
+                        showBottomSheet = showBottomSheet,
+                        onButtonClick = { showBottomSheet = it },
+                        listEmailViewModel = listEmailViewModel,
+                        userViewModel = userViewModel)
                 }
             ) {
                 NavHost(
@@ -295,17 +341,20 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit) {
+fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit, listEmailViewModel: ListEmailViewModel, userViewModel: UserViewModel) {
     val sheetState = rememberModalBottomSheetState()
     val azul_escuro: Color = colorResource(id = R.color.azul_escuro)
-
     val colors = MaterialTheme.colorScheme
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogMessage by remember { mutableStateOf("Processando...") }
+    val receivedEmail by userViewModel.receivedEmails.observeAsState(emptyList())
+    val userId = userViewModel.userId.observeAsState("")
 
     Column {
         if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = {
-                    onButtonClick(false)
+                        onButtonClick(false)
                 },
                 sheetState = sheetState,
                 containerColor = colors.primary
@@ -377,22 +426,65 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                         color = Color.LightGray,
                         thickness = 1.dp
                     )
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 12.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.delete),
-                            contentDescription = "delete"
-                        )
-                        Text(
-                            text = "Deletar",
-                            modifier = Modifier.padding(start = 10.dp),
-                            color = azul_escuro
-                        )
+                    Card(
+                        onClick = {
+                            val selectedEmails = listEmailViewModel.selectedItems.map { index ->
+                                receivedEmail[index].emailId
+                            }
+                            showDialog = true
+                            dialogMessage = "Deletando emails"
+
+                            listEmailViewModel.moveToTrash(
+                                userId = userId.value,
+                                emailIds = selectedEmails,
+                                emailType = "received",
+                                onSuccess = {
+                                    dialogMessage = "E-mails deletados com sucesso!"
+                                    listEmailViewModel.clearSelectedItems()
+                                    userViewModel.fetchReceivedEmails(userId.value)
+                                    showDialog = false
+                                },
+                                onError = {
+                                    dialogMessage = "Erro ao deletar e-mails."
+                                    showDialog = false
+                                }
+                            )
+
+                            onButtonClick(true)
+                        },
+                        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                        modifier = Modifier.fillMaxWidth()
+                    ){
+                        Row(
+                            modifier = Modifier
+                                .padding(10.dp, 12.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.delete),
+                                contentDescription = "delete"
+                            )
+                            Text(
+                                text = "Deletar",
+                                modifier = Modifier.padding(start = 10.dp),
+                                color = azul_escuro
+                            )
+                        }
                     }
+                    LaunchedEffect(listEmailViewModel.isLoading) {
+                        if (!listEmailViewModel.isLoading) {
+                            showDialog = false
+                            onButtonClick(true)
+                        }
+                    }
+                    DialogLoading(
+                        showDialog = showDialog,
+                        onDismiss = {showDialog = true},
+                        message = dialogMessage,
+                        isLoading = listEmailViewModel.isLoading,
+                        delayTime = 9000
+                    )
                     Divider(
                         modifier = Modifier.padding(horizontal = 5.dp),
                         color = Color.LightGray,
@@ -409,7 +501,7 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
 fun NetworkStatus(viewModel: NetworkViewModel = viewModel()) {
     val isConnected = viewModel.connectivityLiveData.observeAsState(initial = false)
 
-    if (isConnected.value == true) {
+    if (isConnected.value) {
         Image(
             modifier = Modifier.size(32.dp),
             painter = painterResource(id = R.drawable.interneton),
