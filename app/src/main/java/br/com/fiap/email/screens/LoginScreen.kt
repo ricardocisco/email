@@ -1,6 +1,5 @@
 package br.com.fiap.email.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,8 +23,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,26 +39,25 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import br.com.fiap.email.R
-import br.com.fiap.email.models.AuthResponse
-import br.com.fiap.email.models.LoginRequest
-import br.com.fiap.email.network.ApiClient
 import br.com.fiap.email.network.AuthService
+import br.com.fiap.email.viewmodel.AuthViewModel
 import br.com.fiap.email.viewmodel.UserViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @Composable
-fun LoginScreen(userViewModel: UserViewModel, valController: NavController, authService: AuthService, onLoginSuccess: () -> Unit){
+fun LoginScreen(userViewModel: UserViewModel, valController: NavController, authService: AuthService, authViewModel: AuthViewModel, onLoginSuccess: () -> Unit){
 
     val colors = MaterialTheme.colorScheme
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var mensagem by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var mensagem by remember { mutableStateOf("") }
+    val errorMessage = authViewModel.errorMessage
+
+    LaunchedEffect(Unit) {
+        authViewModel.clearErrorMessage()
+    }
 
     Column(
         modifier = Modifier
@@ -139,39 +137,27 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
             Text(text = "Lembre-se")
         }
         Text(modifier = Modifier
-                .align(Alignment.End)
-                .clickable {
-                    valController.navigate("resetScreen")
-                }, text = "Esqueceu sua senha?",)
+            .align(Alignment.End)
+            .clickable {
+                valController.navigate("resetScreen")
+            }, text = "Esqueceu sua senha?",)
         Button(
-            onClick = { val loginRequest = LoginRequest(email, password)
-                ApiClient.authService.login(loginRequest).enqueue(object :  Callback<AuthResponse> {
-                    override fun onResponse(
-                        call: Call<AuthResponse>,
-                        response: Response<AuthResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            val authResponse = response.body()
-                            if( authResponse?.user != null){
-                                userViewModel.setUserName(authResponse.user.nome)
-                                userViewModel.setUserId(authResponse.user.id)
-                                userViewModel.setUserEmail(authResponse.user.email)
-                                Log.d("Login", "${response.body()}")
-                                onLoginSuccess()
-                            }
-                            else{
-                                Log.d("Login", "Erro: ${response.code()}")
-                            }
-                        }else {
-                            Log.d("Login", "Erro: ${response.code()}")
-                            Log.d("Login", "Erro: ${response.body()}")
-                            Log.d("Login", "Erro: ${response.message()}")
-                        }
+            onClick = {
+                authViewModel.loginUser(
+                    email = email,
+                    password = password,
+                    onLoginSuccess = { authResponse ->
+                        userViewModel.setUserName(authResponse.user.nome)
+                        userViewModel.setUserId(authResponse.user.id)
+                        userViewModel.setUserEmail(authResponse.user.email)
+                        userViewModel.setUserTheme(authResponse.user.preferences.theme)
+                        onLoginSuccess()
+                        },
+                    onError = { errorMessage ->
+                        mensagem = errorMessage
                     }
-                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                        Log.e("Login", "Erro na requisição: ${t.message}")
-                    }
-                })},
+                    )
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
@@ -184,6 +170,9 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
                 modifier = Modifier.padding(8.dp),
                 fontSize = 18.sp
             )
+        }
+        errorMessage?.let {
+            Text(text = it, color = Color.Red, fontSize = 16.sp)
         }
         Spacer(modifier = Modifier.height(50.dp))
         Row(

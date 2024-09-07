@@ -8,3 +8,8 @@ data class MoveEmailsRequest(
 data class MoveArchivedRequest(
     val emailIds: List<String>
 )
+
+data class DeleteEmailsRequest(
+    val userId: String,
+    val emailIds: List<String>
+)

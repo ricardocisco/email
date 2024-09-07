@@ -294,6 +294,9 @@ fun WriteScreen(
                     onClick = {
                         if (user.isNotBlank() && campoPara.isNotBlank() && campoAssunto.isNotBlank() && campoEmail.isNotBlank()) {
                             userViewModel.sendEmail(user, campoPara, campoAssunto, campoEmail)
+                            campoPara = ""
+                            campoAssunto = ""
+                            campoEmail = ""
                             dialogMessage = "E-mail enviado com sucesso!"
                         } else {
                             dialogMessage = "Preencha todos os campos"

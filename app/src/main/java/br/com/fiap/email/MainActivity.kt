@@ -29,6 +29,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -62,37 +64,43 @@ import br.com.fiap.email.screens.SentScreen
 import br.com.fiap.email.screens.TrashScreen
 import br.com.fiap.email.screens.WriteScreen
 import br.com.fiap.email.ui.theme.EmailTheme
+import br.com.fiap.email.viewmodel.AuthViewModel
+import br.com.fiap.email.viewmodel.ThemeViewModel
 import br.com.fiap.email.viewmodel.UserViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            EmailTheme {
-                val userViewModel: UserViewModel = viewModel();
+            val userViewModel: UserViewModel = viewModel();
+            val isDarkTheme = userViewModel.userTheme.collectAsState().value == "dark"
+            EmailTheme(darkTheme = isDarkTheme) {
+
+                val themeViewModel: ThemeViewModel = viewModel()
+                val authViewModel: AuthViewModel = viewModel();
                 val authService = ApiClient.authService
-                TelaSettings( authService, userViewModel)
+                TelaSettings( authService, userViewModel, authViewModel, themeViewModel)
             }
         }
     }
 }
 
 @Composable
-fun TelaSettings(authService: AuthService, userViewModel: UserViewModel) {
+fun TelaSettings(authService: AuthService, userViewModel: UserViewModel, authViewModel: AuthViewModel, themeViewModel: ThemeViewModel) {
     val valController = rememberNavController()
     NavHost(navController = valController, startDestination = "inicialScreen") {
         composable(route = "inicialScreen") {
             InicialScreen(valController)
         }
         composable(route = "login") {
-            LoginScreen( userViewModel,valController, authService){
+            LoginScreen( userViewModel,valController, authService, authViewModel){
                 valController.navigate("homeApp") {
                     popUpTo("login") { inclusive = true }
                 }
             }
         }
         composable(route = "register") {
-            RegisterScreen(valController, authService) {
+            RegisterScreen(valController, authService, authViewModel) {
                 valController.navigate("login") {
                     popUpTo("register") { inclusive = true }
                 }
@@ -102,7 +110,7 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel) {
             AppNavigation(valController, userViewModel)
         }
         composable(route = "settings") {
-            ConfigScreen(valController)
+            ConfigScreen(valController, userViewModel, themeViewModel)
         }
         composable(route = "writeEmail?subject={subject}&body={body}") {
             WriteScreen(valController, userViewModel,
@@ -141,7 +149,7 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel) {
             TrashScreen(valController, userViewModel)
         }
         composable(route = "resetScreen"){
-            ResetScreen(valController)
+            ResetScreen(valController, authViewModel)
         }
     }
 }

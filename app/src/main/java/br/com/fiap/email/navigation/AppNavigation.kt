@@ -264,8 +264,6 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
                                 tint = colors.onBackground
                             )
                         }
-//                        Spacer(modifier = Modifier.padding(4.dp))
-//                        Spacer(modifier = Modifier.padding(7.dp))
                     }
                 }
             }
@@ -316,7 +314,8 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
                         showBottomSheet = showBottomSheet,
                         onButtonClick = { showBottomSheet = it },
                         listEmailViewModel = listEmailViewModel,
-                        userViewModel = userViewModel)
+                        userViewModel = userViewModel,
+                    )
                 }
             ) {
                 NavHost(
@@ -341,7 +340,12 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit, listEmailViewModel: ListEmailViewModel, userViewModel: UserViewModel) {
+fun BottomSheetButtonEdit(
+    showBottomSheet: Boolean,
+    onButtonClick: (Boolean) -> Unit,
+    listEmailViewModel: ListEmailViewModel,
+    userViewModel: UserViewModel,
+) {
     val sheetState = rememberModalBottomSheetState()
     val azul_escuro: Color = colorResource(id = R.color.azul_escuro)
     val colors = MaterialTheme.colorScheme
@@ -354,7 +358,7 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
         if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = {
-                        onButtonClick(false)
+                    onButtonClick(false)
                 },
                 sheetState = sheetState,
                 containerColor = colors.primary
@@ -363,21 +367,29 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                     modifier = Modifier
                         .padding(25.dp)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 12.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.forward),
-                            contentDescription = "forward"
-                        )
-                        Text(
-                            text = "Encaminhar",
-                            modifier = Modifier.padding(start = 10.dp),
-                            color = colors.onPrimary
-                        )
+                    Card(
+                        onClick = {
+                            listEmailViewModel.selectAllEmails(receivedEmail.size)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+                    ){
+                        Row(
+                            modifier = Modifier
+                                .padding(10.dp, 12.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.forward),
+                                contentDescription = "forward"
+                            )
+                            Text(
+                                text = "Selecionar Todos",
+                                modifier = Modifier.padding(start = 10.dp),
+                                color = colors.onPrimary
+                            )
+                        }
                     }
                     Divider(
                         modifier = Modifier.padding(horizontal = 5.dp),
@@ -483,7 +495,7 @@ fun BottomSheetButtonEdit(showBottomSheet: Boolean, onButtonClick: (Boolean) -> 
                         onDismiss = {showDialog = true},
                         message = dialogMessage,
                         isLoading = listEmailViewModel.isLoading,
-                        delayTime = 9000
+                        delayTime = 7000
                     )
                     Divider(
                         modifier = Modifier.padding(horizontal = 5.dp),

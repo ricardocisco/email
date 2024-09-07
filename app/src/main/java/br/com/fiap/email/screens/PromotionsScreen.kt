@@ -55,7 +55,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
 import br.com.fiap.email.R
+import br.com.fiap.email.components.FormatTime
 import br.com.fiap.email.viewmodel.ListEmailViewModel
+import br.com.fiap.email.viewmodel.MessageState
 import br.com.fiap.email.viewmodel.UserViewModel
 import io.github.serpro69.kfaker.Faker
 
@@ -72,11 +74,14 @@ fun PromotionsScreen(
         userViewModel.fetchReceivedEmails(userId.value)
     }
 
+    val loading by userViewModel.loadingList
+    val messageState by userViewModel.message
+
     val filteredEmailDataList = receivedEmail.filter {
-        it.receiveNome.contains(searchText, ignoreCase = true) || it.subject.contains(
+        it.receiveNome?.contains(searchText, ignoreCase = true) == true || it.subject?.contains(
             searchText,
             ignoreCase = true
-        )
+        ) == true
     }
 
     val colors = MaterialTheme.colorScheme
@@ -94,28 +99,55 @@ fun PromotionsScreen(
                 .height(1.dp)
                 .fillMaxWidth()
         )
-        LazyColumn(
-            modifier = Modifier.padding(top = 85.dp)
-        ) {
-            items(filteredEmailDataList.size) { index ->
-                val isFavorite = listEmailViewModel.isFavorite(index)
-                val isSelected = listEmailViewModel.selectedItems.contains(index)
-                ListEmail(
-                    name = filteredEmailDataList[index].receiveNome,
-                    email = filteredEmailDataList[index].receiveEmail,
-                    subject = filteredEmailDataList[index].subject,
-                    body = filteredEmailDataList[index].body,
-                    index = index,
-                    isFavorite = isFavorite,
-                    onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex) },
-                    isSelected = isSelected,
-                    onItemSelected = { emailIndex ->
-                        listEmailViewModel.toggleItemSelected(
-                            emailIndex
-                        )
-                    },
-                    valController = valController
-                )
+        when(messageState){
+            is MessageState.Success -> {
+                println("emails carregados com sucesso!")
+            }
+            is MessageState.Error -> {
+                val errorMessage = (messageState as MessageState.Error).message
+                androidx.compose.material3.Text(text = "Erro ao carregar os emails: ${errorMessage}")
+            }
+            is MessageState.Loading -> {
+                androidx.compose.material3.Text(text = "Carregando...")
+            }
+            is MessageState.None -> {
+
+            }
+            null -> {
+
+            }
+        }
+        
+        if(filteredEmailDataList.isEmpty() && !loading){
+            Text(text = "A caixa está vazia!")
+        }
+
+        if(!loading){
+            LazyColumn(
+                modifier = Modifier.padding(top = 85.dp)
+            ) {
+                items(filteredEmailDataList.size) { index ->
+                    val isFavorite = listEmailViewModel.isFavorite(index)
+                    val isSelected = listEmailViewModel.selectedItems.contains(index)
+
+                    ListEmail(
+                        name = filteredEmailDataList[index].receiveNome ?: "",
+                        email = filteredEmailDataList[index].receiveEmail ?: "",
+                        subject = filteredEmailDataList[index].subject ?: "",
+                        body = filteredEmailDataList[index].body ?: "",
+                        time = FormatTime(filteredEmailDataList[index].receivedAt),
+                        index = index,
+                        isFavorite = isFavorite,
+                        onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex) },
+                        isSelected = isSelected,
+                        onItemSelected = { emailIndex ->
+                            listEmailViewModel.toggleItemSelected(
+                                emailIndex
+                            )
+                        },
+                        valController = valController
+                    )
+                }
             }
         }
     }
@@ -128,6 +160,7 @@ fun ListEmail(
     email: String,
     body: String,
     subject: String,
+    time: String,
     index: Int,
     isFavorite: Boolean,
     onToggleFavorite: (Int) -> Unit,
@@ -188,7 +221,7 @@ fun ListEmail(
                         Text(text = email, color = if (isSelected) colors.surface else colors.onPrimary)
                     }
                     Column {
-                        Text(text = "12m ago", color = if (isSelected) colors.surface else colors.onPrimary)
+                        Text(text = "${time}", color = if (isSelected) colors.surface else colors.onPrimary)
                         IconButton(onClick = {
                             favorited = !favorited
                             onToggleFavorite(index)

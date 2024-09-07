@@ -27,7 +27,7 @@ val LightColorScheme = lightColorScheme(
 
 @Composable
 fun EmailTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean,
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {

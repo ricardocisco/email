@@ -69,6 +69,7 @@ fun FavoritesScreen(
                     email = emailData.receiveEmail,
                     subject = emailData.subject,
                     body = emailData.body,
+                    time = emailData.receivedAt,
                     index = index,
                     isFavorite = true,
                     onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex) },

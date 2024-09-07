@@ -58,6 +58,14 @@ class ListEmailViewModel : ViewModel() {
         _isInEditMode.value = false
     }
 
+    fun selectAllEmails(emailListSize: Int) {
+        _selectedItems.clear()
+        for (i in 0 until emailListSize) {
+            _selectedItems.add(i)
+        }
+        _isInEditMode.value = _selectedItems.isNotEmpty()
+    }
+
     var isLoading by mutableStateOf(false)
         private set
 
@@ -141,6 +149,7 @@ class ListEmailViewModel : ViewModel() {
                 if (response.isSuccessful){
                     onSuccess()
                 }else {
+
                     errorMessage = "erro ao desarquivar email"
                 }
             }

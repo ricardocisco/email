@@ -33,7 +33,9 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -51,10 +53,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.com.fiap.email.R
+import br.com.fiap.email.viewmodel.ThemeViewModel
+import br.com.fiap.email.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConfigScreen(valController: NavController) {
+fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, themeViewModel: ThemeViewModel) {
 
     var validacaoNotificacao by remember { mutableStateOf(true) }
     var validacaoSom by remember { mutableStateOf(true) }
@@ -62,6 +66,9 @@ fun ConfigScreen(valController: NavController) {
     val customPink: Color = colorResource(id = R.color.customPink)
     val customBlue: Color = colorResource(id = R.color.customBlue)
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
+
+    val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+    val userId = userViewModel.userId.observeAsState("")
 
     val colors = MaterialTheme.colorScheme
 
@@ -122,53 +129,25 @@ fun ConfigScreen(valController: NavController) {
                         .fillMaxWidth()
                         .padding(bottom = 5.dp)
                 )
-                Row (
+                Column (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .offset(x = -7.dp)
                 ) {
-                    IconButton(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier
-                            .height(60.dp)
-                            .width(60.dp)
-//                                .offset(x = (-170).dp)
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.circulo),
-                            contentDescription = "Tema White",
-                            tint = Color.White,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .border(
-                                    width = 5.dp,
-                                    color = customPink,
-                                    shape = CircleShape
-                                )
-                        )
-                    }
-                    IconButton(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier
-                            .height(60.dp)
-                            .width(60.dp)
-//                                .offset(x = (-170).dp)
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.circulo),
-                            contentDescription = "Tema Dark",
-                            tint = Color.Black,
-                            modifier = Modifier
-                                .height(50.dp)
-                                .width(50.dp)
-                                .border(
-                                    width = 5.dp,
-                                    Color.Black,
-                                    shape = CircleShape
-                                )
-                        )
-                    }
+                    Text(text = if (isDarkTheme) "Tema Escuro" else "Tema Claro", color = colors.onPrimary)
+                    Switch(
+                        checked = isDarkTheme,
+                        onCheckedChange = { isDarkTheme ->
+                            val newTheme = if (isDarkTheme) "dark" else "light"
+                            userViewModel.setUserTheme(newTheme)
+                            themeViewModel.toggleTheme(userId.value)
+                        },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = colors.primary,
+                            checkedTrackColor = colors.onPrimary,
+                            uncheckedThumbColor = colors.primary,
+                            uncheckedTrackColor = colors.onSurface
+                        ),
+                    )
                 }
             }
             LazyColumn(
@@ -179,7 +158,6 @@ fun ConfigScreen(valController: NavController) {
                         contentAlignment = Alignment.TopEnd,
                         modifier = Modifier
                             .padding(start = 30.dp, end = 30.dp, bottom = 40.dp)
-                        //.border(width = 1.dp, Color.Black)
                     ) {
                         Column{
                             Text(
@@ -221,8 +199,10 @@ fun ConfigScreen(valController: NavController) {
                                         null
                                     },
                                     colors = SwitchDefaults.colors(
-                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                        checkedTrackColor = customBlue
+                                        checkedThumbColor = colors.primary,
+                                        checkedTrackColor = colors.onPrimary,
+                                        uncheckedThumbColor = colors.primary,
+                                        uncheckedTrackColor = colors.onSurface
                                     )
                                 )
                             }
@@ -256,8 +236,10 @@ fun ConfigScreen(valController: NavController) {
                                         null
                                     },
                                     colors = SwitchDefaults.colors(
-                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                        checkedTrackColor = customBlue
+                                        checkedThumbColor = colors.primary,
+                                        checkedTrackColor = colors.onPrimary,
+                                        uncheckedThumbColor = colors.primary,
+                                        uncheckedTrackColor = colors.onSurface
                                     )
                                 )
                             }
@@ -291,8 +273,10 @@ fun ConfigScreen(valController: NavController) {
                                         null
                                     },
                                     colors = SwitchDefaults.colors(
-                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                        checkedTrackColor = customBlue
+                                        checkedThumbColor = colors.primary,
+                                        checkedTrackColor = colors.onPrimary,
+                                        uncheckedThumbColor = colors.primary,
+                                        uncheckedTrackColor = colors.onSurface
                                     )
                                 )
                             }
@@ -346,8 +330,10 @@ fun ConfigScreen(valController: NavController) {
                                         null
                                     },
                                     colors = SwitchDefaults.colors(
-                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                        checkedTrackColor = customBlue
+                                        checkedThumbColor = colors.primary,
+                                        checkedTrackColor = colors.onPrimary,
+                                        uncheckedThumbColor = colors.primary,
+                                        uncheckedTrackColor = colors.onSurface
                                     )
                                 )
                             }
@@ -381,8 +367,10 @@ fun ConfigScreen(valController: NavController) {
                                         null
                                     },
                                     colors = SwitchDefaults.colors(
-                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                        checkedTrackColor = customBlue
+                                        checkedThumbColor = colors.primary,
+                                        checkedTrackColor = colors.onPrimary,
+                                        uncheckedThumbColor = colors.primary,
+                                        uncheckedTrackColor = colors.onSurface
                                     )
                                 )
                             }
@@ -416,8 +404,10 @@ fun ConfigScreen(valController: NavController) {
                                         null
                                     },
                                     colors = SwitchDefaults.colors(
-                                        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
-                                        checkedTrackColor = customBlue
+                                        checkedThumbColor = colors.primary,
+                                        checkedTrackColor = colors.onPrimary,
+                                        uncheckedThumbColor = colors.primary,
+                                        uncheckedTrackColor = colors.onSurface
                                     )
                                 )
                             }
@@ -429,7 +419,6 @@ fun ConfigScreen(valController: NavController) {
                 contentAlignment = Alignment.TopEnd,
                 modifier = Modifier
                     .padding(start = 30.dp, top = 15.dp)
-                    //.border(width = 1.dp, Color.Black)
                     .height(150.dp)
             ) {
                 Column{
@@ -441,39 +430,44 @@ fun ConfigScreen(valController: NavController) {
                         modifier = Modifier
                             .padding(bottom = 20.dp, top = 15.dp)
                     )
-                    Button(
-                        onClick = { },
-                        modifier = Modifier
-
-                            .shadow(
-                                elevation = 5.dp,
-                                shape = RoundedCornerShape(15.dp),
-                                spotColor = customDarkBlue,
-                                clip = false
-                            ),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = customDarkBlue)
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.lixeira),
-                            contentDescription = "Lixeira",
-                            tint = Color.White,
-                            modifier = Modifier
-                                .height(30.dp)
-                                .width(30.dp)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            text = "Limpar histórico",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                        )
-                    }
-                    Button(
-                        onClick = {valController.navigate("inicialScreen")}
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ){
-                        Text(text = "Sair")
+                        Button(
+                            onClick = { },
+                            modifier = Modifier
+                                .shadow(
+                                    elevation = 5.dp,
+                                    shape = RoundedCornerShape(15.dp),
+                                    spotColor = customDarkBlue,
+                                    clip = false
+                                ),
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = customDarkBlue)
+                        ) {
+                            Icon(
+                                painterResource(id = R.drawable.lixeira),
+                                contentDescription = "Lixeira",
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .height(30.dp)
+                                    .width(30.dp)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = "Limpar histórico",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                            )
+                        }
+                        Button(
+                            onClick = {valController.navigate("inicialScreen")},
+                            modifier = Modifier.padding(end = 20.dp).border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                        ){
+                            Text(text = "Sair")
+                        }
                     }
                 }
             }

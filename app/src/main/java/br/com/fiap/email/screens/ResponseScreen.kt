@@ -278,6 +278,9 @@ fun ResponseScreen(valController: NavController, name: String, email: String, su
                         if (user.isNotBlank() && campoPara.isNotBlank() && campoAssunto.isNotBlank() && campoEmail.isNotBlank()) {
                             userViewModel.sendEmail(user, campoPara, campoAssunto, campoEmail)
                             dialogMessage = "E-mail enviado com sucesso!"
+                            campoPara = ""
+                            campoAssunto = ""
+                            campoEmail = ""
                         } else {
                             dialogMessage = "Preencha todos os campos"
                         }

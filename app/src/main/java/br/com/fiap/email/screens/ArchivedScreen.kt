@@ -1,10 +1,7 @@
 package br.com.fiap.email.screens
 
-import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
+
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,6 +18,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
@@ -27,7 +27,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -50,7 +52,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import br.com.fiap.email.R
 import br.com.fiap.email.components.DialogLoading
+import br.com.fiap.email.components.FormatTime
 import br.com.fiap.email.viewmodel.ListEmailViewModel
+import br.com.fiap.email.viewmodel.MessageState
 import br.com.fiap.email.viewmodel.UserViewModel
 
 @Composable
@@ -64,6 +68,10 @@ fun ArchivedScreen(valController: NavController, userViewModel: UserViewModel){
 
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("Processando...") }
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+    val loading by userViewModel.loadingList
+    val messageState by userViewModel.message
 
     LaunchedEffect(Unit) {
         userViewModel.fetchArchivedEmails(userId.value)
@@ -116,7 +124,7 @@ fun ArchivedScreen(valController: NavController, userViewModel: UserViewModel){
                                     tint = colors.onBackground
                                 )
                             }
-                            IconButton(onClick = {}) {
+                            IconButton(onClick = {showBottomSheet = true }) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.more),
                                     contentDescription = "botao de mais",
@@ -140,6 +148,8 @@ fun ArchivedScreen(valController: NavController, userViewModel: UserViewModel){
                     ){
                         IconButton(
                             onClick = {valController.navigate("homeApp")},
+                            modifier = Modifier
+                                .offset(x = (-110).dp)
                         ) {
                             Icon(
                                 painterResource(id = R.drawable.seta_voltar),
@@ -155,6 +165,8 @@ fun ArchivedScreen(valController: NavController, userViewModel: UserViewModel){
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             color = colors.onBackground,
+                            modifier = Modifier
+                                .offset(x = (-20).dp)
                         )
                     }
                 }
@@ -165,20 +177,223 @@ fun ArchivedScreen(valController: NavController, userViewModel: UserViewModel){
                     .height(1.dp)
                     .fillMaxWidth()
             )
-            LazyColumn (
-                modifier = Modifier.fillMaxSize()
-            ){
-                items(listArchivedEmails.size) { index ->
-                    val isSelected = listEmailViewModel.selectedItems.contains(index)
-                    ListEmail(
-                        email = listArchivedEmails[index].emailDataBase.sentEmail ?: listArchivedEmails[index].emailDataBase.receiveEmail ?: "",
-                        name = listArchivedEmails[index].emailDataBase.sentNome ?: listArchivedEmails[index].emailDataBase.receiveNome ?: "",
-                        body = listArchivedEmails[index].emailDataBase.body ?: "",
-                        subject = listArchivedEmails[index].emailDataBase.subject ?: "",
-                        index = index,
-                        isSelected = isSelected,
-                        onItemSelected = {emailIndex -> listEmailViewModel.toggleItemSelected(index)},
-                        valController = valController
+            when(messageState){
+                is MessageState.Success -> {
+                    println("emails carregados com sucesso!")
+                }
+                is MessageState.Error -> {
+                    val errorMessage = (messageState as MessageState.Error).message
+                    Text(text = "Erro ao carregar os emails: ${errorMessage}")
+                }
+                is MessageState.Loading -> {
+                    Text(text = "Carregando...")
+                }
+                is MessageState.None -> {
+                    
+                }
+                null -> {
+                    
+                }
+            }
+            
+            if(listArchivedEmails.isEmpty() && !loading){
+                Text(text = "A caixa está vazia!")
+            }
+            
+            if(!loading){
+                LazyColumn (
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    items(listArchivedEmails.size) { index ->
+                        val isSelected = listEmailViewModel.selectedItems.contains(index)
+                        ListEmail(
+                            email = listArchivedEmails[index].emailDataBase.sentEmail ?: listArchivedEmails[index].emailDataBase.receiveEmail ?: "",
+                            name = listArchivedEmails[index].emailDataBase.sentNome ?: listArchivedEmails[index].emailDataBase.receiveNome ?: "",
+                            body = listArchivedEmails[index].emailDataBase.body ?: "",
+                            subject = listArchivedEmails[index].emailDataBase.subject ?: "",
+                            time = FormatTime(listArchivedEmails[index].emailDataBase.sentAt ?: listArchivedEmails[index].emailDataBase.receivedAt ?: ""),
+                            index = index,
+                            isSelected = isSelected,
+                            onItemSelected = {listEmailViewModel.toggleItemSelected(index)},
+                            valController = valController
+                        )
+                    }
+                }
+            }
+        }
+        BottomSheetButtonArchived(
+            showBottomSheet = showBottomSheet,
+            onButtonClick = { showBottomSheet = it },
+            listEmailViewModel = listEmailViewModel,
+            userViewModel = userViewModel,
+        )
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomSheetButtonArchived(
+    showBottomSheet: Boolean,
+    onButtonClick: (Boolean) -> Unit,
+    listEmailViewModel: ListEmailViewModel,
+    userViewModel: UserViewModel,
+) {
+    val sheetState = rememberModalBottomSheetState()
+    val azul_escuro: Color = colorResource(id = R.color.azul_escuro)
+    val colors = MaterialTheme.colorScheme
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogMessage by remember { mutableStateOf("Processando...") }
+    val archivedEmails by userViewModel.archivesEmails.observeAsState(emptyList())
+    val userId = userViewModel.userId.observeAsState("")
+
+    Column {
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    onButtonClick(false)
+                },
+                sheetState = sheetState,
+                containerColor = colors.primary
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(25.dp)
+                ) {
+                    Card(
+                        onClick = {
+                            listEmailViewModel.selectAllEmails(archivedEmails.size)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+                    ){
+                        Row(
+                            modifier = Modifier
+                                .padding(10.dp, 12.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.forward),
+                                contentDescription = "forward"
+                            )
+                            Text(
+                                text = "Selecionar Todos",
+                                modifier = Modifier.padding(start = 10.dp),
+                                color = colors.onPrimary
+                            )
+                        }
+                    }
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        color = Color.LightGray,
+                        thickness = 1.dp
+                    )
+                    Row(
+                        modifier = Modifier
+                            .padding(10.dp, 12.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.folderimg),
+                            contentDescription = "pastas"
+                        )
+                        Text(
+                            text = "Adicionar a Pasta",
+                            modifier = Modifier.padding(start = 10.dp),
+                            color = colors.onPrimary
+                        )
+                    }
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        color = Color.LightGray,
+                        thickness = 1.dp
+                    )
+                    Row(
+                        modifier = Modifier
+                            .padding(10.dp, 12.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.spam),
+                            contentDescription = "spam"
+                        )
+                        Text(
+                            text = "Denunciar Spam",
+                            modifier = Modifier.padding(start = 10.dp),
+                            color = colors.onPrimary
+                        )
+                    }
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        color = Color.LightGray,
+                        thickness = 1.dp
+                    )
+                    Card(
+                        onClick = {
+                            val selectedEmails = listEmailViewModel.selectedItems.map { index ->
+                                archivedEmails[index].emailId
+                            }
+                            showDialog = true
+                            dialogMessage = "Deletando emails"
+
+                            listEmailViewModel.moveToTrash(
+                                userId = userId.value,
+                                emailIds = selectedEmails,
+                                emailType = "received",
+                                onSuccess = {
+                                    dialogMessage = "E-mails deletados com sucesso!"
+                                    listEmailViewModel.clearSelectedItems()
+                                    userViewModel.fetchReceivedEmails(userId.value)
+                                    showDialog = false
+                                },
+                                onError = {
+                                    dialogMessage = "Erro ao deletar e-mails."
+                                    showDialog = false
+                                }
+                            )
+
+                            onButtonClick(true)
+                        },
+                        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                        modifier = Modifier.fillMaxWidth()
+                    ){
+                        Row(
+                            modifier = Modifier
+                                .padding(10.dp, 12.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.delete),
+                                contentDescription = "delete"
+                            )
+                            Text(
+                                text = "Deletar",
+                                modifier = Modifier.padding(start = 10.dp),
+                                color = azul_escuro
+                            )
+                        }
+                    }
+                    LaunchedEffect(listEmailViewModel.isLoading) {
+                        if (!listEmailViewModel.isLoading) {
+                            showDialog = false
+                            onButtonClick(true)
+                        }
+                    }
+                    DialogLoading(
+                        showDialog = showDialog,
+                        onDismiss = {showDialog = true},
+                        message = dialogMessage,
+                        isLoading = listEmailViewModel.isLoading,
+                        delayTime = 7000
+                    )
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        color = Color.LightGray,
+                        thickness = 1.dp
                     )
                 }
             }

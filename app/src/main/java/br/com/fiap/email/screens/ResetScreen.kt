@@ -1,5 +1,6 @@
 package br.com.fiap.email.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,14 +33,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import br.com.fiap.email.viewmodel.AuthViewModel
 
 @Composable
-fun ResetScreen(valController: NavController){
+fun ResetScreen(valController: NavController, authViewModel: AuthViewModel){
 
     var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var newPassword by remember { mutableStateOf("") }
+    var mensagem by remember { mutableStateOf<String?>(null) }
+    val errorMessage = authViewModel.errorMessage
+
+    LaunchedEffect(Unit) {
+        authViewModel.clearErrorMessage()
+    }
 
     Column (
         modifier = Modifier.fillMaxSize(),
@@ -82,10 +94,51 @@ fun ResetScreen(valController: NavController){
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp)
             )
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Senha",
+                fontWeight = FontWeight.Bold,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = password,
+                onValueChange = {password = it},
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                visualTransformation = PasswordVisualTransformation()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Confirmar senha",
+                fontWeight = FontWeight.Bold,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = newPassword,
+                onValueChange = {newPassword = it},
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                visualTransformation = PasswordVisualTransformation()
+            )
             Button(
                 onClick = {
-
+                    Log.d("PasswordCheck", "password: $password, newPassword: $newPassword")
+                    if(password == newPassword){
+                        authViewModel.passwordReset(
+                            email = email,
+                            newPassword = newPassword,
+                            onSuccess = {
+                                email = ""
+                                password = ""
+                                newPassword = ""
+                            },
+                            onError = { errorMessage ->
+                                mensagem = errorMessage
+                            }
+                        )
+                    } else {
+                        mensagem = "As senhas não coincidem."
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -94,11 +147,20 @@ fun ResetScreen(valController: NavController){
                 colors = ButtonDefaults.buttonColors(Color(0xFF2F2F2F))
             ) {
                 Text(
-                    text = "Enviar codigo",
+                    text = "Redefinir senha",
                     color = Color(0xFFFFFFFF),
                     modifier = Modifier.padding(10.dp),
                     fontSize = 20.sp
                 )
+            }
+            mensagem?.let { 
+                Text(text = it)
+            }
+            if (authViewModel.successMessage != null) {
+                Text(text = authViewModel.successMessage!!, color = Color.Green, fontSize = 16.sp)
+            }
+            errorMessage?.let {
+                Text(text = it, color = Color.Red)
             }
 
         }

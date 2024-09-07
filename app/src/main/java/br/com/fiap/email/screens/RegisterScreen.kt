@@ -42,15 +42,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.email.R
 import androidx.compose.material3.TextField
+import androidx.compose.runtime.LaunchedEffect
+import br.com.fiap.email.viewmodel.AuthViewModel
 
 @Composable
-fun RegisterScreen(valController: NavController, authService: AuthService, onRegisterSuccess: (AuthResponse) -> Unit){
+fun RegisterScreen(valController: NavController, authService: AuthService, authViewModel: AuthViewModel ,onRegisterSuccess: (AuthResponse) -> Unit){
 
 
     val colors = MaterialTheme.colorScheme
     var email by remember { mutableStateOf("") }
     var nome by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var mensagem by remember { mutableStateOf("") }
+    val errorMessage = authViewModel.errorMessage
+
+    LaunchedEffect(Unit) {
+        authViewModel.clearErrorMessage()
+    }
 
     Column(
         modifier = Modifier
@@ -105,20 +113,22 @@ fun RegisterScreen(valController: NavController, authService: AuthService, onReg
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { val registerRequest = RegisterRequest(nome, email, password)
-                authService.register(registerRequest).enqueue(object : Callback<AuthResponse> {
-                    override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
-                        if(response.isSuccessful){
-                            onRegisterSuccess(response.body()!!)
-                        } else {
-                            Log.e("Register", "Erro na resposta: ${response.code()}")
-                        }
+            onClick = {
+                authViewModel.registerUser(
+                    nome = nome,
+                    email = email,
+                    password = password,
+                    onRegisterSuccess = {
+                        onRegisterSuccess
+                        nome = ""
+                        email = ""
+                        password = ""
+                    },
+                    onError = {
+                        errorMessage -> mensagem = errorMessage
                     }
-
-                    override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                        Log.e("Register", "Erro na resposta")
-                    }
-                })},
+                )
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
@@ -131,6 +141,9 @@ fun RegisterScreen(valController: NavController, authService: AuthService, onReg
                 modifier = Modifier.padding(8.dp),
                 fontSize = 18.sp
             )
+        }
+        errorMessage?.let { 
+            Text(text = it, color = Color.Red)
         }
         Spacer(modifier = Modifier.height(50.dp))
         Row(

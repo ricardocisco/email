@@ -33,6 +33,7 @@ data class ReceivedEmail(
     val emailId: String,
     val receiveEmail: String,
     val receiveNome: String,
+    val receivedAt: String,
     val subject: String,
     val body: String,
     val isSpam: Boolean
