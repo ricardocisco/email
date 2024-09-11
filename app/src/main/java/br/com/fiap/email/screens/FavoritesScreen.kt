@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
+import br.com.fiap.email.components.FormatTime
 import br.com.fiap.email.viewmodel.ListEmailViewModel
 import br.com.fiap.email.viewmodel.UserViewModel
 import io.github.serpro69.kfaker.Faker
@@ -69,7 +70,7 @@ fun FavoritesScreen(
                     email = emailData.receiveEmail,
                     subject = emailData.subject,
                     body = emailData.body,
-                    time = emailData.receivedAt,
+                    time = FormatTime(emailData.receivedAt),
                     index = index,
                     isFavorite = true,
                     onToggleFavorite = { emailIndex -> listEmailViewModel.toggleFavorite(emailIndex) },

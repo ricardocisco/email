@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -28,6 +29,7 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.OutlinedButton
 import androidx.wear.compose.material.Text
 import br.com.fiap.email.R
+import br.com.fiap.email.network.ConnectivityObserver
 
 @Composable
 fun InicialScreen(valController: NavController){
@@ -42,7 +44,9 @@ fun InicialScreen(valController: NavController){
         Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.width(350.dp).height(350.dp),
+            modifier = Modifier
+                .width(350.dp)
+                .height(350.dp),
             painter = painterResource(id = R.drawable.bg),
             contentDescription = "Foto BG"
         )
@@ -61,7 +65,7 @@ fun InicialScreen(valController: NavController){
                     .fillMaxWidth(0.8f)
                     .height(50.dp)
             ) {
-                Text(text = "Entrar", color = Color.White)
+                Text(text = stringResource(id = R.string.login_button), color = Color.White)
             }
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedButton(
@@ -72,8 +76,10 @@ fun InicialScreen(valController: NavController){
                     .fillMaxWidth(0.8f)
                     .height(50.dp)
             ) {
-                Text(text = "Criar conta", color = Color.Black)
+                Text(text = stringResource(id = R.string.register_button), color = Color.Black)
             }
         }
     }
+    ConnectivityObserver()
 }
+

@@ -98,6 +98,7 @@ import br.com.fiap.email.components.BottomSheetButton
 import br.com.fiap.email.components.ButtonWrite
 import br.com.fiap.email.components.DialogLoading
 import br.com.fiap.email.models.User
+import br.com.fiap.email.network.ConnectivityObserver
 import br.com.fiap.email.screens.FavoritesScreen
 import br.com.fiap.email.screens.HomeScreen
 import br.com.fiap.email.screens.PromotionsScreen
@@ -316,6 +317,7 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
                         listEmailViewModel = listEmailViewModel,
                         userViewModel = userViewModel,
                     )
+                    ConnectivityObserver()
                 }
             ) {
                 NavHost(

@@ -47,6 +47,7 @@ import br.com.fiap.email.R
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -110,7 +111,7 @@ fun WriteScreen(
                         )
                     }
                     Text(
-                        text = "Escrever",
+                        text = stringResource(id = R.string.write_email),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = colors.onPrimary,
@@ -138,7 +139,7 @@ fun WriteScreen(
                     TextField(
                         value = campoDe,
                         onValueChange = { campoDe = it },
-                        label = { Text("De:") },
+                        label = { Text(stringResource(id = R.string.write_to)) },
                         placeholder = { Text("exemplo@email.com") },
                         textStyle = TextStyle(
                             fontSize = 18.sp
@@ -164,7 +165,7 @@ fun WriteScreen(
                     TextField(
                         value = campoPara,
                         onValueChange = { campoPara = it },
-                        label = { Text("Para:") },
+                        label = { Text(stringResource(id = R.string.write_from)) },
                         placeholder = { Text("exemplo@email.com") },
                         textStyle = TextStyle(
                             fontSize = 18.sp
@@ -201,7 +202,7 @@ fun WriteScreen(
                     TextField(
                         value = campoAssunto,
                         onValueChange = { campoAssunto = it },
-                        label = { Text("Assunto:") },
+                        label = { Text(stringResource(id = R.string.write_subject)) },
                         textStyle = TextStyle(
                             fontSize = 18.sp
                         ),
@@ -227,7 +228,7 @@ fun WriteScreen(
                     TextField(
                         value = campoEmail,
                         onValueChange = { campoEmail = it },
-                        label = { Text("E-mail:") },
+                        label = { Text(stringResource(id = R.string.write_body)) },
                         textStyle = TextStyle(
                             fontSize = 18.sp
                         ),
@@ -283,7 +284,7 @@ fun WriteScreen(
                             .width(30.dp)
                     )
                     Text(
-                        text = "Anexar",
+                        text = stringResource(id = R.string.write_attach),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
@@ -325,7 +326,7 @@ fun WriteScreen(
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
-                        text = "Enviar",
+                        text = stringResource(id = R.string.write_sent),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White,

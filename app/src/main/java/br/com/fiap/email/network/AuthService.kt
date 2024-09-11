@@ -9,6 +9,9 @@ import br.com.fiap.email.models.MoveEmailsRequest
 import br.com.fiap.email.models.PasswordReset
 import br.com.fiap.email.models.ReceivedEmail
 import br.com.fiap.email.models.RegisterRequest
+import br.com.fiap.email.models.UpdateEmailSortOrderRequest
+import br.com.fiap.email.models.UpdateFontRequest
+import br.com.fiap.email.models.UpdateLanguageRequest
 import br.com.fiap.email.models.UpdateThemeRequest
 import br.com.fiap.email.models.User
 import retrofit2.Call
@@ -55,4 +58,14 @@ interface AuthService {
 
     @PUT("api/User/users/{id}/theme")
     suspend fun updateTheme(@Path("id") userId: String, @Body request: UpdateThemeRequest): Response<User>
+
+    @PUT("api/User/users/{id}/fontsize")
+    suspend fun updateFontSize(@Path("id") userId: String, @Body request: UpdateFontRequest): Response<User>
+
+    @PUT("api/User/users/{id}/language")
+    suspend fun updateLanguage(@Path("id") userId: String, @Body request: UpdateLanguageRequest): Response<User>
+
+    @PUT("api/User/users/{id}/emailsortorder")
+    suspend fun updateEmailOrder(@Path("id") userId: String, @Body request: UpdateEmailSortOrderRequest): Response<User>
+
 }

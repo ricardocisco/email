@@ -93,7 +93,7 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel, authVie
             InicialScreen(valController)
         }
         composable(route = "login") {
-            LoginScreen( userViewModel,valController, authService, authViewModel){
+            LoginScreen( userViewModel,valController, authService, authViewModel, themeViewModel){
                 valController.navigate("homeApp") {
                     popUpTo("login") { inclusive = true }
                 }
@@ -118,13 +118,14 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel, authVie
                 it.arguments?.getString("body")?: "")
 
         }
-        composable(route = "emailDetail/{name}/{email}/{subject}/{body}") {
+        composable(route = "emailDetail/{name}/{email}/{subject}/{body}/{time}") {
             EmailModel(
                 valController,
                 it.arguments?.getString("name")!!,
                 it.arguments?.getString("email")!!,
                 it.arguments?.getString("subject")!!,
-                it.arguments?.getString("body")!!
+                it.arguments?.getString("body")!!,
+                it.arguments?.getString("time")!!,
             )
         }
         composable(route = "responseEmail/{name}/{email}/{subject}") {

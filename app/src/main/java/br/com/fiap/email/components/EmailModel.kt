@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,7 +52,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun EmailModel(valController: NavController, name: String, email: String, body: String, subject: String) {
+fun EmailModel(valController: NavController, name: String, email: String, body: String, subject: String, time: String) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
     val gray_100: Color = colorResource(id = R.color.gray_100)
@@ -112,7 +113,9 @@ fun EmailModel(valController: NavController, name: String, email: String, body: 
                 .fillMaxWidth()
         )
         Column(
-            modifier = Modifier.fillMaxSize().background(color =  colors.primary),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = colors.primary),
         ) {
             Row(
                 modifier = Modifier
@@ -137,7 +140,7 @@ fun EmailModel(valController: NavController, name: String, email: String, body: 
                         Text(text = name, fontSize = 18.sp, color = colors.onPrimary)
                         Text(text = email, fontSize = 13.sp, color = colors.onPrimary)
                     }
-                    Text(text = "1h ago", color = colors.onPrimary)
+                    Text(text = time, color = colors.onPrimary)
                 }
             }
             Column(
@@ -185,7 +188,11 @@ fun EmailModel(valController: NavController, name: String, email: String, body: 
                         painter = painterResource(id = R.drawable.forward),
                         contentDescription = "forward",
                     )
-                    Text(text = "Encaminhar", modifier = Modifier.padding(start = 10.dp), color = Color.Black, fontSize = 16.sp)
+                    Text(
+                        text = stringResource(id = R.string.visualization_forward),
+                        modifier = Modifier.padding(start = 10.dp),
+                        color = Color.Black,
+                        fontSize = 16.sp)
                 }
                 Button(
                     onClick = {valController.navigate("responseEmail/${name}/${email}/${subject}")},
@@ -205,7 +212,7 @@ fun EmailModel(valController: NavController, name: String, email: String, body: 
                         contentDescription = "forward"
                     )
                     Text(
-                        text = "Responder",
+                        text = stringResource(id = R.string.visualization_reply),
                         color = Color.White,
                         modifier = Modifier.padding(start = 10.dp),
                         fontSize = 16.sp
@@ -249,74 +256,11 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.replyblack),
-                            contentDescription = "reply"
-                        )
-                        Text(
-                            text = "Responder",
-                            modifier = Modifier.padding(start = 10.dp),
-                            color = colors.onPrimary
-                        )
-                    }
-                    Divider(
-                        modifier = Modifier.padding(horizontal = 5.dp),
-                        color = Color.LightGray,
-                        thickness = 1.dp
-                    )
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 12.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.forward),
-                            contentDescription = "forward"
-                        )
-                        Text(
-                            text = "Encaminhar",
-                            modifier = Modifier.padding(start = 10.dp),
-                            color = colors.onPrimary
-                        )
-                    }
-                    Divider(
-                        modifier = Modifier.padding(horizontal = 5.dp),
-                        color = Color.LightGray,
-                        thickness = 1.dp
-                    )
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 12.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.folderimg),
-                            contentDescription = "pastas"
-                        )
-                        Text(
-                            text = "Adicionar a Pasta",
-                            modifier = Modifier.padding(start = 10.dp),
-                            color = colors.onPrimary
-                        )
-                    }
-                    Divider(
-                        modifier = Modifier.padding(horizontal = 5.dp),
-                        color = Color.LightGray,
-                        thickness = 1.dp
-                    )
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 12.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Image(
                             painter = painterResource(id = R.drawable.spam),
                             contentDescription = "spam"
                         )
                         Text(
-                            text = "Denunciar Spam",
+                            text = stringResource(id = R.string.visualization_spam),
                             modifier = Modifier.padding(start = 10.dp),
                             color = colors.onPrimary
                         )
@@ -337,7 +281,7 @@ fun BottomSheetButton(showBottomSheet: Boolean, onButtonClick: (Boolean) -> Unit
                             contentDescription = "delete"
                         )
                         Text(
-                            text = "Deletar",
+                            text = stringResource(id = R.string.visualization_delete),
                             modifier = Modifier.padding(start = 10.dp),
                             color = azul_escuro
                         )

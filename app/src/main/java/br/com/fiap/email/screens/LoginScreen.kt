@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -34,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -42,11 +45,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.com.fiap.email.R
 import br.com.fiap.email.network.AuthService
+import br.com.fiap.email.network.ConnectivityObserver
 import br.com.fiap.email.viewmodel.AuthViewModel
+import br.com.fiap.email.viewmodel.ThemeViewModel
 import br.com.fiap.email.viewmodel.UserViewModel
 
 @Composable
-fun LoginScreen(userViewModel: UserViewModel, valController: NavController, authService: AuthService, authViewModel: AuthViewModel, onLoginSuccess: () -> Unit){
+fun LoginScreen(userViewModel: UserViewModel, valController: NavController, authService: AuthService, authViewModel: AuthViewModel, themeViewModel: ThemeViewModel, onLoginSuccess: () -> Unit){
 
     val colors = MaterialTheme.colorScheme
     var email by remember { mutableStateOf("") }
@@ -69,7 +74,7 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
     ) {
         Row {
             Text(
-                text = "Olá, bem-vindo!  ",
+                text = stringResource(id = R.string.hello_world),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF000000)
@@ -128,19 +133,19 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
             },
         )
         Spacer(modifier = Modifier.height(10.dp))
-        Row {
-            Icon(
-                imageVector = Icons.Rounded.CheckCircle,
-                contentDescription = "Check sign",
-                tint = Color(0xFF000000)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            Arrangement.SpaceBetween
+        ){
+            Row {
+                Text(text = "Lembre-se")
+            }
+            Text(modifier = Modifier
+                .clickable {
+                    valController.navigate("resetScreen")
+                }, text = stringResource(id = R.string.forgot_pass)
             )
-            Text(text = "Lembre-se")
         }
-        Text(modifier = Modifier
-            .align(Alignment.End)
-            .clickable {
-                valController.navigate("resetScreen")
-            }, text = "Esqueceu sua senha?",)
         Button(
             onClick = {
                 authViewModel.loginUser(
@@ -151,6 +156,7 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
                         userViewModel.setUserId(authResponse.user.id)
                         userViewModel.setUserEmail(authResponse.user.email)
                         userViewModel.setUserTheme(authResponse.user.preferences.theme)
+                        themeViewModel.setLocalFontSize(authResponse.user.preferences.fontSize)
                         onLoginSuccess()
                         },
                     onError = { errorMessage ->
@@ -165,7 +171,7 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
             colors = ButtonDefaults.buttonColors(Color(0xFF2F2F2F))
         ) {
             Text(
-                text = "Entrar",
+                text = stringResource(id = R.string.login_button),
                 color = Color(0xFFFFFFFF),
                 modifier = Modifier.padding(8.dp),
                 fontSize = 18.sp
@@ -181,7 +187,7 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = "Ou entre com ... ",
+            Text(text = stringResource(id = R.string.or_login),
                 fontSize = 18.sp
             )
         }
@@ -200,7 +206,7 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
                 contentDescription = "Foto Google"
             )
             Text(
-                text = "Continuar com uma conta Google",
+                text = stringResource(id = R.string.google_button),
                 fontWeight = FontWeight.Bold,
                 color = colors.onPrimary
             )
@@ -219,7 +225,7 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
                 contentDescription = "Foto Apple"
             )
             Text(
-                text = "Continuar com uma conta Apple",
+                text = stringResource(id = R.string.apple_button),
                 fontWeight = FontWeight.Bold,
                 color = colors.onPrimary
             )
@@ -232,12 +238,12 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Não tem uma conta?",
+                text = stringResource(id = R.string.not_register),
                 color = Color(0xFF000000),
                 fontSize = 18.sp
             )
             Text(
-                text = "Cadastre-se",
+                text = stringResource(id = R.string.on_register),
                 modifier = Modifier
                     .clickable {
                         valController.navigate("register")
@@ -249,5 +255,5 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
             )
         }
     }
-
+    ConnectivityObserver()
 }

@@ -1,3 +1,58 @@
 <resources>
-    <string name="app_name">email</string>
+    <string name="app_name">Mymail</string>
+    <string name="login_button">Entrar</string>
+    <string name="register_button">Criar Conta</string>
+    <string name="hello_world">Olá, bem-vindo!</string>
+    <string name="register">Cadastro! :)</string>
+    <string name="password">Senha</string>
+    <string name="forgot_pass">Esqueceu sua senha?</string>
+    <string name="or_login">Ou entre com…</string>
+    <string name="or_register">Ou registre-se com…</string>
+    <string name="new_pass">Crie uma senha</string>
+    <string name="google_button">Continuar com uma conta Google</string>
+    <string name="apple_button">Continuar com uma conta Apple</string>
+    <string name="not_register">Não tem uma conta?</string>
+    <string name="on_register">Cadastre-se</string>
+    <string name="not_login">Já tem uma conta?</string>
+
+    <string name="home_default">Padrão</string>
+    <string name="home_calendar">Calendário</string>
+    <string name="home_favorites">Favoritos</string>
+    <string name="home_created">Criados</string>
+    <string name="home_archived">Arquivados</string>
+    <string name="home_sent">Enviados</string>
+    <string name="home_trash">Lixeira</string>
+    <string name="home_spam">Spam</string>
+
+    <string name="write_email">Escrever</string>
+    <string name="write_from">De:</string>
+    <string name="write_to">Para:</string>
+    <string name="write_subject">Assunto:</string>
+    <string name="write_body">E-mail:</string>
+    <string name="write_sent">Enviar</string>
+    <string name="write_attach">Anexar</string>
+    
+    <string name="visualization_reply">Responder</string>
+    <string name="visualization_forward">Encaminhar</string>
+    <string name="visualization_delete">Deletar</string>
+    <string name="visualization_spam">Denunciar Spam</string>
+    
+    <string name="settings">Configurações</string>
+    <string name="theme">Tema</string>
+    <string name="theme_light">Tema Claro</string>
+    <string name="theme_dark">Tema Escuro</string>
+    <string name="font_size">Tamanho da Fonte</string>
+    <string name="font_size_actual">Tamanho atual: %1$d</string>
+    <string name="sort_emails">Ordenar Emails</string>
+    <string name="most_recent">Mais recentes</string>
+    <string name="oldest">Mais antigos</string>
+    <string name="by_subject">Por assunto</string>
+    <string name="change_language">Alterar idioma</string>
+    <string name="pt">Português</string>
+    <string name="en">Inglês</string>
+    <string name="es">Espanhol</string>
+    <string name="search_history">Histórico</string>
+    <string name="clear_history">Limpar histórico</string>
+    <string name="exit">Sair</string>
+
 </resources>

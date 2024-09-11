@@ -3,6 +3,7 @@ package br.com.fiap.email.screens
 import android.widget.Switch
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -47,6 +52,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -60,13 +66,15 @@ import br.com.fiap.email.viewmodel.UserViewModel
 @Composable
 fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, themeViewModel: ThemeViewModel) {
 
-    var validacaoNotificacao by remember { mutableStateOf(true) }
-    var validacaoSom by remember { mutableStateOf(true) }
-    var validacaoAgrupamento by remember { mutableStateOf(true) }
-    val customPink: Color = colorResource(id = R.color.customPink)
-    val customBlue: Color = colorResource(id = R.color.customBlue)
+    var selectedSorting by remember { mutableStateOf("Mais Recentes") }
+    var selectedLanguage by remember { mutableStateOf("Português") }
+
+    val fontSizeOptions = listOf(12f, 16f, 20f, 24f)
+    val sortingOptions = listOf(stringResource(id = R.string.most_recent), stringResource(id = R.string.oldest), stringResource(id = R.string.by_subject))
+    val languageOptions = listOf(stringResource(id = R.string.pt), stringResource(id = R.string.en), stringResource(id = R.string.es))
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
 
+    val fontSize by themeViewModel.fontSize.collectAsState()
     val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
     val userId = userViewModel.userId.observeAsState("")
 
@@ -101,7 +109,7 @@ fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, the
                     )
                 }
                 Text(
-                    text = "Configurações",
+                    text = stringResource(id = R.string.settings),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = colors.onBackground,
@@ -116,300 +124,134 @@ fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, the
                     .height(1.dp)
                     .fillMaxWidth()
             )
-            Column(
-                modifier = Modifier
-                    .padding(start = 30.dp, bottom = 15.dp)
-            ) {
-                Text(
-                    text = "Tema",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = colors.onBackground,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 5.dp)
-                )
-                Column (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(text = if (isDarkTheme) "Tema Escuro" else "Tema Claro", color = colors.onPrimary)
-                    Switch(
-                        checked = isDarkTheme,
-                        onCheckedChange = { isDarkTheme ->
-                            val newTheme = if (isDarkTheme) "dark" else "light"
-                            userViewModel.setUserTheme(newTheme)
-                            themeViewModel.toggleTheme(userId.value)
-                        },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = colors.primary,
-                            checkedTrackColor = colors.onPrimary,
-                            uncheckedThumbColor = colors.primary,
-                            uncheckedTrackColor = colors.onSurface
-                        ),
-                    )
-                }
-            }
-            LazyColumn(
-                modifier = Modifier.fillMaxHeight(0.72f)
-            ){
+            LazyColumn(modifier = Modifier
+                .fillMaxHeight(0.8f)
+                .padding(end = 20.dp)){
                 item {
-                    Box(
-                        contentAlignment = Alignment.TopEnd,
+                    Column(
                         modifier = Modifier
-                            .padding(start = 30.dp, end = 30.dp, bottom = 40.dp)
+                            .padding(start = 30.dp, bottom = 15.dp)
                     ) {
-                        Column{
-                            Text(
-                                text = "Notificações",
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = colors.onBackground,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 10.dp)
+                        Text(
+                            text = stringResource(id = R.string.theme),
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = colors.onBackground,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 5.dp)
+                        )
+                        Column (
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(text = if (isDarkTheme) stringResource(id = R.string.theme_dark) else stringResource(id = R.string.theme_light), color = colors.onPrimary)
+                            Switch(
+                                checked = isDarkTheme,
+                                onCheckedChange = { isDarkTheme ->
+                                    val newTheme = if (isDarkTheme) "dark" else "light"
+                                    userViewModel.setUserTheme(newTheme)
+                                    themeViewModel.toggleTheme(userId.value)
+                                },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = colors.primary,
+                                    checkedTrackColor = colors.onPrimary,
+                                    uncheckedThumbColor = colors.primary,
+                                    uncheckedTrackColor = colors.onSurface
+                                ),
                             )
-                            Row (
-                                horizontalArrangement = Arrangement.SpaceBetween,
+                        }
+                    }
+                    Column(
+                        modifier = Modifier.padding(start = 30.dp, top = 15.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.font_size),
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = colors.onBackground,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 10.dp)
+                        )
+                        Slider(
+                            value = fontSize,
+                            onValueChange = {
+                                newSize ->
+                                themeViewModel.setLocalFontSize(newSize)
+                            },
+                            onValueChangeFinished = {
+                                themeViewModel.updateFontSize(userId.value)
+                            },
+                            valueRange = 12f..24f,
+                            steps = 3,
+                            colors = SliderDefaults.colors(
+                                thumbColor = colors.onPrimary,
+                                activeTrackColor = colors.onPrimary
+                            )
+                        )
+                        Text(
+                            text = stringResource(id = R.string.font_size, fontSize.toInt()),
+                            color = colors.onBackground,
+                            fontSize = fontSize.sp,
+                            modifier = Modifier.padding(top = 5.dp)
+                        )
+                    }
+                    Column(
+                        modifier = Modifier.padding(start = 30.dp, top = 20.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.sort_emails),
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = colors.onBackground,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 10.dp)
+                        )
+                        sortingOptions.forEach { option ->
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
+                                    .clickable { selectedSorting = option },
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = "Receber notificações",
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = colors.onBackground,
-                                    modifier = Modifier
-                                        .padding(bottom = 15.dp, top = 15.dp)
+                                RadioButton(
+                                    selected = selectedSorting == option,
+                                    onClick = { selectedSorting = option },
+                                    colors = RadioButtonDefaults.colors(selectedColor = colors.onPrimary)
                                 )
-                                Switch(
-                                    checked = validacaoNotificacao,
-                                    onCheckedChange = {
-                                        validacaoNotificacao = it
-                                    },
-                                    thumbContent = if (validacaoNotificacao) {
-                                        {
-                                            Icon(
-                                                imageVector = Icons.Filled.Check,
-                                                contentDescription = null,
-                                                modifier = Modifier.size(SwitchDefaults.IconSize),
-                                            )
-                                        }
-                                    } else {
-                                        null
-                                    },
-                                    colors = SwitchDefaults.colors(
-                                        checkedThumbColor = colors.primary,
-                                        checkedTrackColor = colors.onPrimary,
-                                        uncheckedThumbColor = colors.primary,
-                                        uncheckedTrackColor = colors.onSurface
-                                    )
-                                )
-                            }
-                            Row (
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = "Som",
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = colors.onBackground,
-                                    modifier = Modifier
-                                        .padding(bottom = 15.dp, top = 15.dp)
-                                )
-                                Switch(
-                                    checked = validacaoSom,
-                                    onCheckedChange = {
-                                        validacaoSom = it
-                                    },
-                                    thumbContent = if (validacaoSom) {
-                                        {
-                                            Icon(
-                                                imageVector = Icons.Filled.Check,
-                                                contentDescription = null,
-                                                modifier = Modifier.size(SwitchDefaults.IconSize),
-                                            )
-                                        }
-                                    } else {
-                                        null
-                                    },
-                                    colors = SwitchDefaults.colors(
-                                        checkedThumbColor = colors.primary,
-                                        checkedTrackColor = colors.onPrimary,
-                                        uncheckedThumbColor = colors.primary,
-                                        uncheckedTrackColor = colors.onSurface
-                                    )
-                                )
-                            }
-                            Row (
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = "Receber notificações",
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = colors.onBackground,
-                                    modifier = Modifier
-                                        .padding(bottom = 15.dp, top = 15.dp)
-                                )
-                                Switch(
-                                    checked = validacaoAgrupamento,
-                                    onCheckedChange = {
-                                        validacaoAgrupamento = it
-                                    },
-                                    thumbContent = if (validacaoAgrupamento) {
-                                        {
-                                            Icon(
-                                                imageVector = Icons.Filled.Check,
-                                                contentDescription = null,
-                                                modifier = Modifier.size(SwitchDefaults.IconSize),
-                                            )
-                                        }
-                                    } else {
-                                        null
-                                    },
-                                    colors = SwitchDefaults.colors(
-                                        checkedThumbColor = colors.primary,
-                                        checkedTrackColor = colors.onPrimary,
-                                        uncheckedThumbColor = colors.primary,
-                                        uncheckedTrackColor = colors.onSurface
-                                    )
-                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = option, color = colors.onBackground)
                             }
                         }
                     }
-                }
-                item {
-                    Box(
-                        contentAlignment = Alignment.TopEnd,
-                        modifier = Modifier
-                            .padding(start = 30.dp, end = 30.dp)
-                        //.border(width = 1.dp, Color.Black)
+                    Column(
+                        modifier = Modifier.padding(start = 30.dp, top = 20.dp)
                     ) {
-                        Column{
-                            Text(
-                                text = "Desempenho",
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = colors.onBackground,
+                        Text(
+                            text = stringResource(id = R.string.change_language),
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = colors.onBackground,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 10.dp)
+                        )
+                        languageOptions.forEach { language ->
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(bottom = 10.dp)
-                            )
-                            Row (
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier
-                                    .fillMaxWidth()
+                                    .clickable { selectedLanguage = language },
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = "Animações",
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = colors.onBackground,
-                                    modifier = Modifier
-                                        .padding(bottom = 15.dp, top = 15.dp)
+                                RadioButton(
+                                    selected = selectedLanguage == language,
+                                    onClick = { selectedLanguage = language },
+                                    colors = RadioButtonDefaults.colors(selectedColor = colors.onPrimary)
                                 )
-                                Switch(
-                                    checked = validacaoNotificacao,
-                                    onCheckedChange = {
-                                        validacaoNotificacao = it
-                                    },
-                                    thumbContent = if (validacaoNotificacao) {
-                                        {
-                                            Icon(
-                                                imageVector = Icons.Filled.Check,
-                                                contentDescription = null,
-                                                modifier = Modifier.size(SwitchDefaults.IconSize),
-                                            )
-                                        }
-                                    } else {
-                                        null
-                                    },
-                                    colors = SwitchDefaults.colors(
-                                        checkedThumbColor = colors.primary,
-                                        checkedTrackColor = colors.onPrimary,
-                                        uncheckedThumbColor = colors.primary,
-                                        uncheckedTrackColor = colors.onSurface
-                                    )
-                                )
-                            }
-                            Row (
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = "Atualizações Automáticas",
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = colors.onBackground,
-                                    modifier = Modifier
-                                        .padding(bottom = 15.dp, top = 15.dp)
-                                )
-                                Switch(
-                                    checked = validacaoSom,
-                                    onCheckedChange = {
-                                        validacaoSom = it
-                                    },
-                                    thumbContent = if (validacaoSom) {
-                                        {
-                                            Icon(
-                                                imageVector = Icons.Filled.Check,
-                                                contentDescription = null,
-                                                modifier = Modifier.size(SwitchDefaults.IconSize),
-                                            )
-                                        }
-                                    } else {
-                                        null
-                                    },
-                                    colors = SwitchDefaults.colors(
-                                        checkedThumbColor = colors.primary,
-                                        checkedTrackColor = colors.onPrimary,
-                                        uncheckedThumbColor = colors.primary,
-                                        uncheckedTrackColor = colors.onSurface
-                                    )
-                                )
-                            }
-                            Row (
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = "Limitar Dados em Segundo Plano",
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = colors.onBackground,
-                                    modifier = Modifier
-                                        .padding(bottom = 15.dp, top = 15.dp)
-                                )
-                                Switch(
-                                    checked = validacaoAgrupamento,
-                                    onCheckedChange = {
-                                        validacaoAgrupamento = it
-                                    },
-                                    thumbContent = if (validacaoAgrupamento) {
-                                        {
-                                            Icon(
-                                                imageVector = Icons.Filled.Check,
-                                                contentDescription = null,
-                                                modifier = Modifier.size(SwitchDefaults.IconSize),
-                                            )
-                                        }
-                                    } else {
-                                        null
-                                    },
-                                    colors = SwitchDefaults.colors(
-                                        checkedThumbColor = colors.primary,
-                                        checkedTrackColor = colors.onPrimary,
-                                        uncheckedThumbColor = colors.primary,
-                                        uncheckedTrackColor = colors.onSurface
-                                    )
-                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = language, color = colors.onBackground)
                             }
                         }
                     }
@@ -423,7 +265,7 @@ fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, the
             ) {
                 Column{
                     Text(
-                        text = "Histórico",
+                        text = stringResource(id = R.string.search_history),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = colors.onBackground,
@@ -456,7 +298,7 @@ fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, the
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
-                                text = "Limpar histórico",
+                                text = stringResource(id = R.string.clear_history),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White,
@@ -464,9 +306,11 @@ fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, the
                         }
                         Button(
                             onClick = {valController.navigate("inicialScreen")},
-                            modifier = Modifier.padding(end = 20.dp).border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                            modifier = Modifier
+                                .padding(end = 20.dp)
+                                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
                         ){
-                            Text(text = "Sair")
+                            Text(text = stringResource(id = R.string.exit))
                         }
                     }
                 }

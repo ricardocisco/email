@@ -10,6 +10,9 @@ data class User(
 
 data class Preferences(
     val theme: String = "light",
+    val language: String = "br",
+    val fontSize: Float  = 16f,
+    val emailSortOrder: String = "date"
 )
 
 data class Emails(

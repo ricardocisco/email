@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import br.com.fiap.email.R
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.res.stringResource
 import br.com.fiap.email.viewmodel.AuthViewModel
 
 @Composable
@@ -70,7 +71,7 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
     ) {
         Row {
             Text(
-                text = "Cadastro! :)",
+                text = stringResource(id = R.string.register),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF000000)
@@ -101,7 +102,7 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Crie uma senha",
+            text = stringResource(id = R.string.new_pass),
             fontWeight = FontWeight.Bold
         )
         OutlinedTextField(
@@ -136,7 +137,7 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
             colors = ButtonDefaults.buttonColors(Color(0xFF2F2F2F))
         ) {
             Text(
-                text = "Cria conta",
+                text = stringResource(id = R.string.register_button),
                 color = Color(0xFFFFFFFF),
                 modifier = Modifier.padding(8.dp),
                 fontSize = 18.sp
@@ -152,7 +153,7 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = "Ou registre-se com ... ",
+            Text(text = stringResource(id = R.string.or_register),
                 fontSize = 18.sp
             )
         }
@@ -171,7 +172,7 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
                 contentDescription = "Foto Google"
             )
             Text(
-                text = "Continuar com uma conta Google",
+                text = stringResource(id = R.string.google_button),
                 fontWeight = FontWeight.Bold,
                 color = colors.onPrimary
             )
@@ -190,7 +191,7 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
                 contentDescription = "Foto Apple"
             )
             Text(
-                text = "Continuar com uma conta Apple",
+                text = stringResource(id = R.string.apple_button),
                 fontWeight = FontWeight.Bold,
                 color = colors.onPrimary
             )
@@ -202,12 +203,12 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = "Você já possui uma conta ?",
+            Text(text = stringResource(id = R.string.not_login),
                 color = Color(0xFF000000),
                 fontSize = 18.sp
             )
             Text(
-                text = "Faça Login",
+                text = stringResource(id = R.string.login_button),
                 modifier = Modifier
                     .clickable {
                         valController.navigate("login")

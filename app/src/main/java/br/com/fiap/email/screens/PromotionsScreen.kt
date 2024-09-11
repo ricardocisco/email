@@ -178,7 +178,7 @@ fun ListEmail(
 
     ElevatedCard(
         onClick = {
-            valController.navigate("emailDetail/${name}/${email}/${body}/${subject}")
+            valController.navigate("emailDetail/${name}/${email}/${body}/${subject}/${time}")
         },
         modifier = Modifier
             .padding(
@@ -189,7 +189,7 @@ fun ListEmail(
         Column(
             modifier = Modifier
                 .combinedClickable(
-                    onClick = { valController.navigate("emailDetail/${name}/${email}/${body}/${subject}") },
+                    onClick = { valController.navigate("emailDetail/${name}/${email}/${body}/${subject}/${time}") },
                     onLongClick = {
                         vibrate(context)
                         onItemSelected(index)
@@ -221,7 +221,7 @@ fun ListEmail(
                         Text(text = email, color = if (isSelected) colors.surface else colors.onPrimary)
                     }
                     Column {
-                        Text(text = "${time}", color = if (isSelected) colors.surface else colors.onPrimary)
+                        Text(text = time, color = if (isSelected) colors.surface else colors.onPrimary)
                         IconButton(onClick = {
                             favorited = !favorited
                             onToggleFavorite(index)

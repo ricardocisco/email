@@ -254,56 +254,6 @@ fun BottomSheetButton(
                     modifier = Modifier
                         .padding(25.dp)
                 ) {
-                    Card(
-                        onClick = {
-                            listEmailViewModel.selectAllEmails(trashEmails.size)
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
-                    ){
-                        Row(
-                            modifier = Modifier
-                                .padding(10.dp, 12.dp),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.forward),
-                                contentDescription = "forward"
-                            )
-                            Text(
-                                text = "Selecionar Todos",
-                                modifier = Modifier.padding(start = 10.dp),
-                                color = colors.onPrimary
-                            )
-                        }
-                    }
-                    Divider(
-                        modifier = Modifier.padding(horizontal = 5.dp),
-                        color = Color.LightGray,
-                        thickness = 1.dp
-                    )
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 12.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.folderimg),
-                            contentDescription = "pastas"
-                        )
-                        Text(
-                            text = "Adicionar a Pasta",
-                            modifier = Modifier.padding(start = 10.dp),
-                            color = colors.onPrimary
-                        )
-                    }
-                    Divider(
-                        modifier = Modifier.padding(horizontal = 5.dp),
-                        color = Color.LightGray,
-                        thickness = 1.dp
-                    )
                     Row(
                         modifier = Modifier
                             .padding(10.dp, 12.dp),

@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,7 +40,9 @@ fun HomeScreen(valController: NavController, navController: NavController)
     val colors = MaterialTheme.colorScheme
 
     Box(
-        modifier = Modifier.fillMaxSize().background(colors.surface),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.surface),
         contentAlignment = Alignment.TopStart,
     ) {
         Divider(
@@ -55,7 +58,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                 .padding(horizontal = 25.dp)
         ) {
             Text(
-                text = "Default",
+                text = stringResource(id = R.string.home_default),
                 color = colors.onPrimary,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
@@ -82,7 +85,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                         tint = colorResource(id = R.color.azul_escuro)
                     )
                     Text(
-                        text = "Calendario",
+                        text = stringResource(id = R.string.home_calendar),
                         modifier = Modifier.padding(start = 10.dp),
                         color = colorResource(id = R.color.azul_escuro),
                         fontSize = 16.sp
@@ -114,7 +117,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
 
                     )
                     Text(
-                        text = "Favoritos",
+                        text = stringResource(id = R.string.home_favorites),
                         modifier = Modifier.padding(start = 10.dp),
                         color = colorResource(id = R.color.azul_escuro),
                         fontSize = 16.sp,
@@ -127,7 +130,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                 )
             }
             Text(
-                text = "Criados",
+                text = stringResource(id = R.string.home_created),
                 color = colors.onPrimary,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
@@ -153,7 +156,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                             .width(24.dp),
                     )
                     Text(
-                        text = "Arquivados",
+                        text = stringResource(id = R.string.home_archived),
                         modifier = Modifier.padding(start = 10.dp),
                         color = colors.onPrimary,
                         fontSize = 16.sp
@@ -183,7 +186,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                             .width(24.dp)
                     )
                     Text(
-                        text = "Enviados",
+                        text = stringResource(id = R.string.home_sent),
                         modifier = Modifier.padding(start = 10.dp),
                         color = colors.onPrimary,
                         fontSize = 16.sp
@@ -213,7 +216,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                             .width(24.dp)
                     )
                     Text(
-                        text = "Spam",
+                        text = stringResource(id = R.string.home_spam),
                         modifier = Modifier.padding(start = 10.dp),
                         color = colors.onPrimary,
                         fontSize = 16.sp
@@ -243,7 +246,7 @@ fun HomeScreen(valController: NavController, navController: NavController)
                             .width(24.dp)
                     )
                     Text(
-                        text = "Lixeira",
+                        text = stringResource(id = R.string.home_trash),
                         modifier = Modifier.padding(start = 10.dp),
                         color = colors.onPrimary,
                         fontSize = 16.sp
