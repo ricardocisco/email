@@ -157,6 +157,7 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
                         userViewModel.setUserEmail(authResponse.user.email)
                         userViewModel.setUserTheme(authResponse.user.preferences.theme)
                         themeViewModel.setLocalFontSize(authResponse.user.preferences.fontSize)
+                        themeViewModel.setLocalLanguage(authResponse.user.preferences.language)
                         onLoginSuccess()
                         },
                     onError = { errorMessage ->

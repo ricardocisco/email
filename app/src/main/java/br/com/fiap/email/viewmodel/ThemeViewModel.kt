@@ -1,24 +1,26 @@
 package br.com.fiap.email.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fiap.email.models.UpdateFontRequest
+import br.com.fiap.email.models.UpdateLanguageRequest
 import br.com.fiap.email.models.UpdateThemeRequest
 import br.com.fiap.email.network.ApiClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.Locale
 
-class ThemeViewModel : ViewModel() {
+class ThemeViewModel() : ViewModel() {
 
     private val _isDarkTheme = MutableStateFlow(false)
     val isDarkTheme: StateFlow<Boolean> = _isDarkTheme
 
     private val _fontSize = MutableStateFlow(16f)
     val fontSize: StateFlow<Float> = _fontSize
+
+    private val _updateLanguage = MutableStateFlow("")
+    val updateLanguage: StateFlow<String> = _updateLanguage
 
     fun toggleTheme(userId: String) {
         viewModelScope.launch {
@@ -32,9 +34,7 @@ class ThemeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val newSize = _fontSize.value
-
                 ApiClient.authService.updateFontSize(userId, UpdateFontRequest(fontSize = newSize))
-                println("Fonte atualizada: ${newSize}")
             } catch (e: Exception){
                 println("Erro:${e.message}")
             }
@@ -43,5 +43,16 @@ class ThemeViewModel : ViewModel() {
 
     fun setLocalFontSize(newSize: Float) {
         _fontSize.value = newSize
+    }
+
+    fun updateNewLanguage(userId: String){
+        viewModelScope.launch {
+            val newLanguage = _updateLanguage.value
+            ApiClient.authService.updateLanguage(userId, UpdateLanguageRequest(language = newLanguage))
+        }
+    }
+
+    fun setLocalLanguage(newLanguage: String) {
+        _updateLanguage.value = newLanguage
     }
 }

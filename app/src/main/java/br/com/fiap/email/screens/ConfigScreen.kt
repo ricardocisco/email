@@ -1,6 +1,11 @@
 package br.com.fiap.email.screens
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.Configuration
+import android.os.Build
 import android.widget.Switch
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -38,6 +43,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -50,6 +56,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,21 +69,25 @@ import androidx.navigation.NavController
 import br.com.fiap.email.R
 import br.com.fiap.email.viewmodel.ThemeViewModel
 import br.com.fiap.email.viewmodel.UserViewModel
+import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, themeViewModel: ThemeViewModel) {
 
-    var selectedSorting by remember { mutableStateOf("Mais Recentes") }
-    var selectedLanguage by remember { mutableStateOf("Português") }
-
-    val fontSizeOptions = listOf(12f, 16f, 20f, 24f)
-    val sortingOptions = listOf(stringResource(id = R.string.most_recent), stringResource(id = R.string.oldest), stringResource(id = R.string.by_subject))
-    val languageOptions = listOf(stringResource(id = R.string.pt), stringResource(id = R.string.en), stringResource(id = R.string.es))
+    val languageOptions = listOf("br","en","es")
     val customDarkBlue: Color = colorResource(id = R.color.customDarkBlue)
 
     val fontSize by themeViewModel.fontSize.collectAsState()
     val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+    val language by themeViewModel.updateLanguage.collectAsState()
+    var selectedLanguage by remember { mutableStateOf(language) }
+    val context = LocalContext.current
+
+    LaunchedEffect(themeViewModel.updateLanguage.value) {
+        changeAppLanguage(themeViewModel.updateLanguage.value, context)
+    }
+
     val userId = userViewModel.userId.observeAsState("")
 
     val colors = MaterialTheme.colorScheme
@@ -201,35 +213,6 @@ fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, the
                         modifier = Modifier.padding(start = 30.dp, top = 20.dp)
                     ) {
                         Text(
-                            text = stringResource(id = R.string.sort_emails),
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = colors.onBackground,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 10.dp)
-                        )
-                        sortingOptions.forEach { option ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { selectedSorting = option },
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(
-                                    selected = selectedSorting == option,
-                                    onClick = { selectedSorting = option },
-                                    colors = RadioButtonDefaults.colors(selectedColor = colors.onPrimary)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(text = option, color = colors.onBackground)
-                            }
-                        }
-                    }
-                    Column(
-                        modifier = Modifier.padding(start = 30.dp, top = 20.dp)
-                    ) {
-                        Text(
                             text = stringResource(id = R.string.change_language),
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
@@ -238,20 +221,37 @@ fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, the
                                 .fillMaxWidth()
                                 .padding(bottom = 10.dp)
                         )
+                        Text(text = "Selected Language: $language", fontSize = 14.sp)
                         languageOptions.forEach { language ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable { selectedLanguage = language },
+                                    .clickable {
+                                        selectedLanguage = language
+                                        themeViewModel.setLocalLanguage(language)
+                                        themeViewModel.updateNewLanguage(userId.value)
+                                    },
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 RadioButton(
                                     selected = selectedLanguage == language,
-                                    onClick = { selectedLanguage = language },
+                                    onClick = {
+                                        selectedLanguage = language
+                                        themeViewModel.setLocalLanguage(language)
+                                        themeViewModel.updateNewLanguage(userId.value)
+                                              },
                                     colors = RadioButtonDefaults.colors(selectedColor = colors.onPrimary)
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(text = language, color = colors.onBackground)
+                                Text(
+                                    text = when (language) {
+                                        "br" -> "Português"
+                                        "en" -> "Inglês"
+                                        "es" -> "Espanhol"
+                                        else -> "Desconhecido"
+                                    },
+                                    color = colors.onBackground
+                                )
                             }
                         }
                     }
@@ -317,4 +317,13 @@ fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, the
             }
         }
     }
+}
+
+fun changeAppLanguage(newLanguage: String, context: Context) {
+    val locale = Locale(newLanguage)
+    Locale.setDefault(locale)
+    val configuration = context.resources.configuration
+    configuration.setLocale(locale)
+    context.createConfigurationContext(configuration)
+    context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
 }

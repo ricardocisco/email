@@ -90,7 +90,7 @@ fun PromotionsScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(colors.background),
-        contentAlignment = Alignment.TopCenter
+        contentAlignment = Alignment.TopCenter,
     ) {
         Divider(
             color = Color.LightGray,
@@ -119,7 +119,7 @@ fun PromotionsScreen(
         }
         
         if(filteredEmailDataList.isEmpty() && !loading){
-            Text(text = "A caixa está vazia!")
+            Text(text = "A caixa está vazia", color = Color.Gray, fontSize = 22.sp)
         }
 
         if(!loading){

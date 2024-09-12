@@ -81,7 +81,9 @@ fun SentScreen(valController: NavController, userViewModel: UserViewModel){
     }
 
     Column {
-        Column {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
             Box (
                 modifier = Modifier
                     .height(80.dp)
@@ -203,7 +205,7 @@ fun SentScreen(valController: NavController, userViewModel: UserViewModel){
             }
 
             if(listSentEmails.isEmpty() && !loading){
-                Text(text = "A caixa está vazia!")
+                Text(text = "A caixa está vazia", color = Color.Gray, fontSize = 22.sp)
             }
             if(!loading){
                 LazyColumn (
@@ -391,7 +393,7 @@ fun BottomSheetButtonEdit(
                             listEmailViewModel.moveToTrash(
                                 userId = userId.value,
                                 emailIds = selectedEmails,
-                                emailType = "received",
+                                emailType = "sent",
                                 onSuccess = {
                                     dialogMessage = "E-mails deletados com sucesso!"
                                     listEmailViewModel.clearSelectedItems()

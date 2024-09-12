@@ -49,9 +49,9 @@
     <string name="oldest">Oldest</string>
     <string name="by_subject">By Subject</string>
     <string name="change_language">Change Language</string>
-    <string name="pt">Portuguêse</string>
-    <string name="en">English</string>
-    <string name="es">Spanish</string>
+    <string name="br">br</string>
+    <string name="en">en</string>
+    <string name="es">es</string>
     <string name="search_history">Search History</string>
     <string name="clear_history">Clear History</string>
     <string name="exit">Exit</string>

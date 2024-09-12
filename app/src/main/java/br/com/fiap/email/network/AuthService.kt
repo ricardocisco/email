@@ -9,7 +9,6 @@ import br.com.fiap.email.models.MoveEmailsRequest
 import br.com.fiap.email.models.PasswordReset
 import br.com.fiap.email.models.ReceivedEmail
 import br.com.fiap.email.models.RegisterRequest
-import br.com.fiap.email.models.UpdateEmailSortOrderRequest
 import br.com.fiap.email.models.UpdateFontRequest
 import br.com.fiap.email.models.UpdateLanguageRequest
 import br.com.fiap.email.models.UpdateThemeRequest
@@ -64,8 +63,5 @@ interface AuthService {
 
     @PUT("api/User/users/{id}/language")
     suspend fun updateLanguage(@Path("id") userId: String, @Body request: UpdateLanguageRequest): Response<User>
-
-    @PUT("api/User/users/{id}/emailsortorder")
-    suspend fun updateEmailOrder(@Path("id") userId: String, @Body request: UpdateEmailSortOrderRequest): Response<User>
 
 }
