@@ -2,6 +2,7 @@ package br.com.fiap.email.screens
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,10 +58,11 @@ import br.com.fiap.email.components.DialogLoading
 import br.com.fiap.email.components.FormatTime
 import br.com.fiap.email.viewmodel.ListEmailViewModel
 import br.com.fiap.email.viewmodel.MessageState
+import br.com.fiap.email.viewmodel.ThemeViewModel
 import br.com.fiap.email.viewmodel.UserViewModel
 
 @Composable
-fun ArchivedScreen(valController: NavController, userViewModel: UserViewModel){
+fun ArchivedScreen(valController: NavController, userViewModel: UserViewModel, themeViewModel: ThemeViewModel){
 
     val userId = userViewModel.userId.observeAsState("")
     val listEmailViewModel = remember { ListEmailViewModel() }
@@ -79,6 +83,7 @@ fun ArchivedScreen(valController: NavController, userViewModel: UserViewModel){
 
     Column {
         Column(
+            modifier = Modifier.background(color = colors.background),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             Box (
@@ -156,17 +161,17 @@ fun ArchivedScreen(valController: NavController, userViewModel: UserViewModel){
                             Icon(
                                 painterResource(id = R.drawable.seta_voltar),
                                 contentDescription = "Botão de Voltar",
-                                tint = colors.onBackground,
+                                tint = colors.onPrimary,
                                 modifier = Modifier
                                     .height(30.dp)
                                     .width(30.dp)
                             )
                         }
                         Text(
-                            text = "Arquivados",
+                            text = stringResource(id = R.string.home_archived),
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
-                            color = colors.onBackground,
+                            color = colors.onPrimary,
                             modifier = Modifier
                                 .offset(x = (-20).dp)
                         )
@@ -228,6 +233,7 @@ fun ArchivedScreen(valController: NavController, userViewModel: UserViewModel){
             onButtonClick = { showBottomSheet = it },
             listEmailViewModel = listEmailViewModel,
             userViewModel = userViewModel,
+            themeViewModel = themeViewModel
         )
     }
 }
@@ -240,6 +246,7 @@ fun BottomSheetButtonArchived(
     onButtonClick: (Boolean) -> Unit,
     listEmailViewModel: ListEmailViewModel,
     userViewModel: UserViewModel,
+    themeViewModel: ThemeViewModel
 ) {
     val sheetState = rememberModalBottomSheetState()
     val azul_escuro: Color = colorResource(id = R.color.azul_escuro)
@@ -248,6 +255,7 @@ fun BottomSheetButtonArchived(
     var dialogMessage by remember { mutableStateOf("Processando...") }
     val archivedEmails by userViewModel.archivesEmails.observeAsState(emptyList())
     val userId = userViewModel.userId.observeAsState("")
+    val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
 
     Column {
         if (showBottomSheet) {
@@ -262,18 +270,51 @@ fun BottomSheetButtonArchived(
                     modifier = Modifier
                         .padding(25.dp)
                 ) {
+                    Card(
+                        onClick = {
+                            listEmailViewModel.selectAllEmails(archivedEmails.size)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+                    ){
+                        Row(
+                            modifier = Modifier
+                                .padding(10.dp, 12.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(painter = painterResource(id = R.drawable.add), contentDescription = "selecionar todos", tint = colors.onBackground)
+                            Text(
+                                text = stringResource(id = R.string.visualization_select),
+                                modifier = Modifier.padding(start = 10.dp),
+                                color = colors.onPrimary
+                            )
+                        }
+                    }
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        color = Color.LightGray,
+                        thickness = 1.dp
+                    )
                     Row(
                         modifier = Modifier
                             .padding(10.dp, 12.dp),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.spam),
-                            contentDescription = "spam"
-                        )
+                        if(isDarkTheme){
+                            Image(
+                                painter = painterResource(id = R.drawable.spam),
+                                contentDescription = "spam"
+                            )
+                        }else{
+                            Image(
+                                painter = painterResource(id = R.drawable.spam_white),
+                                contentDescription = "spam"
+                            )
+                        }
                         Text(
-                            text = "Denunciar Spam",
+                            text = stringResource(id = R.string.visualization_spam),
                             modifier = Modifier.padding(start = 10.dp),
                             color = colors.onPrimary
                         )
@@ -323,7 +364,7 @@ fun BottomSheetButtonArchived(
                                 contentDescription = "delete"
                             )
                             Text(
-                                text = "Deletar",
+                                text = stringResource(id = R.string.visualization_delete),
                                 modifier = Modifier.padding(start = 10.dp),
                                 color = azul_escuro
                             )

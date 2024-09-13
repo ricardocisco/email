@@ -58,6 +58,8 @@ import java.util.Locale
 
 @Composable
 fun CalendarScreen(events: Map<LocalDate, MutableList<String>>, onEventAdd: (LocalDate, String) -> Unit) {
+    val colors = MaterialTheme.colorScheme
+
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     var showEventDialog by remember { mutableStateOf(false) }
     var dialogDate by remember { mutableStateOf<LocalDate?>(null) }
@@ -81,7 +83,7 @@ fun CalendarScreen(events: Map<LocalDate, MutableList<String>>, onEventAdd: (Loc
         Box(
             modifier = Modifier
                 .fillMaxWidth().background(Color.White)
-                .background(Color.Gray.copy(alpha = 0.1f))
+                .background(colors.background)
         ) {
             Column(
                 modifier = Modifier.padding(horizontal = 22.dp, vertical = 6.dp)
@@ -112,7 +114,6 @@ fun CalendarScreen(events: Map<LocalDate, MutableList<String>>, onEventAdd: (Loc
                 .height(1.dp)
                 .fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(4.dp))
         EventList(events = events)
     }
 }
@@ -125,6 +126,7 @@ fun MonthHeader(
     onMonthSelected: (Int) -> Unit,
     onYearSelected: (Int) -> Unit
 ) {
+    val colors = MaterialTheme.colorScheme
     var monthExpanded by remember { mutableStateOf(false) }
     var yearExpanded by remember { mutableStateOf(false) }
     val monthName = selectedDate.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
@@ -139,17 +141,18 @@ fun MonthHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = onPreviousMonth) {
-            Icon(Icons.Default.ArrowBack, contentDescription = "Previous Month")
+            Icon(Icons.Default.ArrowBack, contentDescription = "Previous Month", tint = colors.onPrimary)
         }
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box {
                 Text(
                     fontSize = 20.sp,
                     text = monthName,
                     modifier = Modifier
-                        .clickable { monthExpanded = true }
+                        .clickable { monthExpanded = true },
+                    color = colors.onPrimary
                 )
                 DropdownMenu(
                     expanded = monthExpanded,
@@ -167,7 +170,7 @@ fun MonthHeader(
                 }
             }
             Text(
-                text = ",",
+                text = ",", color = colors.onPrimary,
             )
             Box {
                 Text(
@@ -175,7 +178,8 @@ fun MonthHeader(
                     text = year.toString(),
                     modifier = Modifier
                         .clickable { yearExpanded = true }
-                        .padding(8.dp)
+                        .padding(8.dp),
+                    color = colors.onPrimary
                 )
                 DropdownMenu(
                     expanded = yearExpanded,
@@ -194,13 +198,14 @@ fun MonthHeader(
             }
         }
         IconButton(onClick = onNextMonth) {
-            Icon(Icons.Default.ArrowForward, contentDescription = "Next Month")
+            Icon(Icons.Default.ArrowForward, contentDescription = "Next Month", tint = colors.onPrimary)
         }
     }
 }
 
 @Composable
 fun WeekDaysHeader() {
+    val colors = MaterialTheme.colorScheme
     val daysOfWeek = listOf("DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB")
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -213,7 +218,7 @@ fun WeekDaysHeader() {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
-                color = Color.Gray
+                color = colors.onPrimary
             )
         }
     }
@@ -225,6 +230,7 @@ fun CalendarGrid(
     events: Map<LocalDate, MutableList<String>>,
     onDayClick: (LocalDate) -> Unit
 ) {
+    val colors = MaterialTheme.colorScheme
     val firstDayOfMonth = yearMonth.atDay(1)
     val lastDayOfMonth = yearMonth.atEndOfMonth()
     val firstDayOfWeek = firstDayOfMonth.dayOfWeek.value % 7
@@ -255,7 +261,7 @@ fun CalendarGrid(
                         isEventDay -> customDarkBlue
                         else -> Color.Transparent
                     }
-                    val textColor = if (isEventDay) Color.White else Color.Black
+                    val textColor = if (isEventDay) colors.primary else colors.onPrimary
 
                     Box(
                         modifier = Modifier
@@ -292,6 +298,7 @@ fun EventDialog(
     onDismiss: () -> Unit
 ) {
     var eventText by remember { mutableStateOf("") }
+    val colors = MaterialTheme.colorScheme
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -328,7 +335,7 @@ fun EventDialog(
                         onClick = {
                             onEventAdd(date, eventText)
                         }) {
-                        Text("Salvar")
+                        Text("Salvar", color = colors.onPrimary)
                     }
                 }
             }
@@ -342,8 +349,9 @@ fun Int.getMonthName(): String {
 
 @Composable
 fun EventList(events: Map<LocalDate, MutableList<String>>) {
+    val colors = MaterialTheme.colorScheme
     LazyColumn(
-        modifier = Modifier.padding(bottom = 80.dp)
+        modifier = Modifier.padding(bottom = 80.dp).background(colors.background).fillMaxSize()
     ){
         events.forEach { (date, eventList) ->
             item {
@@ -355,22 +363,25 @@ fun EventList(events: Map<LocalDate, MutableList<String>>) {
 
 @Composable
 fun EventItem(date: LocalDate, eventList: List<String>) {
+    val colors = MaterialTheme.colorScheme
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(8.dp))
+            .background(colors.background)
             .padding(8.dp)
     ) {
         Text(
             text = formatDate(date),
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = colors.onPrimary
         )
         Spacer(modifier = Modifier.height(4.dp))
         eventList.forEach { event ->
             Text(
                 text = event,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 8.dp),
+                color = colors.onPrimary
             )
             Spacer(modifier = Modifier.height(2.dp))
         }
@@ -383,6 +394,7 @@ fun ShowEventDialog(
 ) {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     var eventText by remember { mutableStateOf("") }
+    val colors = MaterialTheme.colorScheme
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -431,7 +443,8 @@ fun ShowEventDialog(
                         .fillMaxWidth()
                         .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(8.dp))
                         .padding(18.dp),
-                    singleLine = true
+                    singleLine = true,
+                    textStyle = androidx.compose.ui.text.TextStyle(color = colors.onPrimary)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Row(
@@ -439,7 +452,7 @@ fun ShowEventDialog(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text("Cancelar", color = Color.Black)
+                        Text("Cancelar", color = colors.onPrimary)
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
@@ -447,7 +460,7 @@ fun ShowEventDialog(
                         onClick = {
                         onEventAdd(selectedDate, eventText)
                     }) {
-                        Text("Salvar")
+                        Text("Salvar", color = colors.onPrimary)
                     }
                 }
             }

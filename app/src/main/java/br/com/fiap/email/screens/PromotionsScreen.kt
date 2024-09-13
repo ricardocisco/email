@@ -176,6 +176,13 @@ fun ListEmail(
 
     val colors = MaterialTheme.colorScheme
 
+    val emailPreviewLength = 50
+    val previewText = if (body.length > emailPreviewLength) {
+        body.take(emailPreviewLength) + "..."
+    } else {
+        body
+    }
+
     ElevatedCard(
         onClick = {
             valController.navigate("emailDetail/${name}/${email}/${body}/${subject}/${time}")
@@ -251,7 +258,7 @@ fun ListEmail(
                     fontSize = 16.sp
                 )
                 Text(
-                    text = body,
+                    text = previewText,
                     color = if (isSelected) colors.surface else colors.onPrimary
                 )
             }

@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -48,6 +49,7 @@ import java.util.Locale
 fun CalendarTaskScreen(events: Map<LocalDate, MutableList<String>>, onEventAdd: (LocalDate, String) -> Unit){
     var showEventDialog by remember { mutableStateOf(false) }
     val selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    val colors = MaterialTheme.colorScheme
 
     if (showEventDialog) {
         EventDialog(
@@ -61,7 +63,7 @@ fun CalendarTaskScreen(events: Map<LocalDate, MutableList<String>>, onEventAdd: 
     }
 
     Column(
-        modifier = Modifier.background(Color.White).fillMaxSize()
+        modifier = Modifier.background(color = colors.background).fillMaxSize()
     ){
         Box(modifier = Modifier
             .fillMaxWidth(),
@@ -69,7 +71,7 @@ fun CalendarTaskScreen(events: Map<LocalDate, MutableList<String>>, onEventAdd: 
 
         ){
             Row(modifier = Modifier.padding(16.dp)){
-                Text(text = "Tarefas do dia", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                Text(text = "Tarefas do dia", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = colors.onPrimary)
             }
         }
         Box(modifier = Modifier.padding(horizontal = 16.dp)){
@@ -83,14 +85,15 @@ fun CalendarTaskScreen(events: Map<LocalDate, MutableList<String>>, onEventAdd: 
 @Composable
 fun TaskList(events: Map<LocalDate, MutableList<String>>) {
     var state by remember { mutableStateOf(true) }
+    val colors = MaterialTheme.colorScheme
     LazyColumn {
         events.forEach { (date, eventList) ->
             item {
                 Column(modifier = Modifier){
                     Text(
-                        text = "${formatDate(date)}",
+                        text = formatDate(date),
                         fontSize = 22.sp,
-                        color = Color.Black
+                        color = colors.onPrimary
                     )
                     eventList.forEach { event ->
                         Row(
@@ -101,13 +104,13 @@ fun TaskList(events: Map<LocalDate, MutableList<String>>) {
                             Text(
                                 text = event,
                                 fontSize = 20.sp,
-                                color = Color.Black
+                                color = colors.onPrimary
                             )
                         }
                     }
                 }
                 Divider (
-                    color = Color.LightGray,
+                    color = colors.onPrimary,
                     modifier = Modifier
                         .height(1.dp)
                         .fillMaxWidth()

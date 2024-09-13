@@ -28,8 +28,7 @@ val listNavItems = listOf(
         label = "Promotions",
         icon = Icons.Default.Email,
         route = Screens.PromotionsScreen.name,
-        hasNews = true,
-        badgeCount = 45
+        hasNews = false,
     ),
     NavItem(
         label = "Favorite",

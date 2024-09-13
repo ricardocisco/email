@@ -31,6 +31,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -44,17 +46,18 @@ import br.com.fiap.email.R
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import br.com.fiap.email.viewmodel.AuthViewModel
 
 @Composable
 fun RegisterScreen(valController: NavController, authService: AuthService, authViewModel: AuthViewModel ,onRegisterSuccess: (AuthResponse) -> Unit){
-
 
     val colors = MaterialTheme.colorScheme
     var email by remember { mutableStateOf("") }
     var nome by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var mensagem by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
     val errorMessage = authViewModel.errorMessage
 
     LaunchedEffect(Unit) {
@@ -86,11 +89,12 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
             onValueChange = { nome = it },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
-            label = { Text("Digite seu nome") }
+            label = { Text(stringResource(id = R.string.place_name)) },
+            textStyle = TextStyle(color = Color.Black)
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "E-mail",
+            text = stringResource(id = R.string.email),
             fontWeight = FontWeight.Bold,
         )
         OutlinedTextField(
@@ -98,7 +102,8 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
             onValueChange = { email = it },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
-            label = { Text("Digite seu e-mail") }
+            label = { Text(stringResource(id = R.string.place_email)) },
+            textStyle = TextStyle(color = Color.Black)
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
@@ -110,7 +115,22 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
             onValueChange = { password = it },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
-            label = { Text(text = "minimo 8 caracteres")}
+            label = { Text(stringResource(id = R.string.place_senha))},
+            textStyle = TextStyle(color = Color.Black),
+            trailingIcon = {
+                val image = if (passwordVisible) {
+                    painterResource(id = R.drawable.visibility)
+                } else {
+                    painterResource(id = R.drawable.visibilityoff)
+                }
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        painter = image,
+                        contentDescription = if (passwordVisible) "Esconder senha" else "Mostrar senha",
+                        tint = Color.Black
+                    )
+                }
+            },
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
@@ -174,7 +194,7 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
             Text(
                 text = stringResource(id = R.string.google_button),
                 fontWeight = FontWeight.Bold,
-                color = colors.onPrimary
+                color = Color.Black
             )
         }
         OutlinedButton(
@@ -193,7 +213,7 @@ fun RegisterScreen(valController: NavController, authService: AuthService, authV
             Text(
                 text = stringResource(id = R.string.apple_button),
                 fontWeight = FontWeight.Bold,
-                color = colors.onPrimary
+                color = Color.Black
             )
         }
         Spacer(modifier = Modifier.height(30.dp))

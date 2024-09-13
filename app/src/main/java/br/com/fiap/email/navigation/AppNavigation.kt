@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
@@ -61,6 +62,7 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -74,6 +76,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
@@ -106,6 +109,7 @@ import br.com.fiap.email.ui.theme.DarkColorScheme
 import br.com.fiap.email.ui.theme.LightColorScheme
 import br.com.fiap.email.viewmodel.ListEmailViewModel
 import br.com.fiap.email.viewmodel.NetworkViewModel
+import br.com.fiap.email.viewmodel.ThemeViewModel
 import br.com.fiap.email.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -113,7 +117,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
+fun AppNavigation(valController: NavController, userViewModel: UserViewModel, themeViewModel: ThemeViewModel) {
     val listEmailViewModel = remember { ListEmailViewModel() }
     val isInEditMode by listEmailViewModel.isInEditMode
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -133,6 +137,28 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
     LaunchedEffect(Unit) {
         userViewModel.fetchReceivedEmails(userId.value)
     }
+
+    val listNavItems = listOf(
+        NavItem(
+            label = "Home",
+            icon = Icons.Default.Home,
+            route = Screens.HomeScreen.name,
+            hasNews = false
+        ),
+        NavItem(
+            label = "Promotions",
+            icon = Icons.Default.Email,
+            route = Screens.PromotionsScreen.name,
+            hasNews = false,
+            badgeCount = receivedEmail.size
+        ),
+        NavItem(
+            label = "Favorite",
+            icon = Icons.Default.Star,
+            route = Screens.FavoritesScreen.name,
+            hasNews = false,
+        ),
+    )
 
     Column {
         Box(
@@ -292,7 +318,7 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
                                 },
                                 icon = {
                                     BadgedBox(badge = {
-                                        if (navItem.badgeCount != null) {
+                                        if (navItem.badgeCount != null && navItem.badgeCount > 0) {
                                             Badge {
                                                 Text(text = navItem.badgeCount.toString())
                                             }
@@ -316,6 +342,7 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
                         onButtonClick = { showBottomSheet = it },
                         listEmailViewModel = listEmailViewModel,
                         userViewModel = userViewModel,
+                        themeViewModel = themeViewModel
                     )
                     ConnectivityObserver()
                 }
@@ -325,7 +352,7 @@ fun AppNavigation(valController: NavController, userViewModel: UserViewModel) {
                     startDestination = Screens.HomeScreen.name,
                 ) {
                     composable(route = Screens.HomeScreen.name) {
-                        HomeScreen(valController, navController)
+                        HomeScreen(valController, navController, themeViewModel)
                     }
                     composable(route = Screens.PromotionsScreen.name) {
                         PromotionsScreen(
@@ -347,6 +374,7 @@ fun BottomSheetButtonEdit(
     onButtonClick: (Boolean) -> Unit,
     listEmailViewModel: ListEmailViewModel,
     userViewModel: UserViewModel,
+    themeViewModel: ThemeViewModel
 ) {
     val sheetState = rememberModalBottomSheetState()
     val azul_escuro: Color = colorResource(id = R.color.azul_escuro)
@@ -355,6 +383,7 @@ fun BottomSheetButtonEdit(
     var dialogMessage by remember { mutableStateOf("Processando...") }
     val receivedEmail by userViewModel.receivedEmails.observeAsState(emptyList())
     val userId = userViewModel.userId.observeAsState("")
+    val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
 
     Column {
         if (showBottomSheet) {
@@ -382,12 +411,9 @@ fun BottomSheetButtonEdit(
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.forward),
-                                contentDescription = "forward"
-                            )
+                            Icon(painter = painterResource(id = R.drawable.add), contentDescription = "selecionar todos", tint = colors.onBackground)
                             Text(
-                                text = "Selecionar Todos",
+                                text = stringResource(id = R.string.visualization_select),
                                 modifier = Modifier.padding(start = 10.dp),
                                 color = colors.onPrimary
                             )
@@ -404,33 +430,19 @@ fun BottomSheetButtonEdit(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.folderimg),
-                            contentDescription = "pastas"
-                        )
+                        if(isDarkTheme){
+                            Image(
+                                painter = painterResource(id = R.drawable.spam),
+                                contentDescription = "spam"
+                            )
+                        } else {
+                            Image(
+                                painter = painterResource(id = R.drawable.spam_white),
+                                contentDescription = "spam"
+                            )
+                        }
                         Text(
-                            text = "Adicionar a Pasta",
-                            modifier = Modifier.padding(start = 10.dp),
-                            color = colors.onPrimary
-                        )
-                    }
-                    Divider(
-                        modifier = Modifier.padding(horizontal = 5.dp),
-                        color = Color.LightGray,
-                        thickness = 1.dp
-                    )
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 12.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.spam),
-                            contentDescription = "spam"
-                        )
-                        Text(
-                            text = "Denunciar Spam",
+                            text = stringResource(id = R.string.visualization_spam),
                             modifier = Modifier.padding(start = 10.dp),
                             color = colors.onPrimary
                         )
@@ -480,7 +492,7 @@ fun BottomSheetButtonEdit(
                                 contentDescription = "delete"
                             )
                             Text(
-                                text = "Deletar",
+                                text = stringResource(id = R.string.visualization_delete),
                                 modifier = Modifier.padding(start = 10.dp),
                                 color = azul_escuro
                             )
@@ -507,26 +519,6 @@ fun BottomSheetButtonEdit(
                 }
             }
         }
-    }
-}
-
-
-@Composable
-fun NetworkStatus(viewModel: NetworkViewModel = viewModel()) {
-    val isConnected = viewModel.connectivityLiveData.observeAsState(initial = false)
-
-    if (isConnected.value) {
-        Image(
-            modifier = Modifier.size(32.dp),
-            painter = painterResource(id = R.drawable.interneton),
-            contentDescription = "Online"
-        )
-    } else {
-        Image(
-            modifier = Modifier.size(32.dp),
-            painter = painterResource(id = R.drawable.internetoff),
-            contentDescription = "Offline"
-        )
     }
 }
 

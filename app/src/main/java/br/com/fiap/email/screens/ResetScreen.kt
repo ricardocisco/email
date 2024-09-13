@@ -32,11 +32,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import br.com.fiap.email.R
 import br.com.fiap.email.viewmodel.AuthViewModel
 
 @Composable
@@ -75,13 +78,13 @@ fun ResetScreen(valController: NavController, authViewModel: AuthViewModel){
             }
             Spacer(modifier = Modifier.height(56.dp))
             Text(
-                text = "Esqueceu sua senha?",
+                text = stringResource(id = R.string.reset_text),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF000000)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Não se preocupe! Isso acontece. Por favor, digite o email associado à sua conta.")
+            Text(text = stringResource(id = R.string.reset_p))
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "E-mail",
@@ -92,11 +95,12 @@ fun ResetScreen(valController: NavController, authViewModel: AuthViewModel){
                 value = email,
                 onValueChange = {email = it},
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(8.dp),
+                placeholder = {Text(text = stringResource(id = R.string.place_email))}
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Senha",
+                text = stringResource(id = R.string.password),
                 fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -105,11 +109,13 @@ fun ResetScreen(valController: NavController, authViewModel: AuthViewModel){
                 onValueChange = {password = it},
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),
-                visualTransformation = PasswordVisualTransformation()
+                visualTransformation = PasswordVisualTransformation(),
+                placeholder = {Text(text = stringResource(id = R.string.place_senha))}
+
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Confirmar senha",
+                text = stringResource(id = R.string.text_new_pass),
                 fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -118,7 +124,8 @@ fun ResetScreen(valController: NavController, authViewModel: AuthViewModel){
                 onValueChange = {newPassword = it},
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),
-                visualTransformation = PasswordVisualTransformation()
+                visualTransformation = PasswordVisualTransformation(),
+                placeholder = {Text(text = stringResource(id = R.string.text_new_pass))}
             )
             Button(
                 onClick = {
@@ -147,7 +154,7 @@ fun ResetScreen(valController: NavController, authViewModel: AuthViewModel){
                 colors = ButtonDefaults.buttonColors(Color(0xFF2F2F2F))
             ) {
                 Text(
-                    text = "Redefinir senha",
+                    text = stringResource(id = R.string.reset_btn),
                     color = Color(0xFFFFFFFF),
                     modifier = Modifier.padding(10.dp),
                     fontSize = 20.sp
@@ -173,10 +180,10 @@ fun ResetScreen(valController: NavController, authViewModel: AuthViewModel){
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Text(text = "Lembrou a senha?",
+                Text(text = stringResource(id = R.string.reset_footer),
                     color = Color(0xFF000000))
                 Text(
-                    text = " Faça o login :)",
+                    text = stringResource(id = R.string.login_button),
                     color = Color(0xFF000000),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(start = 6.dp)

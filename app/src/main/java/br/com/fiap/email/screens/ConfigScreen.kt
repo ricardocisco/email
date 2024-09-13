@@ -203,7 +203,7 @@ fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, the
                             )
                         )
                         Text(
-                            text = stringResource(id = R.string.font_size, fontSize.toInt()),
+                            text = "Font Size: $fontSize",
                             color = colors.onBackground,
                             fontSize = fontSize.sp,
                             modifier = Modifier.padding(top = 5.dp)
@@ -221,7 +221,7 @@ fun ConfigScreen(valController: NavController, userViewModel: UserViewModel, the
                                 .fillMaxWidth()
                                 .padding(bottom = 10.dp)
                         )
-                        Text(text = "Selected Language: $language", fontSize = 14.sp)
+                        Text(text = "Selected Language: $language", fontSize = 14.sp, color = colors.onPrimary)
                         languageOptions.forEach { language ->
                             Row(
                                 modifier = Modifier

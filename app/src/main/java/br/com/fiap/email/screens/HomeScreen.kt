@@ -18,6 +18,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,12 +34,14 @@ import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
 import br.com.fiap.email.R
 import br.com.fiap.email.navigation.Screens
+import br.com.fiap.email.viewmodel.ThemeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(valController: NavController, navController: NavController)
+fun HomeScreen(valController: NavController, navController: NavController, themeViewModel: ThemeViewModel)
 {
     val colors = MaterialTheme.colorScheme
+    val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
 
     Box(
         modifier = Modifier
@@ -148,13 +152,23 @@ fun HomeScreen(valController: NavController, navController: NavController)
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.clock),
-                        contentDescription = "Arquivados",
-                        modifier = Modifier
-                            .height(24.dp)
-                            .width(24.dp),
-                    )
+                    if(!isDarkTheme){
+                        Image(
+                            painter = painterResource(id = R.drawable.clock),
+                            contentDescription = "Arquivados",
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(24.dp),
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.drawable.later_white),
+                            contentDescription = "Arquivados",
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(24.dp),
+                        )
+                    }
                     Text(
                         text = stringResource(id = R.string.home_archived),
                         modifier = Modifier.padding(start = 10.dp),
@@ -178,13 +192,23 @@ fun HomeScreen(valController: NavController, navController: NavController)
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.send),
-                        contentDescription = "Enviados",
-                        modifier = Modifier
-                            .height(24.dp)
-                            .width(24.dp)
-                    )
+                    if(!isDarkTheme){
+                        Image(
+                            painter = painterResource(id = R.drawable.send),
+                            contentDescription = "Enviados",
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(24.dp)
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.drawable.send_white),
+                            contentDescription = "Enviados",
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(24.dp)
+                        )
+                    }
                     Text(
                         text = stringResource(id = R.string.home_sent),
                         modifier = Modifier.padding(start = 10.dp),
@@ -208,13 +232,23 @@ fun HomeScreen(valController: NavController, navController: NavController)
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.spam),
-                        contentDescription = "Spam",
-                        modifier = Modifier
-                            .height(24.dp)
-                            .width(24.dp)
-                    )
+                    if(!isDarkTheme){
+                        Image(
+                            painter = painterResource(id = R.drawable.spam),
+                            contentDescription = "Spam",
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(24.dp)
+                        )
+                    }else {
+                        Image(
+                            painter = painterResource(id = R.drawable.spam_white),
+                            contentDescription = "Spam",
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(24.dp)
+                        )
+                    }
                     Text(
                         text = stringResource(id = R.string.home_spam),
                         modifier = Modifier.padding(start = 10.dp),
@@ -238,13 +272,23 @@ fun HomeScreen(valController: NavController, navController: NavController)
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.trash),
-                        contentDescription = "Lixeira",
-                        modifier = Modifier
-                            .height(24.dp)
-                            .width(24.dp)
-                    )
+                    if(!isDarkTheme){
+                        Image(
+                            painter = painterResource(id = R.drawable.trash),
+                            contentDescription = "Lixeira",
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(24.dp)
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.drawable.trash_white),
+                            contentDescription = "Lixeira",
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(24.dp)
+                        )
+                    }
                     Text(
                         text = stringResource(id = R.string.home_trash),
                         modifier = Modifier.padding(start = 10.dp),

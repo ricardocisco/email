@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +31,7 @@ fun DialogLoading(
     isLoading: Boolean,
     delayTime: Long = 9000
 ){
+    val colors = MaterialTheme.colorScheme
     if (showDialog) {
         LaunchedEffect(Unit) {
             kotlinx.coroutines.delay(delayTime)
@@ -42,21 +44,21 @@ fun DialogLoading(
                 modifier = Modifier
                     .height(100.dp)
                     .width(250.dp)
-                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .background(colors.primary, shape = RoundedCornerShape(8.dp))
                     .padding(16.dp)
             ) {
                 if(isLoading){
                     Text(
                         text = message,
                         fontSize = 16.sp,
-                        color = Color.Black,
+                        color = colors.onPrimary,
                         textAlign = TextAlign.Center
                     )
                 } else {
                     Text(
                         text = message,
                         fontSize = 16.sp,
-                        color = Color.Black,
+                        color = colors.onPrimary,
                         textAlign = TextAlign.Center
                     )
                 }

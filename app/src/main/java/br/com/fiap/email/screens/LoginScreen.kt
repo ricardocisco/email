@@ -35,8 +35,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -89,23 +91,24 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "E-mail",
+            text = stringResource(id = R.string.email),
             fontWeight = FontWeight.Bold,
         )
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            placeholder = { Text("Digite seu e-mail") },
+            placeholder = { Text(stringResource(id = R.string.place_email)) },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp),
             shape = RoundedCornerShape(8.dp),
+            textStyle = TextStyle(color = Color.Black)
 
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Senha",
+            text = stringResource(id = R.string.password),
             fontWeight = FontWeight.Bold,
         )
         OutlinedTextField(
@@ -116,6 +119,7 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
                 .padding(4.dp),
             shape = RoundedCornerShape(8.dp),
             singleLine = true,
+            placeholder = { Text(stringResource(id = R.string.place_senha))},
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 val image = if (passwordVisible) {
@@ -123,14 +127,15 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
                 } else {
                     painterResource(id = R.drawable.visibilityoff)
                 }
-
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(
                         painter = image,
-                        contentDescription = if (passwordVisible) "Esconder senha" else "Mostrar senha"
+                        contentDescription = if (passwordVisible) "Esconder senha" else "Mostrar senha",
+                        tint = Color.Black
                     )
                 }
             },
+            textStyle = TextStyle(color = Color.Black)
         )
         Spacer(modifier = Modifier.height(10.dp))
         Row(
@@ -138,7 +143,7 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
             Arrangement.SpaceBetween
         ){
             Row {
-                Text(text = "Lembre-se")
+                Text(text = stringResource(id = R.string.rememberme))
             }
             Text(modifier = Modifier
                 .clickable {
@@ -209,7 +214,7 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
             Text(
                 text = stringResource(id = R.string.google_button),
                 fontWeight = FontWeight.Bold,
-                color = colors.onPrimary
+                color = Color.Black
             )
         }
         OutlinedButton(
@@ -228,7 +233,7 @@ fun LoginScreen(userViewModel: UserViewModel, valController: NavController, auth
             Text(
                 text = stringResource(id = R.string.apple_button),
                 fontWeight = FontWeight.Bold,
-                color = colors.onPrimary
+                color = Color.Black
             )
         }
         Spacer(modifier = Modifier.height(30.dp))

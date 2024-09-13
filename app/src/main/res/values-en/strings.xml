@@ -15,6 +15,19 @@
     <string name="not_register">Dont have an account?</string>
     <string name="on_register">Sign up</string>
     <string name="not_login">Already have an account?</string>
+    <string name="email">E-mail</string>
+    <string name="rememberme">Remember me</string>
+    <string name="place_email">Enter your email</string>
+    <string name="place_senha">Enter your password</string>
+    <string name="place_name">Your name</string>
+
+    <string name="text_new_pass">Confirm password</string>
+    <string name="place_new_pass">Confirm password</string>
+
+    <string name="reset_text">Forgot your password?</string>
+    <string name="reset_p">Dont worry! It happens. Please enter the email associated with your account.</string>
+    <string name="reset_btn">Reset password</string>
+    <string name="reset_footer">Did you remember the password?</string>
 
     <string name="home_default">Default</string>
     <string name="home_calendar">Calendar</string>
@@ -37,13 +50,14 @@
     <string name="visualization_forward">Forward</string>
     <string name="visualization_delete">Delete</string>
     <string name="visualization_spam">Report spam</string>
+    <string name="visualization_select">Select All</string>
 
     <string name="settings">Settings</string>
     <string name="theme">Theme</string>
     <string name="theme_light">Dark Theme</string>
     <string name="theme_dark">Light Theme</string>
     <string name="font_size">Font Size</string>
-    <string name="font_size_actual">Current Size: %1$d</string>
+    <string name="font_size_actual">Current Size: %1$.2f</string>
     <string name="sort_emails">Sort Emails</string>
     <string name="most_recent">Most Recent</string>
     <string name="oldest">Oldest</string>

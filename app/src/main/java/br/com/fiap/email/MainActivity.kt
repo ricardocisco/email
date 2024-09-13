@@ -107,7 +107,7 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel, authVie
             }
         }
         composable(route = "homeApp") {
-            AppNavigation(valController, userViewModel)
+            AppNavigation(valController, userViewModel, themeViewModel)
         }
         composable(route = "settings") {
             ConfigScreen(valController, userViewModel, themeViewModel)
@@ -121,6 +121,7 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel, authVie
         composable(route = "emailDetail/{name}/{email}/{subject}/{body}/{time}") {
             EmailModel(
                 valController,
+                themeViewModel,
                 it.arguments?.getString("name")!!,
                 it.arguments?.getString("email")!!,
                 it.arguments?.getString("subject")!!,
@@ -141,13 +142,13 @@ fun TelaSettings(authService: AuthService, userViewModel: UserViewModel, authVie
             CalendarNavigation(valController)
         }
         composable(route = "sentScreen"){
-            SentScreen(valController, userViewModel)
+            SentScreen(valController, userViewModel, themeViewModel)
         }
         composable(route = "archivedScreen"){
-            ArchivedScreen(valController, userViewModel)
+            ArchivedScreen(valController, userViewModel, themeViewModel)
         }
         composable(route = "trashScreen"){
-            TrashScreen(valController, userViewModel)
+            TrashScreen(valController, userViewModel, themeViewModel)
         }
         composable(route = "resetScreen"){
             ResetScreen(valController, authViewModel)

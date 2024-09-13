@@ -15,6 +15,20 @@
     <string name="not_register">¿No tienes una cuenta?</string>
     <string name="on_register">Regístrate</string>
     <string name="not_login">¿Ya tienes una cuenta?</string>
+    <string name="email">Correo electrónico</string>
+    <string name="rememberme">Recuérdame</string>
+    <string name="place_email">Ingresa tu correo electrónico</string>
+    <string name="place_senha">Ingresa tu contraseña</string>
+    <string name="place_name">Su nombre</string>
+
+    <string name="text_new_pass">Confirmar Contraseña</string>
+    <string name="place_new_pass">Confirmar Contraseña</string>
+
+    <string name="reset_text">¿Olvidaste tu contraseña?</string>
+    <string name="reset_p">¡No te preocupes! Sucede. Por favor ingrese el correo electrónico asociado con su cuenta.</string>
+    <string name="reset_btn">Restablecer contraseña</string>
+    <string name="reset_footer">¿Recordaste la contraseña?</string>
+
 
     <string name="home_default">Predeterminado</string>
     <string name="home_calendar">Calendario</string>
@@ -37,13 +51,14 @@
     <string name="visualization_forward">Reenviar</string>
     <string name="visualization_delete">Eliminar</string>
     <string name="visualization_spam">Reportar como spam</string>
+    <string name="visualization_select">Seleccionar todo</string>
 
     <string name="settings">Configuración</string>
     <string name="theme">Tema</string>
     <string name="theme_light">Tema oscuro</string>
     <string name="theme_dark">Tema claro</string>
     <string name="font_size">Tamaño de fuente</string>
-    <string name="font_size_actual">Tamaño actual: %1$d</string>
+    <string name="font_size_actual">Tamaño actual: %1$.2f</string>
     <string name="sort_emails">Ordenar correos</string>
     <string name="most_recent">Más recientes</string>
     <string name="oldest">Más antiguos</string>
