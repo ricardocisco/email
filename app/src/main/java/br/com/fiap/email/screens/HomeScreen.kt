@@ -223,7 +223,7 @@ fun HomeScreen(valController: NavController, navController: NavController, theme
                 )
             }
             Card(
-                onClick = { /*TODO*/ },
+                onClick = {valController.navigate("spamScreen")},
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent)
             ) {
                 Row(
